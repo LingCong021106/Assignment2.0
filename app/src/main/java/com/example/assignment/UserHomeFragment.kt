@@ -36,10 +36,9 @@ class UserHomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val textview = findViewById(R.id.textView1) as TextView
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_home, container, false)
+        return inflater.inflate(com.example.assignment.R.layout.fragment_user_home, container, false)
     }
 
     companion object {
