@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/baseline_home_24"
+        android:iconTintMode="add"
+        android:title="Home" />
+    <item
+        android:id="@+id/donate"
+        android:icon="@drawable/baseline_diversity_1_24"
+        android:title="Donate" />
+    <item
+        android:id="@+id/event"
+        android:icon="@drawable/baseline_event_24"
+        android:title="Event" />
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/baseline_person_24"
+        android:title="Profile" />
+</menu>
