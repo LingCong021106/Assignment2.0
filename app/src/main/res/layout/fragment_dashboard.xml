@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/dashboardUserBtn"
         android:layout_width="173dp"
         android:layout_height="173dp"
         android:layout_marginStart="16dp"
@@ -41,7 +41,7 @@
         app:layout_constraintTop_toBottomOf="@+id/text1" />
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/dashboardVolunteerBtn"
         android:layout_width="173dp"
         android:layout_height="173dp"
         android:layout_marginStart="16dp"
@@ -55,10 +55,10 @@
         app:iconGravity="textTop"
         app:iconSize="50dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
+        app:layout_constraintTop_toBottomOf="@+id/dashboardUserBtn" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/dashboardDonateBtn"
         android:layout_width="173dp"
         android:layout_height="173dp"
         android:layout_marginStart="24dp"
@@ -73,11 +73,11 @@
         app:iconGravity="textTop"
         app:iconSize="50dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button3"
+        app:layout_constraintStart_toEndOf="@+id/dashboardUserBtn"
         app:layout_constraintTop_toBottomOf="@+id/text1" />
 
     <Button
-        android:id="@+id/button7"
+        android:id="@+id/dashboardNewsBtn"
         android:layout_width="173dp"
         android:layout_height="173dp"
         android:layout_marginStart="24dp"
@@ -92,11 +92,11 @@
         app:iconGravity="textTop"
         app:iconSize="50dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button6"
-        app:layout_constraintTop_toBottomOf="@+id/button4" />
+        app:layout_constraintStart_toEndOf="@+id/dashboardVolunteerBtn"
+        app:layout_constraintTop_toBottomOf="@+id/dashboardDonateBtn" />
 
     <Button
-        android:id="@+id/button8"
+        android:id="@+id/dashboardReportBtn"
         android:layout_width="173dp"
         android:layout_height="173dp"
         android:layout_marginStart="16dp"
@@ -110,7 +110,7 @@
         app:iconGravity="textTop"
         app:iconSize="50dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button6" />
+        app:layout_constraintTop_toBottomOf="@+id/dashboardVolunteerBtn" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
