@@ -18,13 +18,13 @@
         android:textAlignment="center"
         app:cardCornerRadius="128dp">
 
-
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@drawable/testingprofile"  />
+
 
     </androidx.cardview.widget.CardView>
 
@@ -37,6 +37,7 @@
         android:id="@+id/user_name"
         android:paddingTop="8dp"
         android:layout_marginStart="10dp"
+
         android:textSize="20dp"
         android:text="Aren"
         android:textColor="@color/black"
@@ -51,13 +52,10 @@
         android:text="Aren@gmail.com"
         android:layout_marginStart="10dp"/>
 
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="30dp"
         android:background="#BDB8B8" />
-
-
-
-
 </LinearLayout>
