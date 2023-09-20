@@ -1,8 +1,10 @@
 package com.example.assignment
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import android.widget.Button
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -10,6 +12,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.assignment.admin.user.AdminUserFragment
+import com.example.assignment.admin.user.AdminUserViewModel
 import com.google.android.material.navigation.NavigationView
 import com.example.assignment.databinding.AdminHomeBinding
 import com.google.android.material.snackbar.Snackbar
@@ -19,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     //cy
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: AdminHomeBinding
+    private lateinit var dashboardUserBtn : Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,10 +49,17 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.admin_nav_dashboard, R.id.admin_nav_donate, R.id.admin_nav_volunteer, R.id.admin_nav_user, R.id.admin_nav_news, R.id.admin_nav_report
+
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+//        dashboardUserBtn = findViewById(R.id.dashboardUserBtn)
+//        dashboardUserBtn.setOnClickListener {
+//            val intent = Intent(this, AdminUserViewModel::class.java)
+//            startActivity(intent)
+//        }
 
 
 
