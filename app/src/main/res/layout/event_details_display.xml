@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/btn_join"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -43,9 +42,9 @@
         android:id="@+id/event_joinpeople"
         android:layout_width="123dp"
         android:layout_height="23dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="81dp"
         android:text="Join People : "
-        android:textSize="12sp"
+        android:textSize="10sp"
         app:layout_constraintStart_toEndOf="@+id/event_joinpeople_img"
         app:layout_constraintTop_toTopOf="@+id/event_details" />
 
@@ -53,9 +52,9 @@
         android:id="@+id/event_numberpoeple"
         android:layout_width="57dp"
         android:layout_height="24dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="81dp"
         android:text="5 / 20"
-        android:textSize="12sp"
+        android:textSize="10sp"
         app:layout_constraintStart_toEndOf="@+id/event_joinpeople"
         app:layout_constraintTop_toTopOf="@+id/event_details" />
 
@@ -73,9 +72,9 @@
         android:id="@+id/event_time"
         android:layout_width="122dp"
         android:layout_height="22dp"
-        android:layout_marginTop="110dp"
+        android:layout_marginTop="111dp"
         android:text="Event Time : "
-        android:textSize="12sp"
+        android:textSize="10sp"
         app:layout_constraintStart_toEndOf="@+id/event_time_img"
         app:layout_constraintTop_toTopOf="@+id/event_details" />
 
@@ -83,9 +82,9 @@
         android:id="@+id/event_time_edit"
         android:layout_width="109dp"
         android:layout_height="23dp"
-        android:layout_marginTop="112dp"
+        android:layout_marginTop="113dp"
         android:text="20-11-2023"
-        android:textSize="12sp"
+        android:textSize="10sp"
         app:layout_constraintStart_toEndOf="@+id/event_time"
         app:layout_constraintTop_toTopOf="@+id/event_details" />
 
@@ -107,15 +106,16 @@
         android:layout_marginTop="142dp"
         app:layout_constraintStart_toStartOf="@+id/event_details"
         app:layout_constraintTop_toTopOf="@+id/event_details"
+        android:src="@drawable/baseline_location_on_24"
         app:srcCompat="@android:drawable/ic_menu_mylocation" />
 
     <TextView
         android:id="@+id/event_location"
         android:layout_width="122dp"
         android:layout_height="23dp"
-        android:layout_marginTop="144dp"
+        android:layout_marginTop="145dp"
         android:text="Location : "
-        android:textSize="12sp"
+        android:textSize="10sp"
         app:layout_constraintStart_toEndOf="@+id/event_location_img"
         app:layout_constraintTop_toTopOf="@+id/event_details" />
 
@@ -123,9 +123,9 @@
         android:id="@+id/event_location_edit"
         android:layout_width="180dp"
         android:layout_height="23dp"
-        android:layout_marginTop="144dp"
+        android:layout_marginTop="145dp"
         android:text="Sipadan Island"
-        android:textSize="12sp"
+        android:textSize="10sp"
         app:layout_constraintStart_toEndOf="@+id/event_location"
         app:layout_constraintTop_toTopOf="@+id/event_details" />
 
@@ -143,9 +143,9 @@
         android:id="@+id/event_organization"
         android:layout_width="120dp"
         android:layout_height="20dp"
-        android:layout_marginTop="176dp"
+        android:layout_marginTop="177dp"
         android:text="Organization Name :"
-        android:textSize="12sp"
+        android:textSize="10sp"
         app:layout_constraintStart_toEndOf="@+id/event_organization_img"
         app:layout_constraintTop_toTopOf="@+id/event_details" />
 
@@ -153,9 +153,9 @@
         android:id="@+id/event_organization_edit"
         android:layout_width="211dp"
         android:layout_height="23dp"
-        android:layout_marginTop="176dp"
+        android:layout_marginTop="177dp"
         android:text="Malaysia Coastal Conservation Society"
-        android:textSize="12sp"
+        android:textSize="10sp"
         app:layout_constraintStart_toEndOf="@+id/event_organization"
         app:layout_constraintTop_toTopOf="@+id/event_details" />
 
@@ -173,9 +173,9 @@
         android:id="@+id/event_contactperson"
         android:layout_width="117dp"
         android:layout_height="23dp"
-        android:layout_marginTop="208dp"
+        android:layout_marginTop="209dp"
         android:text="Contact Person :"
-        android:textSize="12sp"
+        android:textSize="10sp"
         app:layout_constraintStart_toEndOf="@+id/event_contactperson_img"
         app:layout_constraintTop_toTopOf="@+id/event_details" />
 
@@ -184,9 +184,9 @@
         android:layout_width="211dp"
         android:layout_height="23dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="208dp"
+        android:layout_marginTop="209dp"
         android:text="Mr Lim"
-        android:textSize="12sp"
+        android:textSize="10sp"
         app:layout_constraintStart_toEndOf="@+id/event_contactperson"
         app:layout_constraintTop_toTopOf="@+id/event_details" />
 
@@ -204,9 +204,9 @@
         android:id="@+id/event_contactnumber"
         android:layout_width="120dp"
         android:layout_height="22dp"
-        android:layout_marginTop="236dp"
+        android:layout_marginTop="237dp"
         android:text="Contact Number :"
-        android:textSize="12sp"
+        android:textSize="10sp"
         app:layout_constraintStart_toEndOf="@+id/event_contactnumber_img"
         app:layout_constraintTop_toTopOf="@+id/event_details" />
 
@@ -214,9 +214,9 @@
         android:id="@+id/event_contactnumber_edit"
         android:layout_width="133dp"
         android:layout_height="21dp"
-        android:layout_marginTop="236dp"
+        android:layout_marginTop="237dp"
         android:text="012-3456789"
-        android:textSize="12sp"
+        android:textSize="10sp"
         app:layout_constraintStart_toEndOf="@+id/event_contactnumber"
         app:layout_constraintTop_toTopOf="@+id/event_details" />
 
@@ -279,7 +279,7 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_join"
         android:layout_width="371dp"
         android:layout_height="38dp"
         android:layout_marginTop="20dp"
@@ -288,6 +288,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollview_fundraising_people" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
