@@ -9,12 +9,18 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.assignment.databinding.FragmentDashboardBinding
+import androidx.navigation.NavController
 import com.example.assignment.R
 import androidx.navigation.fragment.findNavController
+import com.example.assignment.admin.donate.AdminDonateFragment
+import com.example.assignment.admin.news.AdminNewsFragment
+import com.example.assignment.admin.report.AdminReportFragment
 import com.example.assignment.admin.user.AdminUserFragment
+import com.example.assignment.admin.volunteer.AdminVolunteerFragment
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,6 +37,9 @@ class DashboardFragment : Fragment() {
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var navController: NavController
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,16 +54,10 @@ class DashboardFragment : Fragment() {
 
         val textView: TextView = binding.text1
 
-//        val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
-//        val navController = Navigation.findNavController(view)
-//        val button1: Button = binding.dashboardUserBtn
-//        button1.setOnClickListener {
-//            findNavController().navigate(R.id.action_dashboard_to_user)
-//        }
-
-
+//
         DashboardViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
+
         }
         return root
     }
@@ -65,43 +68,41 @@ class DashboardFragment : Fragment() {
 
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val navController = Navigation.findNavController(view)
 
         val button1 = view.findViewById<Button>(R.id.dashboardUserBtn)
         button1.setOnClickListener {
-            findNavController().navigate(R.id.action_dashboard_to_user)
+            loadFragment(AdminUserFragment())
         }
 
         val button2 = view.findViewById<Button>(R.id.dashboardDonateBtn)
         button2.setOnClickListener {
-            navController.navigate(R.id.action_dashboard_to_donate)
+            loadFragment(AdminDonateFragment())
         }
 
         val button3 = view.findViewById<Button>(R.id.dashboardVolunteerBtn)
         button3.setOnClickListener {
-            navController.navigate(R.id.action_dashboard_to_volunteer)
+            loadFragment(AdminVolunteerFragment())
         }
 
         val button4 = view.findViewById<Button>(R.id.dashboardNewsBtn)
         button4.setOnClickListener {
-            navController.navigate(R.id.action_dashboard_to_news)
+            loadFragment(AdminNewsFragment())
         }
 
         val button5 = view.findViewById<Button>(R.id.dashboardReportBtn)
         button5.setOnClickListener {
-            // Navigate to Fragment1
-            navController.navigate(R.id.action_dashboard_to_report)
+            loadFragment(AdminReportFragment())
         }
     }
 
-//    public fun test(view : View) {
-//        val navController = Navigation.findNavController(view)
-//        findNavController().navigate(R.id.action_dashboard_to_user)
-//    }
-
-
-
+    private fun loadFragment(fragment: Fragment) {
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container, fragment)
+        transaction.commit()
+    }
 }
