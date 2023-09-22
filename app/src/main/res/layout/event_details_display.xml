@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <ImageView
+        android:id="@+id/event_img"
+        android:layout_width="411dp"
+        android:layout_height="274dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <TextView
+        android:id="@+id/event_details"
+        android:layout_width="367dp"
+        android:layout_height="271dp"
+        android:layout_marginTop="116dp"
+        android:background="@color/white"
+        android:text=""
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.481"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/event_img" />
+
+    <ImageView
+        android:id="@+id/event_joinpeople_img"
+        android:layout_width="19dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="77dp"
+        app:layout_constraintStart_toStartOf="@+id/event_details"
+        app:layout_constraintTop_toTopOf="@+id/event_details"
+        app:srcCompat="@android:drawable/ic_menu_myplaces" />
+
+    <TextView
+        android:id="@+id/event_joinpeople"
+        android:layout_width="123dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="81dp"
+        android:text="Join People : "
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/event_joinpeople_img"
+        app:layout_constraintTop_toTopOf="@+id/event_details" />
+
+    <TextView
+        android:id="@+id/event_numberpoeple"
+        android:layout_width="57dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="81dp"
+        android:text="5 / 20"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/event_joinpeople"
+        app:layout_constraintTop_toTopOf="@+id/event_details" />
+
+    <ImageView
+        android:id="@+id/event_time_img"
+        android:layout_width="20dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="108dp"
+        app:layout_constraintStart_toStartOf="@+id/event_details"
+        app:layout_constraintTop_toTopOf="@+id/event_details"
+        app:srcCompat="@android:drawable/ic_menu_my_calendar" />
+
+    <TextView
+        android:id="@+id/event_time"
+        android:layout_width="122dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="111dp"
+        android:text="Event Time : "
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/event_time_img"
+        app:layout_constraintTop_toTopOf="@+id/event_details" />
+
+    <TextView
+        android:id="@+id/event_time_edit"
+        android:layout_width="109dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="113dp"
+        android:text="20-11-2023"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/event_time"
+        app:layout_constraintTop_toTopOf="@+id/event_details" />
+
+    <TextView
+        android:id="@+id/event_title"
+        android:layout_width="346dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="4dp"
+        android:text="Malaysia Coastal Cleanup Initiative - Cleaning our oceans, safeguarding our future, united in action!"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/event_details"
+        app:layout_constraintTop_toTopOf="@+id/event_details" />
+
+    <ImageView
+        android:id="@+id/event_location_img"
+        android:layout_width="20dp"
+        android:layout_height="21dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="142dp"
+        app:layout_constraintStart_toStartOf="@+id/event_details"
+        app:layout_constraintTop_toTopOf="@+id/event_details"
+        android:src="@drawable/baseline_location_on_24"
+        app:srcCompat="@android:drawable/ic_menu_mylocation" />
+
+    <TextView
+        android:id="@+id/event_location"
+        android:layout_width="122dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="145dp"
+        android:text="Location : "
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/event_location_img"
+        app:layout_constraintTop_toTopOf="@+id/event_details" />
+
+    <TextView
+        android:id="@+id/event_location_edit"
+        android:layout_width="180dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="145dp"
+        android:text="Sipadan Island"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/event_location"
+        app:layout_constraintTop_toTopOf="@+id/event_details" />
+
+    <ImageView
+        android:id="@+id/event_organization_img"
+        android:layout_width="20dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="175dp"
+        app:layout_constraintStart_toStartOf="@+id/event_details"
+        app:layout_constraintTop_toTopOf="@+id/event_details"
+        app:srcCompat="@android:drawable/ic_menu_mapmode" />
+
+    <TextView
+        android:id="@+id/event_organization"
+        android:layout_width="120dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="177dp"
+        android:text="Organization Name :"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/event_organization_img"
+        app:layout_constraintTop_toTopOf="@+id/event_details" />
+
+    <TextView
+        android:id="@+id/event_organization_edit"
+        android:layout_width="211dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="177dp"
+        android:text="Malaysia Coastal Conservation Society"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/event_organization"
+        app:layout_constraintTop_toTopOf="@+id/event_details" />
+
+    <ImageView
+        android:id="@+id/event_contactperson_img"
+        android:layout_width="20dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="204dp"
+        app:layout_constraintStart_toStartOf="@+id/event_details"
+        app:layout_constraintTop_toTopOf="@+id/event_details"
+        app:srcCompat="@android:drawable/ic_menu_view" />
+
+    <TextView
+        android:id="@+id/event_contactperson"
+        android:layout_width="117dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="209dp"
+        android:text="Contact Person :"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/event_contactperson_img"
+        app:layout_constraintTop_toTopOf="@+id/event_details" />
+
+    <TextView
+        android:id="@+id/event_contactperson_edit"
+        android:layout_width="211dp"
+        android:layout_height="23dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="209dp"
+        android:text="Mr Lim"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/event_contactperson"
+        app:layout_constraintTop_toTopOf="@+id/event_details" />
+
+    <ImageView
+        android:id="@+id/event_contactnumber_img"
+        android:layout_width="20dp"
+        android:layout_height="21dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="234dp"
+        app:layout_constraintStart_toStartOf="@+id/event_details"
+        app:layout_constraintTop_toTopOf="@+id/event_details"
+        app:srcCompat="@android:drawable/ic_menu_call" />
+
+    <TextView
+        android:id="@+id/event_contactnumber"
+        android:layout_width="120dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="237dp"
+        android:text="Contact Number :"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/event_contactnumber_img"
+        app:layout_constraintTop_toTopOf="@+id/event_details" />
+
+    <TextView
+        android:id="@+id/event_contactnumber_edit"
+        android:layout_width="133dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="237dp"
+        android:text="012-3456789"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/event_contactnumber"
+        app:layout_constraintTop_toTopOf="@+id/event_details" />
+
+    <TextView
+        android:id="@+id/txt_event_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:text="Event Content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event_details" />
+
+    <ScrollView
+        android:id="@+id/event_content"
+        android:layout_width="366dp"
+        android:layout_height="143dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_event_content">
+
+        <TextView
+            android:id="@+id/event_content_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bio"
+            android:textSize="12sp"
+            tools:layout_editor_absoluteX="132dp"
+            tools:layout_editor_absoluteY="399dp" />
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/event_people"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Event Joined Records"
+        android:layout_marginTop="13dp"
+        android:layout_marginStart="20dp"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event_content" />
+
+    <ScrollView
+        android:id="@+id/scrollview_fundraising_people"
+        android:layout_width="394dp"
+        android:layout_height="125dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event_people">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fundraising_people_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_join"
+        android:layout_width="371dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/event_join_btn"
+        android:text="I want to join"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollview_fundraising_people" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
