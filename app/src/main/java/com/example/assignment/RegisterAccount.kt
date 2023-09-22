@@ -51,12 +51,13 @@ class RegisterAccount : AppCompatActivity() {
         etemail = findViewById(R.id.etEmailEditText)
         etpassword = findViewById(R.id.passwordEditText)
         etconpassword = findViewById(R.id.conpasswordEditText)
-        signupBtn=findViewById(R.id.signupBtn)
+        signupBtn = findViewById(R.id.signupBtn)
 
         nameLayout.helperText = null
         etEmailLayout.helperText = null
         passwordLayout.helperText = null
         conpasswordLayout.helperText = null
+
 
 
         signupBtn.setOnClickListener{
@@ -67,7 +68,15 @@ class RegisterAccount : AppCompatActivity() {
     }
 
     fun validationInput(){
+//     name= etname.text.toString().trim { it <= ' ' }
+        if(etname.text.toString().length>10){
+            nameLayout.setError("User Name cannot be empty");
+//            nameLayout.setErrorIconDrawable(R.drawable.baseline_error_24);
 
+
+        }else{
+            nameLayout.error = null
+        }
     }
 //    fun save(view: View?) {
 //        name = etname.text.toString().trim { it <= ' ' }
