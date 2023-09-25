@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".Paypal">
 
     <TextView
         android:id="@+id/donateAmount_paypal_title"
@@ -97,6 +98,19 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email_paypal" />
+
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="279dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="64dp"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/paypal_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password_paypal"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/paypal_btn"
