@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.assignment.admin.donate.AdminDonateFragment
 import com.example.assignment.admin.news.AdminNewsFragment
 import com.example.assignment.admin.report.AdminReportFragment
+import com.example.assignment.admin.user.AdminUserDetailFragment
 import com.example.assignment.admin.user.AdminUserFragment
 import com.example.assignment.admin.volunteer.AdminVolunteerFragment
 
@@ -53,12 +54,11 @@ class DashboardFragment : Fragment() {
         val root: View = binding.root
 
         val textView: TextView = binding.text1
-
-//
         DashboardViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
 
         }
+
         return root
     }
 
@@ -99,6 +99,7 @@ class DashboardFragment : Fragment() {
             loadFragment(AdminReportFragment())
         }
     }
+
 
     private fun loadFragment(fragment: Fragment) {
         val transaction = requireActivity().supportFragmentManager.beginTransaction()

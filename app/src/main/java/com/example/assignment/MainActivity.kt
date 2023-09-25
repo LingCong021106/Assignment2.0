@@ -156,6 +156,7 @@ class MainActivity : AppCompatActivity() {
         adminButton.setCompoundDrawablesWithIntrinsicBounds(null, AiconDrawable, null, null)
     }
 
+        
     private fun updateIndividualButtonLayout() {
 
         etEmailLayout.helperText = null
@@ -324,7 +325,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     fun register(view: View?) {
         val intent = Intent(this, RegisterAccount::class.java)
         startActivity(intent)
@@ -338,8 +338,6 @@ class MainActivity : AppCompatActivity() {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 }
-
-
 
 ////lingcong
 //class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
