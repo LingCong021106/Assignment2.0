@@ -16,17 +16,33 @@
         android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:id="@+id/toolbar"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></androidx.appcompat.widget.Toolbar>
+            android:theme="@style/AppCompatTheme"
+            app:popupTheme="@style/AppCompatTheme"
+            app:subtitleTextColor="#FFFFFF"
+            >
+
+            <ImageView
+                android:id="@+id/nav_logo"
+                android:layout_width="66dp"
+                android:layout_height="51dp"
+                android:layout_gravity="right|top"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/user_login_logo"
+                android:text="Toolbar Title" />
+
+
+        </androidx.appcompat.widget.Toolbar>
+
+
 
         <fragment
+            android:id="@+id/fragment_container"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/fragment_container"></fragment>
+            android:layout_height="match_parent"></fragment>
 
 
     </LinearLayout>
@@ -39,5 +55,9 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/admin_nav_menu" />
+
+
+
+
 
 </androidx.drawerlayout.widget.DrawerLayout>
