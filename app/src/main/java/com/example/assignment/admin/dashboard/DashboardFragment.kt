@@ -69,12 +69,9 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         var fragment = parentFragmentManager.findFragmentById(R.id.fragment_container)
-//        navigationView.setNavigationItemSelectedListener(this)
 
 
         binding.dashboardUserBtn.setOnClickListener{
-            val navigationView = view.findViewById<NavigationView>(R.id.nav_view)
-
             if(savedInstanceState == null){
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, AdminUserFragment()).commit()
