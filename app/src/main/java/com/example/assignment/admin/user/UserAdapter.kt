@@ -38,8 +38,5 @@ class UserAdapter(var userList : List<User>) :
         //holder.profile.setImageResource(userList[position].profile)
         holder.username.text = userList[position].userName
         holder.role.text = userList[position].role
-
     }
-
-
 }

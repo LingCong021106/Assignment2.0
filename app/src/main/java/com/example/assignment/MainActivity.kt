@@ -41,6 +41,7 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.assignment.user.UserHome
 import com.google.android.material.textfield.TextInputLayout
 
 //jiahon
@@ -672,93 +673,78 @@ import com.google.android.material.textfield.TextInputLayout
 //}
 
 ////lingcong
-//class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-//
-//    private lateinit var dashboardUserBtn: Button
-//    private lateinit var navController: NavController
-//
-//    private lateinit var drawerLayout: DrawerLayout
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
-//
-//        val button = findViewById<Button>(R.id.button2).setOnClickListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    private lateinit var dashboardUserBtn: Button
+    private lateinit var navController: NavController
+
+    private lateinit var drawerLayout: DrawerLayout
+
+    private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var binding: AdminHomeBinding
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.admin_home)
+
+//        val button2 = findViewById<Button>(R.id.button2).setOnClickListener {
 //            val intent = Intent(this, AdminHome::class.java)
 //            startActivity(intent)
 //        }
-
-//        drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
-//
-//        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-//        setSupportActionBar(toolbar)
-//
-//        val navigationView = findViewById<NavigationView>(R.id.nav_view)
-//        navigationView.setNavigationItemSelectedListener(this)
-//
-//        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-//
-//        drawerLayout.addDrawerListener(toggle)
-//        toggle.syncState()
-//        if(savedInstanceState == null){
-//            supportFragmentManager.beginTransaction()
-//                .replace(R.id.fragment_container, DashboardFragment()).commit()
-//            navigationView.setCheckedItem(R.id.admin_nav_dashboard)
+//        val button3 = findViewById<Button>(R.id.button3).setOnClickListener {
+//            val intent = Intent(this, UserHome::class.java)
+//            startActivity(intent)
 //        }
 
-//        when(fragment.toString()){
-//            "admin_nav_user" -> supportFragmentManager.beginTransaction()
-//                .replace(R.id.fragment_container, DashboardFragment()).commit()
-//            navigationView.setCheckedItem(R.id.admin_nav_dashboard)
-//
-//        }
 
-//        toolbar.setNavigationOnClickListener{
-//            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-//                drawerLayout.closeDrawer(GravityCompat.START)
-//
-//            } else {
-//                var currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
-//                when(currentFragment){
-//                    is AdminUserFragment -> navigationView.setCheckedItem(R.id.admin_nav_user)
-//                    is AdminReportFragment -> navigationView.setCheckedItem(R.id.admin_nav_report)
-//                    is AdminNewsFragment -> navigationView.setCheckedItem(R.id.admin_nav_news)
-//                    is AdminDonateFragment -> navigationView.setCheckedItem(R.id.admin_nav_donate)
-//                    is AdminVolunteerFragment -> navigationView.setCheckedItem(R.id.admin_nav_volunteer)
-//                    else -> navigationView.setCheckedItem(R.id.admin_nav_dashboard)
-//                }
-//                drawerLayout.openDrawer(GravityCompat.START)
-//            }
-//        }
 
-//    }
+        drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
 
-//    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-//        when (item.itemId) {
-//            R.id.admin_nav_dashboard -> loadFragment(DashboardFragment())
-//            R.id.admin_nav_donate -> loadFragment(AdminDonateFragment())
-//            R.id.admin_nav_news -> loadFragment(AdminNewsFragment())
-//            R.id.admin_nav_report -> loadFragment(AdminReportFragment())
-//            R.id.admin_nav_volunteer -> loadFragment(AdminVolunteerFragment())
-//            R.id.admin_nav_user -> loadFragment(AdminUserFragment())
-//        }
-//        drawerLayout.closeDrawer(GravityCompat.START)
-//        return true
-//    }
-//
-//    override fun onBackPressed() {
-//        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-//            drawerLayout.closeDrawer(GravityCompat.START)
-//        } else {
-//            onBackPressedDispatcher.onBackPressed()
-//        }
-//    }
-//
-//    private fun loadFragment(fragment: Fragment) {
-//        val transaction = supportFragmentManager.beginTransaction()
-//        transaction.replace(R.id.fragment_container, fragment)
-//        transaction.commit()
-//    }
-//}
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        val navigationView = findViewById<NavigationView>(R.id.nav_view)
+        navigationView.setNavigationItemSelectedListener(this)
+
+        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+        if(savedInstanceState == null){
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, DashboardFragment()).commit()
+            navigationView.setCheckedItem(R.id.admin_nav_dashboard)
+        }
+
+
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.admin_nav_dashboard -> loadFragment(DashboardFragment())
+            R.id.admin_nav_donate -> loadFragment(AdminDonateFragment())
+            R.id.admin_nav_news -> loadFragment(AdminNewsFragment())
+            R.id.admin_nav_report -> loadFragment(AdminReportFragment())
+            R.id.admin_nav_volunteer -> loadFragment(AdminVolunteerFragment())
+            R.id.admin_nav_user -> loadFragment(AdminUserFragment())
+        }
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
+    }
+
+    override fun onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            onBackPressedDispatcher.onBackPressed()
+        }
+    }
+
+    private fun loadFragment(fragment: Fragment) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container, fragment)
+        transaction.commit()
+    }
+}
 
 
 //    //cy
@@ -858,90 +844,9 @@ import com.google.android.material.textfield.TextInputLayout
 ////        setupActionBarWithNavController(navController, appBarConfiguration)
 ////        navView.setupWithNavController(navController)
 //
-////        navigationView = findViewById(R.id.nav_view) as NavigationView
-////        navigationView.setNavigationItemSelectedListener() {
-////            when (it.itemId) {
-////                R.id.admin_nav_dashboard -> {
-////                    loadFragment(DashboardFragment())
-////                    true
-////                }
-////                R.id.admin_nav_donate -> {
-////                    loadFragment(AdminDonateFragment())
-////                    true
-////                }
-////                R.id.admin_nav_volunteer -> {
-////                    loadFragment(AdminVolunteerFragment())
-////                    true
-////                }
-////                R.id.admin_nav_user -> {
-////                    loadFragment(AdminUserFragment())
-////                    true
-////                }
-////                R.id.admin_nav_news -> {
-////                    loadFragment(AdminNewsFragment())
-////                    true
-////                }
-////                R.id.admin_nav_report -> {
-////                    loadFragment(AdminNewsFragment())
-////                    true
-////                }
-////                else -> {
-////                    true
-////                }
-////            }
-////            }
-//
-////        loadFragment(UserHomeFragment())
-////        bottomNav = findViewById(R.id.bottom_navigation) as BottomNavigationView
-////        bottomNav.setOnItemSelectedListener {
-////            when (it.itemId) {
-////                R.id.home -> {
-////                    loadFragment(UserHomeFragment())
-////                    true
-////                }
 ////
-////                R.id.donate -> {
-////                    loadFragment(DonateFragment())
-////                    true
-////                }
-////
-////                R.id.profile -> {
-////                    loadFragment(ProfileFragment())
-////                    true
-////                }
-////
-////
-////                R.id.event -> {
-////                    loadFragment(EventFragment())
-////                    true
-////                }
-////
-////                else -> {
-////                    true
-////                }
-////            }
-////        }
 //    }
-//    override fun onSupportNavigateUp(): Boolean {
-//        val navController = findNavController(R.id.nav_host_fragment_content_main)
-//        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-//    }
-//
-//    private  fun loadFragment(fragment: Fragment){
-//        val transaction = supportFragmentManager.beginTransaction()
-//        transaction.replace(R.id.fragment_container,fragment)
-//        transaction.commit()
-//    }
-//
-//}
-//
-//
-//
-////        dashboardUserBtn = findViewById(R.id.dashboardUserBtn)
-////        dashboardUserBtn.setOnClickListener {
-////            val intent = Intent(this, AdminUserViewModel::class.java)
-////            startActivity(intent)
-////        }
+
 //
 //
 //
@@ -950,17 +855,7 @@ import com.google.android.material.textfield.TextInputLayout
 ////        menuInflater.inflate(R.menu.main, menu)
 ////        return true
 ////    }
-//
-//
-//    //cy
-//
-//
-//    //lc
-////    private val userHomeFragment = UserHomeFragment()
-////    private val eventFragment = EventFragment()
-////    private val donateFragment = DonateFragment()
-////    private val profileFragment = ProfileFragment()
-////    lateinit var bottomNav : BottomNavigationView
+
 //    //sb
 ////    lateinit var image1 : ImageView
 ////    lateinit var image2 : ImageView
@@ -996,13 +891,7 @@ import com.google.android.material.textfield.TextInputLayout
 ////        setContentView(R.layout.user_register_account2)
 //
 //        //cy
-//
-//
-//
-//
-//
-//
-//    //cy
+
 ////    override fun onCreateOptionsMenu(menu: Menu): Boolean {
 ////        // Inflate the menu; this adds items to the action bar if it is present.
 ////        menuInflater.inflate(R.menu.main, menu)
@@ -1143,9 +1032,6 @@ import com.google.android.material.textfield.TextInputLayout
 ////
 ////        btnJoin.setOnClickListener { confirmation(it) }
 //
-//
-//
-//
 ////    }
 //
 ////    override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -1165,9 +1051,6 @@ import com.google.android.material.textfield.TextInputLayout
 ////        return super.onOptionsItemSelected(item)
 ////    }
 //
-//
-//
-//
 ////    private fun confirmation(view:View) {
 ////        builder.setTitle("Confirmation")
 ////            .setMessage("Are you sure want to join this event?")
@@ -1186,8 +1069,6 @@ import com.google.android.material.textfield.TextInputLayout
 ////            .show()
 ////    }
 //
-//
-//
 ////    private fun getUserdata() {
 ////        for (i in imageId.indices) {
 ////            val people = ListDonate(imageId[i], name[i])
@@ -1195,9 +1076,4 @@ import com.google.android.material.textfield.TextInputLayout
 ////        }
 ////    }
 //
-//
-//
-//
 ////}
-//
-

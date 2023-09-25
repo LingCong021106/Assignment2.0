@@ -85,7 +85,7 @@ class AdminHome: AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
         }
     }
 
-    private  fun loadFragment(fragment: Fragment){
+    private fun loadFragment(fragment: Fragment){
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container,fragment)
         transaction.commit()
