@@ -80,18 +80,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, DashboardFragment()).commit()
             navigationView.setCheckedItem(R.id.admin_nav_dashboard)
+            title="Dashboard"
         }
 
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.admin_nav_dashboard -> loadFragment(DashboardFragment())
-            R.id.admin_nav_donate -> loadFragment(AdminDonateFragment())
-            R.id.admin_nav_news -> loadFragment(AdminNewsFragment())
-            R.id.admin_nav_report -> loadFragment(AdminReportFragment())
-            R.id.admin_nav_volunteer -> loadFragment(AdminVolunteerFragment())
-            R.id.admin_nav_user -> loadFragment(AdminUserFragment())
+            R.id.admin_nav_dashboard -> loadFragment(DashboardFragment(), "Dashboard")
+            R.id.admin_nav_donate -> loadFragment(AdminDonateFragment(), "Donate")
+            R.id.admin_nav_news -> loadFragment(AdminNewsFragment(), "News")
+            R.id.admin_nav_report -> loadFragment(AdminReportFragment(), "Report")
+            R.id.admin_nav_volunteer -> loadFragment(AdminVolunteerFragment(), "Volunteer")
+            R.id.admin_nav_user -> loadFragment(AdminUserFragment(), "User")
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
@@ -208,9 +209,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    private  fun loadFragment(fragment: Fragment){
+    private  fun loadFragment(fragment: Fragment, label : String){
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container,fragment)
+        title = label
         transaction.commit()
     }
 
