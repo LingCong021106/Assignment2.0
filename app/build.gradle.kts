@@ -76,6 +76,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
 
+    implementation("androidx.fragment:fragment:1.0.0")
+
     //implementation("androidx.lifecycle:lifecycle-common:2.6.2")
 
 
