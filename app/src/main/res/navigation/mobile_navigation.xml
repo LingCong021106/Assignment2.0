@@ -15,7 +15,24 @@
         android:id="@+id/admin_nav_user"
         android:name="com.example.assignment.admin.user.AdminUserFragment"
         android:label="User"
-        tools:layout="@layout/fragment_admin_user" />
+        tools:layout="@layout/fragment_admin_user">
+        <action
+            android:id="@+id/action_admin_nav_user_to_admin_nav_user_detail"
+            app:destination="@id/admin_nav_user_detail" />
+    </fragment>
+
+    <action
+        android:id="@+id/action_fragmentA_to_fragmentB"
+        app:destination="@id/admin_nav_user_detail" />
+
+
+
+    <fragment
+        android:id="@+id/admin_nav_user_detail"
+        android:name="com.example.assignment.admin.user.AdminUserDetailFragment"
+        android:label="UserDetail"
+        tools:layout="@layout/fragment_admin_user_detail" />
+
 
     <fragment
         android:id="@+id/admin_nav_donate"
@@ -40,4 +57,24 @@
         android:name="com.example.assignment.admin.report.AdminReportFragment"
         android:label="Report"
         tools:layout="@layout/fragment_admin_report" />
+
+    <action
+        android:id="@+id/action_dashboard_to_user"
+        app:destination="@id/admin_nav_user" />
+
+    <action
+        android:id="@+id/action_dashboard_to_donate"
+        app:destination="@id/admin_nav_donate" />
+
+    <action
+        android:id="@+id/action_dashboard_to_volunteer"
+        app:destination="@id/admin_nav_volunteer" />
+
+    <action
+        android:id="@+id/action_dashboard_to_news"
+        app:destination="@id/admin_nav_news" />
+
+    <action
+        android:id="@+id/action_dashboard_to_report"
+        app:destination="@id/admin_nav_report" />
 </navigation>

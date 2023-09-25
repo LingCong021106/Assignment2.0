@@ -1,14 +1,27 @@
 package com.example.assignment.admin.dashboard
 
+import android.R.*
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.assignment.databinding.FragmentDashboardBinding
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.example.assignment.R
+import com.example.assignment.admin.donate.AdminDonateFragment
+import com.example.assignment.admin.news.AdminNewsFragment
+import com.example.assignment.admin.report.AdminReportFragment
+import com.example.assignment.admin.user.AdminUserDetailFragment
+import com.example.assignment.admin.user.AdminUserFragment
+import com.example.assignment.admin.volunteer.AdminVolunteerFragment
+import com.example.assignment.databinding.FragmentDashboardBinding
+import com.google.android.material.navigation.NavigationView
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,16 +51,73 @@ class DashboardFragment : Fragment() {
         val root: View = binding.root
 
         val textView: TextView = binding.text1
+
         DashboardViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
+
         }
+
         return root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        var fragment = parentFragmentManager.findFragmentById(R.id.fragment_container)
+//        navigationView.setNavigationItemSelectedListener(this)
 
+
+        binding.dashboardUserBtn.setOnClickListener{
+            val navigationView = view.findViewById<NavigationView>(R.id.nav_view)
+
+            if(savedInstanceState == null){
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, AdminUserFragment()).commit()
+
+            }
+        }
+
+        val button2 = view.findViewById<Button>(R.id.dashboardDonateBtn)
+        button2.setOnClickListener {
+            if(savedInstanceState == null){
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, AdminDonateFragment()).commit()
+            }
+        }
+
+        val button3 = view.findViewById<Button>(R.id.dashboardVolunteerBtn)
+        button3.setOnClickListener {
+            if(savedInstanceState == null){
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, AdminVolunteerFragment()).commit()
+            }
+        }
+
+        val button4 = view.findViewById<Button>(R.id.dashboardNewsBtn)
+        button4.setOnClickListener {
+            if(savedInstanceState == null){
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, AdminNewsFragment()).commit()
+            }
+        }
+
+        val button5 = view.findViewById<Button>(R.id.dashboardReportBtn)
+        button5.setOnClickListener {
+            if(savedInstanceState == null){
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, AdminReportFragment()).commit()
+            }
+        }
+    }
+
+    private fun loadFragment(fragment: Fragment) {
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container, fragment)
+        transaction.commit()
+    }
 }

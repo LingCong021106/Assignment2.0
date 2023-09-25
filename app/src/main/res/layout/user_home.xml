@@ -32,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:background="#03A9F4"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/buttom_nav_menu" />
 
