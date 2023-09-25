@@ -26,6 +26,7 @@
             android:name=".user_views"
             android:exported="false" />
         <activity android:name=".admin.AdminHome"/>
+        <activity android:name=".user.UserHome"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">
