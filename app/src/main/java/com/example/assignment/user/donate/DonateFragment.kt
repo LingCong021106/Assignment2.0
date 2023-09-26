@@ -35,7 +35,7 @@ class DonateFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_donate, container, false)
+        return inflater.inflate(R.layout.fragment_user_donate, container, false)
     }
 
     companion object {
