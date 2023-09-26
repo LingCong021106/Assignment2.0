@@ -74,39 +74,40 @@ class DashboardFragment : Fragment() {
         binding.dashboardUserBtn.setOnClickListener{
             if(savedInstanceState == null){
                 parentFragmentManager.beginTransaction()
+                    .addToBackStack(null)
                     .replace(R.id.fragment_container, AdminUserFragment()).commit()
 
             }
         }
 
-        val button2 = view.findViewById<Button>(R.id.dashboardDonateBtn)
-        button2.setOnClickListener {
+        binding.dashboardDonateBtn.setOnClickListener{
             if(savedInstanceState == null){
                 parentFragmentManager.beginTransaction()
+                    .addToBackStack(null)
                     .replace(R.id.fragment_container, AdminDonateFragment()).commit()
             }
         }
 
-        val button3 = view.findViewById<Button>(R.id.dashboardVolunteerBtn)
-        button3.setOnClickListener {
+        binding.dashboardVolunteerBtn.setOnClickListener{
             if(savedInstanceState == null){
                 parentFragmentManager.beginTransaction()
+                    .addToBackStack(null)
                     .replace(R.id.fragment_container, AdminVolunteerFragment()).commit()
             }
         }
 
-        val button4 = view.findViewById<Button>(R.id.dashboardNewsBtn)
-        button4.setOnClickListener {
+        binding.dashboardNewsBtn.setOnClickListener{
             if(savedInstanceState == null){
                 parentFragmentManager.beginTransaction()
+                    .addToBackStack(null)
                     .replace(R.id.fragment_container, AdminNewsFragment()).commit()
             }
         }
 
-        val button5 = view.findViewById<Button>(R.id.dashboardReportBtn)
-        button5.setOnClickListener {
+        binding.dashboardReportBtn.setOnClickListener{
             if(savedInstanceState == null){
                 parentFragmentManager.beginTransaction()
+                    .addToBackStack(null)
                     .replace(R.id.fragment_container, AdminReportFragment()).commit()
             }
         }

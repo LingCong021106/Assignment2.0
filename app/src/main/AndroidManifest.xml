@@ -36,7 +36,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".admin.dashboard.DashboardFragment"
+            android:exported="true" />
+        <activity
+            android:name=".admin.donate.AdminDonateFragment"
+            android:exported="true" />
+        <activity
+            android:name=".admin.news.AdminNewsFragment"
+            android:exported="true" />
+        <activity
+            android:name=".admin.report.AdminReportFragment"
+            android:exported="true" />
+        <activity
+            android:name=".admin.user.AdminUserFragment"
+            android:exported="true" />
+        <activity
+            android:name=".admin.volunteer.AdminVolunteerFragment"
+            android:exported="true" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
