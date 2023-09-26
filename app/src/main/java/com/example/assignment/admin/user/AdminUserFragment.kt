@@ -1,5 +1,6 @@
 package com.example.assignment.admin.user
 
+import android.media.Image
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.RadioButton
 import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
@@ -34,12 +37,19 @@ class AdminUserFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var recyclerView : RecyclerView
     private lateinit var searchView : SearchView
+    private lateinit var radioAllUser : RadioButton
+    private lateinit var radioAdmin : RadioButton
+    private lateinit var radioIndividual : RadioButton
+    private lateinit var radioOrganization : RadioButton
+
     //private  var userList = ArrayList<User>()
     private lateinit var adapter: UserAdapter
 
     private lateinit var appDb : UserDatabase
 
     lateinit var usersList : List<User>
+
+    lateinit var profile : ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,9 +76,30 @@ class AdminUserFragment : Fragment() {
         appDb = UserDatabase.getDatabase(requireContext())
         recyclerView = binding.userRecycleView
         searchView = binding.adminUserSearch
+        radioAllUser = binding.radioButtonAllUser
+        radioAdmin = binding.radioButtonAdmin
+        radioIndividual = binding.radioButtonIndividual
+        radioOrganization = binding.radioButtonOrganization
+
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
 
-        getAllUsers()
+        getAll()
+        //getAdmin("Admin")
+
+        radioAllUser.setOnClickListener{
+            getUser("All")
+        }
+        radioAdmin.setOnClickListener {
+            getUser("Admin")
+        }
+        radioIndividual.setOnClickListener{
+            getUser("Individual")
+        }
+        radioOrganization.setOnClickListener{
+            getUser("Organization")
+        }
 
 
 
@@ -134,15 +165,12 @@ class AdminUserFragment : Fragment() {
         transaction.commit()
     }
 
-    private fun getAllUsers() {
+    private fun getAll() {
 
         GlobalScope.launch {
-            var users = appDb.studentDao().getAll()
+            var users = appDb.userDao().getAll()
             // Handle the list of students as needed (e.g., update the UI)
             usersList = users
-
-            recyclerView.setHasFixedSize(true)
-            recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
             adapter = UserAdapter(usersList)
             recyclerView.adapter = adapter
@@ -150,7 +178,25 @@ class AdminUserFragment : Fragment() {
         }
     }
 
+    private fun getUser(role: String) {
+
+        val adminUsers = mutableListOf<User>()
+
+        if(role == "All"){
+            for (user in usersList) {
+                adminUsers.add(user)
+            }
+        }else{
+            for (user in usersList) {
+                if (user.role == role) {
+                    adminUsers.add(user)
+                }
+            }
+        }
 
 
+        adapter = UserAdapter(adminUsers)
+        recyclerView.adapter = adapter
+    }
 
 }

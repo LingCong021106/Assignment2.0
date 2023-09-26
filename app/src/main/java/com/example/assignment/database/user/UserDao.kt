@@ -4,8 +4,11 @@ import androidx.room.*
 
 @Dao
 interface UserDao {
-    @Query("SELECT * FROM user_table")
+    @Query("SELECT * FROM user_table ORDER BY role")
     fun getAll(): List<User>
+
+    @Query("SELECT * FROM user_table WHERE role LIKE :role")
+    fun getUsers(role : String): List<User>
 
    /* @Query("SELECT * FROM student_table WHERE uid IN (:userIds)")
     fun loadAllByIds(userIds: IntArray): List<Student>*/
