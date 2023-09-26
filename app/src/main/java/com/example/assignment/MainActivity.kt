@@ -684,36 +684,36 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var binding: AdminHomeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.admin_home)
+        setContentView(R.layout.activity_main)
 
-//        val button2 = findViewById<Button>(R.id.button2).setOnClickListener {
-//            val intent = Intent(this, AdminHome::class.java)
-//            startActivity(intent)
-//        }
-//        val button3 = findViewById<Button>(R.id.button3).setOnClickListener {
-//            val intent = Intent(this, UserHome::class.java)
-//            startActivity(intent)
-//        }
-
-
-
-        drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
-
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-
-        val navigationView = findViewById<NavigationView>(R.id.nav_view)
-        navigationView.setNavigationItemSelectedListener(this)
-
-        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-        if(savedInstanceState == null){
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, DashboardFragment()).commit()
-            navigationView.setCheckedItem(R.id.admin_nav_dashboard)
+        val button2 = findViewById<Button>(R.id.button2).setOnClickListener {
+            val intent = Intent(this, AdminHome::class.java)
+            startActivity(intent)
         }
+        val button3 = findViewById<Button>(R.id.button3).setOnClickListener {
+            val intent = Intent(this, UserHome::class.java)
+            startActivity(intent)
+        }
+
+
+
+//        drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+//
+//        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+//        setSupportActionBar(toolbar)
+//
+//        val navigationView = findViewById<NavigationView>(R.id.nav_view)
+//        navigationView.setNavigationItemSelectedListener(this)
+//
+//        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+//
+//        drawerLayout.addDrawerListener(toggle)
+//        toggle.syncState()
+//        if(savedInstanceState == null){
+//            supportFragmentManager.beginTransaction()
+//                .replace(R.id.fragment_container, DashboardFragment()).commit()
+//            navigationView.setCheckedItem(R.id.admin_nav_dashboard)
+//        }
 
 
     }
