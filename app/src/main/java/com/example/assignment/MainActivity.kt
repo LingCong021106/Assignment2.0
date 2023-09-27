@@ -686,14 +686,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val button2 = findViewById<Button>(R.id.button2).setOnClickListener {
-            val intent = Intent(this, AdminHome::class.java)
-            startActivity(intent)
-        }
-        val button3 = findViewById<Button>(R.id.button3).setOnClickListener {
-            val intent = Intent(this, UserHome::class.java)
-            startActivity(intent)
-        }
+//        val button2 = findViewById<Button>(R.id.button2).setOnClickListener {
+//            val intent = Intent(this, AdminHome::class.java)
+//            startActivity(intent)
+//        }
+//        val button3 = findViewById<Button>(R.id.button3).setOnClickListener {
+//            val intent = Intent(this, UserHome::class.java)
+//            startActivity(intent)
+//        }
 
 
 
