@@ -32,7 +32,7 @@
                 android:layout_marginVertical="10dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="15dp"
-                android:text="Edit My User Profile"
+                android:text="Edit My Profile"
                 android:textAlignment="center"
                 android:textColor="#033247"
                 android:textSize="34sp"
@@ -49,11 +49,12 @@
                     android:id="@+id/userImageView"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_centerVertical="true"
+                    android:layout_centerInParent="true"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/profile_circular_shape"
                     android:contentDescription="User Image"
-                    android:src="@drawable/upload_image" />
+                    android:src="@drawable/user_login_logo" />
+
 
                 <ImageView
                     android:id="@+id/editImageView"
@@ -78,12 +79,13 @@
                 android:textColor="#809CA8"
                 android:textSize="14sp"
                 android:textStyle="bold|italic" />
+
             <TextView
                 android:id="@+id/rightTopTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:layout_marginRight="10dp"
                 android:text="Change Password"
                 android:textColor="#1476A3"
@@ -95,43 +97,42 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="15dp"
                 android:text="Name"
                 android:textColor="#033247"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/baseline_person_2white_24"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="0dp"
-                android:layout_marginStart="10dp"
-                android:contentDescription="Icon" />
-
-            <EditText
-                android:id="@+id/etName"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="10dp"
-                android:hint="Name"
-                android:textColorHint="#7E6666"
-                android:inputType="text"
-                android:minHeight="48dp" />
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
 
-        </LinearLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_person_2white_24"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginStart="10dp"
+                    android:contentDescription="Icon" />
+                <EditText
+                    android:id="@+id/etName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="20dp"
+                    android:hint="Name"
+                    android:textColorHint="#7E6666"
+                    android:inputType="text"
+                    android:minHeight="48dp" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/emailText"
@@ -144,36 +145,36 @@
                 android:textColor="#033247"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/baseline_email_24"
-            android:layout_gravity="center_vertical"
-                android:layout_marginEnd="0dp"
-                android:layout_marginStart="10dp"
-                android:contentDescription="Icon" />
-
-
-            <EditText
-                android:id="@+id/emailEditText"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="20dp"
-                android:hint="Email Address"
-                android:textColorHint="#7E6666"
-                android:inputType="textEmailAddress"
-                android:minHeight="48dp" />
-        </LinearLayout>
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_email_24"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginStart="10dp"
+                    android:contentDescription="Icon" />
+
+
+                <EditText
+                    android:id="@+id/emailEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="20dp"
+                    android:hint="Email Address"
+                    android:textColorHint="#7E6666"
+                    android:inputType="textEmailAddress"
+                    android:minHeight="48dp" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/phoneText"
@@ -187,55 +188,55 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/baseline_phone_enabled_24"
-                 android:layout_gravity="center_vertical"
-                android:layout_marginEnd="0dp"
-                android:layout_marginStart="10dp"
-            android:contentDescription="Icon" />
-
-            <EditText
-                android:id="@+id/phoneEditText"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="20dp"
-                android:hint="Enter Your Phone Number"
-                android:textColorHint="#7E6666"
-                android:inputType="phone"
-                android:minHeight="48dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/saveButton"
-                android:layout_width="180dp"
-                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="16dp"
-                android:drawableLeft="@drawable/baseline_save_24"
-                android:drawablePadding="8dp"
-                android:gravity="center"
-                android:text="Save Change" />
+                android:layout_marginRight="20dp">
 
-        </LinearLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_phone_enabled_24"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginStart="10dp"
+                    android:contentDescription="Icon" />
+
+                <EditText
+                    android:id="@+id/phoneEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="20dp"
+                    android:hint="Enter Your Phone Number"
+                    android:textColorHint="#7E6666"
+                    android:inputType="phone"
+                    android:minHeight="48dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/saveButton"
+                    android:layout_width="180dp"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="16dp"
+                    android:drawableLeft="@drawable/baseline_save_24"
+                    android:drawablePadding="8dp"
+                    android:gravity="center"
+                    android:text="Save Change" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
