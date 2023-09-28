@@ -684,7 +684,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var binding: AdminHomeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.fundraising_details_donate_payment)
 
 //        val button2 = findViewById<Button>(R.id.button2).setOnClickListener {
 //            val intent = Intent(this, AdminHome::class.java)

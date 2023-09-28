@@ -7,5 +7,6 @@
     <color name="normal">#072EF1</color>
     <color name="app_bar_background">#287294</color>
     <color name="icon_color">#AFAFAA</color>
+    <color name="error">#F30F0F</color>
 
 </resources>
