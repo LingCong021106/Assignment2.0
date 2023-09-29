@@ -111,6 +111,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //sb
+//        setContentView(R.layout.fundraising_details_donate_payment)
+
+//        val button2 = findViewById<Button>(R.id.button2).setOnClickListener {
+//            val intent = Intent(this, AdminHome::class.java)
+//            startActivity(intent)
+//        }
+//        val button3 = findViewById<Button>(R.id.button3).setOnClickListener {
+//            val intent = Intent(this, UserHome::class.java)
+//            startActivity(intent)
+//        }
         setContentView(R.layout.user_login)
 
 
