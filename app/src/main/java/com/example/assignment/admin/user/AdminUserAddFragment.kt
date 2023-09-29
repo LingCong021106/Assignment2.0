@@ -32,6 +32,7 @@ class AdminUserAddFragment : Fragment() {
     private lateinit var addName : EditText
     private lateinit var addRole : EditText
     private lateinit var addbtn : Button
+    private lateinit var testbtn : Button
     private  lateinit var profile : ImageView
     private lateinit var bitmapString : String
 
@@ -46,12 +47,18 @@ class AdminUserAddFragment : Fragment() {
         addName = view.findViewById(R.id.addName)
         addRole = view.findViewById(R.id.addRole)
         addbtn = view.findViewById(R.id.addbtn)
+        testbtn = view.findViewById(R.id.testupdate)
         profile = view.findViewById(R.id.profile_image)
 
         profile.setOnClickListener { selectImageFromGallery() }
 
         addbtn.setOnClickListener {
             addUser()
+        }
+
+        testbtn.setOnClickListener {
+
+            updateUser()
         }
 
         return view
@@ -100,6 +107,23 @@ class AdminUserAddFragment : Fragment() {
                 profile.setImageURI(selectedImageUri)
             }
         }
+    }
+
+
+    private fun updateUser() {
+
+//        val name = viewName.text.toString()
+//        val role = viewRole.text.toString()
+//        val profile = bitmapString
+
+        val user = User(
+            1, "test2", "Organization", "test2"
+        )
+
+        GlobalScope.launch(Dispatchers.IO) {
+            appDb.userDao().update(user)
+        }
+
     }
 
 

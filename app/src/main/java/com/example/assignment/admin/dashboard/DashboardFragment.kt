@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.assignment.R
+import com.example.assignment.admin.donate.AdminDonateAddFragment
+import com.example.assignment.admin.donate.AdminDonateDetailFragment
 import com.example.assignment.admin.donate.AdminDonateFragment
 import com.example.assignment.admin.news.AdminNewsFragment
 import com.example.assignment.admin.report.AdminReportFragment
@@ -83,7 +85,7 @@ class DashboardFragment : Fragment() {
         button2.setOnClickListener {
             if(savedInstanceState == null){
                 parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, AdminDonateFragment()).commit()
+                    .replace(R.id.fragment_container, AdminDonateAddFragment()).commit()
             }
         }
 

@@ -22,6 +22,12 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(user: User)
 
+//    @Query("UPDATE user_table SET userName=:name, role=:role, profile=:profile WHERE id=:id")
+//    fun update(id : Int, name : String, role: String, profile : String)
+
+    @Update
+    fun update(user: User)
+
     @Delete
     fun delete(user: User)
 

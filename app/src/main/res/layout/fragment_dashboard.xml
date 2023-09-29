@@ -30,7 +30,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:background="@drawable/oval_shape"
-        android:drawableLeft="@drawable/baseline_person_24"
         android:text="User"
         android:textSize="30dp"
         app:backgroundTint="#03A9F4"

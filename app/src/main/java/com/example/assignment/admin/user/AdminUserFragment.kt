@@ -1,5 +1,7 @@
 package com.example.assignment.admin.user
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.media.Image
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -24,9 +26,11 @@ import com.example.assignment.admin.donate.AdminDonateFragment
 import com.example.assignment.admin.news.AdminNewsFragment
 import com.example.assignment.admin.report.AdminReportFragment
 import com.example.assignment.admin.volunteer.AdminVolunteerFragment
+import com.example.assignment.admin.volunteer.test
 import com.example.assignment.database.user.User
 import com.example.assignment.database.user.UserDatabase
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -50,6 +54,8 @@ class AdminUserFragment : Fragment() {
     lateinit var usersList : List<User>
 
     lateinit var profile : ImageView
+
+    private lateinit var type : String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,6 +86,8 @@ class AdminUserFragment : Fragment() {
         radioAdmin = binding.radioButtonAdmin
         radioIndividual = binding.radioButtonIndividual
         radioOrganization = binding.radioButtonOrganization
+
+
 
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -172,9 +180,10 @@ class AdminUserFragment : Fragment() {
             // Handle the list of students as needed (e.g., update the UI)
             usersList = users
 
-            adapter = UserAdapter(usersList)
+            adapter = UserAdapter(usersList) { type, user ->
+                onActionClick(type, user)
+            }
             recyclerView.adapter = adapter
-
         }
     }
 
@@ -195,8 +204,45 @@ class AdminUserFragment : Fragment() {
         }
 
 
-        adapter = UserAdapter(adminUsers)
+        adapter = UserAdapter(adminUsers) { type, user ->
+            onActionClick(type, user)
+        }
         recyclerView.adapter = adapter
+    }
+
+
+    private fun onActionClick(type : String, user : User){
+        if(type == "delete"){
+            AlertDialog.Builder(requireContext())
+                .setTitle("Delete User")
+                .setMessage("Are you sure you want to delete this user?")
+                .setPositiveButton("Yes") { _, _ ->
+                    // Delete the user from the Room database
+                    GlobalScope.launch {
+                        appDb.userDao().delete(user)
+                        // Refresh the RecyclerView after deletion
+                        //getAll()
+                    }
+
+                    loadFragment(AdminUserFragment())
+                }
+                .setNegativeButton("No", null)
+                .show()
+        }else if(type == "view"){
+
+            val bundle = Bundle()
+            bundle.putString("id", user.id.toString())
+            bundle.putString("name", user.userName)
+            bundle.putString("role", user.role)
+            bundle.putString("profile", user.profile)
+            val fragmentUserDetail = AdminUserDetailFragment()
+            fragmentUserDetail.arguments = bundle
+
+            loadFragment(fragmentUserDetail)
+
+        }
+
+
     }
 
 }
