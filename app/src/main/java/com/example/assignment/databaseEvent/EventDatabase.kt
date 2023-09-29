@@ -33,8 +33,13 @@ abstract class EventDatabase : RoomDatabase() {
                 return instance
             }
 
+
+            val tempInstance = INSTANCE
+            if(tempInstance != null){
+                return tempInstance
             }
 
         }
+
 
 }

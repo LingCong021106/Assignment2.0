@@ -37,3 +37,4 @@ data class Event(
     @ColumnInfo(name = "eventLocation")
     val eventLocation : String?
 )
+

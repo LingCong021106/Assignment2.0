@@ -10,60 +10,62 @@
         android:id="@+id/donate_amount"
         android:layout_width="354dp"
         android:layout_height="245dp"
-        android:layout_marginStart="16dp"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/donate_title">
 
-        <RadioButton
-            android:id="@+id/donate_5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="RM5"
-            tools:layout_editor_absoluteX="130dp"
-            tools:layout_editor_absoluteY="130dp" />
+            <RadioButton
+                android:id="@+id/donate_5"
+                android:layout_width="69dp"
+                android:layout_height="59dp"
+                android:layout_marginTop="65dp"
+                android:background="@drawable/custom_radio_selector"
+                android:button="@color/black"
+                android:gravity="center_horizontal"
+                android:text="RM5"
+                tools:layout_editor_absoluteX="130dp"
+                tools:layout_editor_absoluteY="130dp" />
 
-        <RadioButton
+            <RadioButton
             android:id="@+id/donate_10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="69dp"
+            android:layout_height="59dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="65dp"
+            android:background="@drawable/custom_radio_selector"
+            android:button="@color/black"
+            android:gravity="center_horizontal"
             android:text="RM10"
             tools:layout_editor_absoluteX="130dp"
             tools:layout_editor_absoluteY="130dp" />
 
-        <RadioButton
-            android:id="@+id/donate_20"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="RM20"
-            tools:layout_editor_absoluteX="130dp"
-            tools:layout_editor_absoluteY="130dp" />
 
-        <RadioButton
-            android:id="@+id/donate_50"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="RM50"
-            tools:layout_editor_absoluteX="130dp"
-            tools:layout_editor_absoluteY="130dp" />
-
-        <RadioButton
-            android:id="@+id/donate_100"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="RM100"
-            tools:layout_editor_absoluteX="130dp"
-            tools:layout_editor_absoluteY="130dp" />
-
+            <RadioButton
+                android:id="@+id/donate_20"
+                android:layout_width="69dp"
+                android:layout_height="59dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="65dp"
+                android:background="@drawable/custom_radio_selector"
+                android:button="@color/black"
+                android:gravity="center_horizontal"
+                android:text="RM20"
+                tools:layout_editor_absoluteX="130dp"
+                tools:layout_editor_absoluteY="130dp" />
 
     </RadioGroup>
 
     <TextView
         android:id="@+id/donate_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="354dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="20dp"
         android:text="Select Donate Amount"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -80,7 +82,7 @@
 
     <EditText
         android:id="@+id/donate_amount_edit"
-        android:layout_width="189dp"
+        android:layout_width="75dp"
         android:layout_height="41dp"
         android:layout_marginStart="20dp"
         android:ems="10"
@@ -103,19 +105,24 @@
 
     <TextView
         android:id="@+id/donate_payment_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_width="354dp"
+        android:layout_height="29dp"
         android:layout_marginTop="32dp"
         android:text="Select Payment Method"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/donate_txt" />
 
     <RadioGroup
         android:id="@+id/donate_payment_method"
-        android:layout_width="350dp"
-        android:layout_height="171dp"
-        android:layout_marginStart="16dp"
+        android:layout_width="347dp"
+        android:layout_height="207dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/donate_payment_title">
 
@@ -123,7 +130,12 @@
             android:id="@+id/donate_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/custom_radio_selector"
+            android:button="@color/black"
+            android:drawableTop="@drawable/icons8_visa_card1"
+            android:gravity="center_horizontal"
             android:text="Credit / Debit Card"
+            android:layout_marginTop="30dp"
             tools:layout_editor_absoluteX="130dp"
             tools:layout_editor_absoluteY="130dp" />
 
@@ -131,6 +143,12 @@
             android:id="@+id/donate_paypal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/custom_radio_selector"
+            android:button="@color/black"
+            android:drawableTop="@drawable/icons8_paypal"
+            android:gravity="center_horizontal"
             android:text="Paypal"
             tools:layout_editor_absoluteX="130dp"
             tools:layout_editor_absoluteY="130dp" />
@@ -140,15 +158,16 @@
 
     <Button
         android:id="@+id/donate_payment_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="163dp"
+        android:layout_height="49dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="28dp"
         android:background="@drawable/event_join_btn"
         android:text="Proceed Payment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
 

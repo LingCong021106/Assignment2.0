@@ -38,10 +38,6 @@ class Donate: AppCompatActivity() {
                     textViewAmount.text = "10"
                 checkedId==R.id.donate_20->
                     textViewAmount.text = "20"
-                checkedId==R.id.donate_50->
-                    textViewAmount.text = "50"
-                checkedId==R.id.donate_100->
-                    textViewAmount.text = "100"
             }
 
             editTextAmount.visibility=View.GONE
