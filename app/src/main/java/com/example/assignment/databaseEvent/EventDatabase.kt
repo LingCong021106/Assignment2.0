@@ -26,14 +26,20 @@ abstract class EventDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     EventDatabase::class.java,
-                    "app_database"
-                ).build()
+                    "event_database"
+                )
+                    .build()
                 INSTANCE = instance
                 return instance
             }
 
+
+            val tempInstance = INSTANCE
+            if(tempInstance != null){
+                return tempInstance
+            }
+
         }
 
-    }
 
 }
