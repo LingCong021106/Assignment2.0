@@ -19,6 +19,33 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ResetPasswordActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="azurefuture.com"
+                    android:pathPrefix="/reset_password" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".AddOrganization"
+            android:exported="false" />
+        <activity
+            android:name=".ForgotPassword"
+            android:exported="false" />
+        <activity
+            android:name=".Admin_Organization_EditProfile"
+            android:exported="false" />
+        <activity
+            android:name=".UserEditProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".RegisterAccount"
             android:exported="false" />
         <activity
@@ -27,19 +54,70 @@
         <activity
             android:name=".user_views"
             android:exported="false" />
-        <activity android:name=".admin.AdminHome"/>
-        <activity android:name=".user.UserHome"/>
+
+<!--        <activity-->
+<!--            android:name=".RegisterAccount"-->
+<!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".user_home"-->
+<!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".user_views"-->
+<!--            android:exported="false" />-->
+
+<!--        <activity-->
+<!--            android:name=".FundraisingDetails"-->
+<!--            android:exported="false" />-->
+
+<!--        <activity-->
+<!--            android:name=".EventDetails"-->
+<!--            android:exported="false" />-->
+
+<!--        <activity-->
+<!--            android:name=".CreditCard"-->
+<!--            android:exported="false" />-->
+
+<!--        <activity-->
+<!--            android:name=".Paypal"-->
+<!--            android:exported="false" />-->
+
+<!--        <activity-->
+<!--            android:name=".Donate"-->
+<!--            android:exported="false" />-->
+
+<!--        <activity android:name=".admin.AdminHome"/>-->
+<!--        <activity android:name=".user.UserHome"/>-->
+
         <activity
-            android:name=".MainActivity"
+            android:name=".Paypal"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+
         </activity>
 
-
+<!--        <activity-->
+<!--            android:name=".admin.dashboard.DashboardFragment"-->
+<!--            android:exported="true" />-->
+<!--        <activity-->
+<!--            android:name=".admin.donate.AdminDonateFragment"-->
+<!--            android:exported="true" />-->
+<!--        <activity-->
+<!--            android:name=".admin.news.AdminNewsFragment"-->
+<!--            android:exported="true" />-->
+<!--        <activity-->
+<!--            android:name=".admin.report.AdminReportFragment"-->
+<!--            android:exported="true" />-->
+<!--        <activity-->
+<!--            android:name=".admin.user.AdminUserFragment"-->
+<!--            android:exported="true" />-->
+<!--        <activity-->
+<!--            android:name=".admin.volunteer.AdminVolunteerFragment"-->
+<!--            android:exported="true" />-->
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
