@@ -15,6 +15,33 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import android.util.AttributeSet
+import android.view.MenuItem
+import android.view.View
+import android.widget.Button
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import com.example.assignment.admin.AdminHome
+import com.example.assignment.admin.dashboard.DashboardFragment
+import com.example.assignment.admin.donate.AdminDonateFragment
+import com.example.assignment.admin.news.AdminNewsFragment
+import com.example.assignment.admin.report.AdminReportFragment
+import com.example.assignment.admin.user.AdminUserFragment
+import com.example.assignment.admin.volunteer.AdminVolunteerFragment
+import com.example.assignment.databinding.AdminHomeBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
@@ -591,6 +618,7 @@ class MainActivity : AppCompatActivity() {
             result.append(String.format("%02x", byte))
         }
 
+
         return result.toString()
     }
 
@@ -829,7 +857,8 @@ class MainActivity : AppCompatActivity() {
 ////        setContentView(binding.root)
 ////
 ////
-////        }
+//    }
+
 //
 //        //setContentView(R.layout.admin_home)
 ////        setContentView(R.layout.user_register_account2)
@@ -984,8 +1013,22 @@ class MainActivity : AppCompatActivity() {
 //
 //
 //
-//
+////    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+////        // Inflate the menu; this adds items to the action bar if it is present.
+////        menuInflater.inflate(R.menu.main, menu)
+////        return true
 ////    }
+//
+//
+//
+//
+//    //cy
+////    private lateinit var appBarConfiguration: AppBarConfiguration
+////    private lateinit var binding: AdminHomeBinding
+//
+//
+//        //setContentView(R.layout.admin_home)
+////        setContentView(R.layout.user_register_account2)
 //
 ////    override fun onOptionsItemSelected(item: MenuItem): Boolean {
 //
@@ -1008,7 +1051,15 @@ class MainActivity : AppCompatActivity() {
 //
 ////        return super.onOptionsItemSelected(item)
 ////    }
+//        //cy
+////        binding = AdminHomeBinding.inflate(layoutInflater)
+////        setContentView(binding.root)
+////
+////
+////        }
 //
+//        //setContentView(R.layout.admin_home)
+////        setContentView(R.layout.user_register_account2)
 //
 //
 //
@@ -1043,5 +1094,66 @@ class MainActivity : AppCompatActivity() {
 //
 //
 ////}
+//        //cy
+
+////    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+////        // Inflate the menu; this adds items to the action bar if it is present.
+////        menuInflater.inflate(R.menu.main, menu)
+////        return true
+////    }
+//
+//
+//    //cy
+
+////            //setContentView(R.layout.user_home)
+////
+//////        val drawerLayout : DrawerLayout = findViewById(R.id.admin_home)
+//////        val navView : NavigationView = findViewById(R.id.nav_view)
+//////
+//////        toggle = ActionBarDrawerToggle(this,drawerLayout, R.string.open, R.string.close)
+//////        drawerLayout.addDrawerListener(toggle)
+//////        toggle.syncState()
+//////
+//////        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//////
+//////        navView.setNavigationItemSelectedListener {
+//////
+//////            when(it.itemId){
+//////                R.id.admin_nav_dashboard -> Toast.makeText(applicationContext,"Clicked", Toast.LENGTH_LONG).show()
+//////            }
+//////
+//////            true
+//////
+//////        }
+////
+////
+////
+//////    }
+////
+//////    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//////
+//////        if(toggle.onOptionsItemSelected(item)){
+//////            return true
+//////        }
+//////
+//////        return super.onOptionsItemSelected(item)
+//////    }
+////
+////
+////        }
+//
+////    }
+//
+////    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//
+////
+
+////
+//
+////
+////        return super.onOptionsItemSelected(item)
+////    }
 //
 
+//
+////}

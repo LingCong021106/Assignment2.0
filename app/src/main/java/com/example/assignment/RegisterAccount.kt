@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
+
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -45,6 +46,7 @@ class RegisterAccount : AppCompatActivity() {
     private lateinit var appDb: AppDatabase
     private var userRole: String? = null
     lateinit var roleLayout: TextView
+
     lateinit var registerText:TextView
     lateinit var nameLayout: TextInputLayout
     lateinit var etEmailLayout: TextInputLayout
@@ -69,9 +71,7 @@ class RegisterAccount : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.user_register_account)
-
-        registerText=findViewById(R.id.registerText)
+        setContentView(R.layout.user_register_account)        registerText=findViewById(R.id.registerText)
         roleLayout = findViewById(R.id.roleLayout)
 
         userRole = intent.getStringExtra("user_role_key") ?: "User"
@@ -91,13 +91,13 @@ class RegisterAccount : AppCompatActivity() {
             roleLayout.text = "Register As Organization"
         }
 
-
         nameLayout = findViewById(R.id.nameLayout)
         etEmailLayout = findViewById(R.id.etEmailLayout)
         passwordLayout = findViewById(R.id.passwordLayout)
         conpasswordLayout = findViewById(R.id.conpasswordLayout)
         etphoneLayout=findViewById(R.id.etPhoneLayout)
         appDb = AppDatabase.getInstance(this)
+
 
         etname = findViewById(R.id.nameEditText)
         etemail = findViewById(R.id.etEmailEditText)
@@ -116,6 +116,7 @@ class RegisterAccount : AppCompatActivity() {
             .fallbackToDestructiveMigration()
             .build()
 
+
         signupBtn.setOnClickListener{
              validationInput()
         }
@@ -130,7 +131,6 @@ class RegisterAccount : AppCompatActivity() {
                 roleLayout.text = "Register As Users"
             }
         }
-
 
     }
 
