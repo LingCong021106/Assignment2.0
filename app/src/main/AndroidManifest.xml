@@ -11,9 +11,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:icon="@drawable/baseline_logo"
+        android:label="Azure Future"
+        android:roundIcon="@drawable/baseline_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.Assignment"
         android:usesCleartextTraffic="true"
@@ -29,9 +29,9 @@
             android:name=".user_views"
             android:exported="false" />
 
-        <activity
-            android:name=".FundraisingDetails"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".FundraisingDetails"-->
+<!--            android:exported="false" />-->
 
         <activity
             android:name=".EventDetails"
@@ -53,7 +53,7 @@
         <activity android:name=".user.UserHome"/>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".FundraisingDetails"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

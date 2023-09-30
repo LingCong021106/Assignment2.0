@@ -24,14 +24,13 @@ class FundraisingDetails : AppCompatActivity() {
     lateinit var image2 : ImageView
     private lateinit var listPeopleRecycler : RecyclerView
     private lateinit var newArrayList: ArrayList<ListDonate>
-    lateinit var imageId : Array<Int>
-    lateinit var name : Array<String>
     lateinit var btnDonate : Button
     lateinit var builder : AlertDialog.Builder
-    private val URL :String = "http://192.168.0.19:8081/mobile/fundraisingdonate.php"
+    private val URL :String = "http://192.168.0.21:8081/mobile/fundraisingdonate.php"
     lateinit var funId : String
     private val nameList: ArrayList<String> = ArrayList()
     private val imageIdList: ArrayList<Int> = ArrayList()
+    private var amount : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,12 +43,11 @@ class FundraisingDetails : AppCompatActivity() {
         image2.setImageResource(R.drawable.dice_1)
 
         val textViewTitle : TextView
-        funId = intent.getStringExtra("id").toString().trim()
+//        funId = intent.getStringExtra("id").toString().trim()
         textViewTitle = findViewById(R.id.fundraising_title_edit)
-        textViewTitle.text = intent.getStringExtra("name").toString()
+//        textViewTitle.text = intent.getStringExtra("name").toString()
 
-        name = emptyArray()
-        imageId= emptyArray()
+
 
         listPeopleRecycler = findViewById(R.id.fundraising_people_list)
         listPeopleRecycler.layoutManager = LinearLayoutManager(this)
@@ -69,9 +67,10 @@ class FundraisingDetails : AppCompatActivity() {
                         for (i in 0 until dataArray.length()) {
                             val dataObject = dataArray.getJSONObject(i)
                             val nameListItem = dataObject.getString("name").toString()
-                            val donateAmount = dataObject.getInt("amount")
+                            val donateAmount = dataObject.getString("amount").toInt()
                             val combinedString = "$nameListItem donate RM$donateAmount"
                             val imageIdListItem = R.drawable.dice_1
+                            amount +=donateAmount
                             nameList.add(combinedString)
                             imageIdList.add(imageIdListItem)
                         }
@@ -84,8 +83,11 @@ class FundraisingDetails : AppCompatActivity() {
                         ).show()
                     }
                 } catch (e: JSONException) {
-                    e.printStackTrace()
-                    // Handle JSON parsing error here
+                    Toast.makeText(
+                        this@FundraisingDetails,
+                        e.message.toString().trim { it <= ' ' },
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             },
             Response.ErrorListener { error ->
@@ -98,7 +100,7 @@ class FundraisingDetails : AppCompatActivity() {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String>? {
                 val data: MutableMap<String, String> = HashMap()
-                data["id"] = funId
+                data["id"] = "1"
                 return data
             }
         }
@@ -115,6 +117,12 @@ class FundraisingDetails : AppCompatActivity() {
         val intent = Intent(this@FundraisingDetails, Donate::class.java)
         startActivity(intent)
         finish()
+//        Toast.makeText(
+//            this@FundraisingDetails,
+//            amount.toString(),
+//            Toast.LENGTH_SHORT
+//        ).show()
+
     }
 
     private fun getUserdata(){
