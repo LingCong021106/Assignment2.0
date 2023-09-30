@@ -31,6 +31,7 @@ import kotlinx.coroutines.launch
 import java.security.MessageDigest
 import android.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
+import com.example.assignment.admin.user.UserFragment
 import com.example.assignment.database.Admin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
@@ -91,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
         appDb = AppDatabase.getInstance(this)
 
-        if (!isLoggedIn) {
+        if (isLoggedIn) {
             // Logged in directly navigate
             val userRole = sharedPreferences.getString("userRole", "users")
             when (userRole) {
@@ -156,14 +157,6 @@ class MainActivity : AppCompatActivity() {
                 userlogin()
             }
 
-     val addOrgBtn = findViewById<Button>(R.id.addOrgBtn)
-            addOrgBtn.setOnClickListener {
-                val intent = Intent(this, ResetPasswordActivity::class.java)
-                val userRole = usersRole
-                intent.putExtra("user_role_key", userRole)
-                startActivity(intent)
-                finish()
-            }
         }
 
 
@@ -290,28 +283,71 @@ class MainActivity : AppCompatActivity() {
 
             var localEmail = etEmail.text.toString()
             val localPassword = etPassword.text.toString()
-            val encryptedPassword = localPassword
+            val encryptedPassword = md5(localPassword)
 
             lifecycleScope.launch(Dispatchers.IO) {
                 val user = appDb.userDao().checkUser(localEmail, encryptedPassword)
+                val admin = appDb.adminDao().checkAdmin(localEmail, encryptedPassword)
+
                 launch(Dispatchers.Main) {
-                    if (user != null) {
+                    if (user != null || admin != null) {
+                        val LoggedInUserEmail = localEmail.toString()
+                        val userIdString = LoggedInUserEmail
 
-                        if (usersRole == "admin") {
-                            val intent = Intent(this@MainActivity, Admin_Organization_EditProfile::class.java)
-                            startActivity(intent)
-                            finish()
-                        } else if (usersRole == "organization") {
-                            val intent = Intent(this@MainActivity, Admin_Organization_EditProfile::class.java)
-                            startActivity(intent)
-                            finish()
-                        } else {
-                             intent = Intent(this@MainActivity, UserEditProfileActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        }
+                        val sharedPreferences =
+                            getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+                        val editor = sharedPreferences.edit()
 
-                    } else {
+
+                        editor.putString("userRole", usersRole)
+                        editor.putBoolean("isLoggedIn", true)
+                        editor.putString("userEmail", userIdString)
+                        editor.apply()
+
+                        if (admin != null && usersRole == "admin") {
+                            val intent =
+                                Intent(this@MainActivity, Admin_Organization_EditProfile::class.java)
+                            startActivity(intent)
+                            finish()
+                        } else if (admin != null && usersRole == "organization") {
+                            val intent = Intent(
+                                this@MainActivity,
+                                Admin_Organization_EditProfile::class.java
+                            )
+                            startActivity(intent)
+                            finish()
+                        } else if (user != null && usersRole == "users") {
+
+                                val intent =
+                                    Intent(this@MainActivity, UserEditProfileActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            } else{
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Invalid Email Address/Password",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            etEmail.text.clear()
+                            etPassword.text.clear()
+                            etEmailLayout.helperText = "*Invalid Email Address/Password"
+                            etEmailLayout.setHelperTextColor(
+                                ColorStateList.valueOf(
+                                    Color.RED
+                                )
+
+                            )
+
+                            passwordInputLayout.helperText =
+                                "*Invalid Email Address/Password"
+                            passwordInputLayout.setHelperTextColor(
+                                ColorStateList.valueOf(
+                                    Color.RED
+                                )
+                            )
+                            }
+                    }
+                else {
 
                         var email = etEmail.getText().toString().trim()
                         var password = etPassword.getText().toString().trim()
@@ -396,8 +432,21 @@ class MainActivity : AppCompatActivity() {
                                                                 appDb.adminDao().insert(admin)
                                                             }
                                                         }
-
-                                                        // 用户信息存储成功
+                                                        if (usersRole == "admin") {
+                                                            val intent = Intent(this@MainActivity, Admin_Organization_EditProfile::class.java)
+                                                            startActivity(intent)
+                                                            finish()
+                                                        } else if (usersRole == "organization") {
+                                                            val intent = Intent(this@MainActivity, Admin_Organization_EditProfile::class.java)
+                                                            startActivity(intent)
+                                                            finish()
+                                                        } else {
+                                                            val intent =
+                                                                Intent(this@MainActivity, UserEditProfileActivity::class.java)
+                                                            startActivity(intent)
+                                                            finish()
+                                                        }
+                                                        //
                                                         Toast.makeText(
                                                             this@MainActivity,
                                                             "User information stored locally",
@@ -459,20 +508,7 @@ class MainActivity : AppCompatActivity() {
                                         val requestQueue = Volley.newRequestQueue(this@MainActivity)
                                         requestQueue.add(stringRequestRemote)
 
-                                        if (usersRole == "admin") {
-                                            val intent = Intent(this@MainActivity, Admin_Organization_EditProfile::class.java)
-                                            startActivity(intent)
-                                            finish()
-                                        } else if (usersRole == "organization") {
-                                            val intent = Intent(this@MainActivity, Admin_Organization_EditProfile::class.java)
-                                            startActivity(intent)
-                                            finish()
-                                        } else {
-                                            val intent =
-                                                Intent(this@MainActivity, UserEditProfileActivity::class.java)
-                                                startActivity(intent)
-                                                finish()
-                                        }
+
 
                                     } else if (successLogin == 0) {
                                         Toast.makeText(

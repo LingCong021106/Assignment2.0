@@ -25,7 +25,7 @@ interface UserDao {
     @Query("UPDATE users_table SET userName = :newName, userEmail = :newEmail, phone = :newPhone, photo = :profileImageUrl WHERE userEmail = :originalEmail")
     fun updateUserInfo(originalEmail: String, newName: String, newEmail: String, newPhone: String, profileImageUrl: String)
 
-    @Query("UPDATE users_table SET password = :password WHERE userEmail = :userEmail")
-    fun updateUserPassword(password: String, userEmail: String,)
+    @Query("UPDATE users_table SET password = :password WHERE userEmail = :email")
+    fun updateUserPassword(password: String, email: String,)
 
 }

@@ -74,7 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Admin"
+                android:text=""
                 android:textAlignment="center"
                 android:textColor="#809CA8"
                 android:textSize="14sp"
@@ -90,7 +90,8 @@
                 android:text="Change Password"
                 android:textColor="#1476A3"
                 android:textSize="14sp"
-                android:textStyle="bold|italic" />
+                android:textStyle="bold|italic"
+                android:onClick="ChangePassword"/>
 
             <TextView
                 android:id="@+id/nameText"
@@ -240,5 +241,23 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            tools:layout_editor_absoluteX="3dp"
+            tools:ignore="MissingConstraints"
+            android:onClick="logout"/>
+
     </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/orgbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AddOrg"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="-4dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

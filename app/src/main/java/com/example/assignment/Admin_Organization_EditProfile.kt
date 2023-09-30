@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -105,6 +106,12 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
 
                 }
             }
+        }
+        val orgbtn = findViewById<Button>(R.id.orgbtn)
+        orgbtn.setOnClickListener{
+            val intent = Intent(this, AddOrganization::class.java)
+            startActivity(intent)
+            finish()
         }
         saveButton = findViewById(R.id.saveButton)
         saveButton.setOnClickListener {
@@ -250,7 +257,7 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
                 } else {
                     // Check Phone Format
                     if (!isValidPhone(newPhone)) {
-                        phoneeditText.error = "Invalid Phone(Eg:012x-xxxxxxx)"
+                        phoneeditText.error = "Invalid Phone(Eg:01x-xxxxxxx)"
                         val errorIcon =
                             ContextCompat.getDrawable(this, R.drawable.baseline_error_24)
                         phoneeditText.setCompoundDrawablesRelativeWithIntrinsicBounds(
@@ -301,97 +308,142 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
                     imageUrl ?: ""
                 )
             } else {
-                Toast.makeText(this, "No Change", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "No new change....", Toast.LENGTH_SHORT).show()
             }
         } else {
-            Toast.makeText(this, "No Change", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "No new change...", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun updateProfile(originalName:String,newName: String, originalEmail: String, newEmail: String,originalPhone:String, newPhone: String, originalProfileImageUrl:String, profileImageUrl: String) {
 
-        if (newName == originalName && newEmail == originalEmail && newPhone == originalPhone && profileImageUrl == originalProfileImageUrl) {
-            // no change
-            Toast.makeText(this@Admin_Organization_EditProfile, "No changes to update", Toast.LENGTH_SHORT).show()
-            return
-        }
-        val stringRequestRemote = object : StringRequest(
-            Request.Method.POST, updateProfileURL,
-            com.android.volley.Response.Listener { response ->
-                try {
-                    Log.d("ResponseData", "Server Response: $response")
-                    val jsonResponse = JSONObject(response)
-                    val success = jsonResponse.getInt("success")
-                    val emailExists = jsonResponse.getInt("emailExists")
-                    val phoneExists = jsonResponse.getInt("phoneExists")
+        if (!isNetworkConnected()) {
 
-                    if (success == 1) {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("No connection")
+            builder.setMessage("Please check your internet connection and try again")
+            builder.setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+            val dialog = builder.create()
+            dialog.show()
 
-                        CoroutineScope(Dispatchers.IO).launch {
-                            val user = appDb.userDao().getUserByEmail(originalEmail)
-                            val userId = user?.userId.toString()
-                            val sharedPreferences =
-                                getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-                            val editor = sharedPreferences.edit()
-                            editor.putString("userRole", "users")
-                            editor.putString("userEmail", newEmail)
-                            editor.putString("userId", userId)
-                            editor.apply()
+        } else {
+            if (newName == originalName && newEmail == originalEmail && newPhone == originalPhone && profileImageUrl == originalProfileImageUrl) {
+                // no change
+                Toast.makeText(
+                    this@Admin_Organization_EditProfile,
+                    "No changes to update",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return
+            }
+            val stringRequestRemote = object : StringRequest(
+                Request.Method.POST, updateProfileURL,
+                com.android.volley.Response.Listener { response ->
+                    try {
+                        Log.d("ResponseData", "Server Response: $response")
+                        val jsonResponse = JSONObject(response)
+                        val success = jsonResponse.getInt("success")
+                        val emailExists = jsonResponse.getInt("emailExists")
+                        val phoneExists = jsonResponse.getInt("phoneExists")
 
-                            appDb.userDao().updateUserInfo(originalEmail, newName, newEmail, newPhone, profileImageUrl)
-                        }
-                        //set hint for update
-                        etName.hint = newName
-                        emailEditText.hint = newEmail
-                        phoneeditText.hint = newPhone
-                        isImageChanged=false
-                        clearFields()
-                        Toast.makeText(this@Admin_Organization_EditProfile, "Profile updated successfully", Toast.LENGTH_SHORT).show()
-                    } else {
+                        if (success == 1) {
 
-                        emailEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null)
-                        phoneeditText.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null)
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val admin = appDb.adminDao().getAdminByEmail(originalEmail)
+                                val userId = admin?.aId.toString()
+                                val userRole = admin?.role.toString()
+                                val sharedPreferences =
+                                    getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+                                val editor = sharedPreferences.edit()
+                                editor.putString("userRole", userRole)
+                                editor.putString("userEmail", newEmail)
+                                editor.putString("userId", userId)
+                                editor.apply()
 
-                        if (emailExists == 1) {
-                            emailEditText.error = "Email Exists"
-                            val errorIcon =
-                                ContextCompat.getDrawable(this, R.drawable.baseline_error_24)
+                                appDb.adminDao().updateAdminInfo(
+                                    originalEmail,
+                                    newName,
+                                    newEmail,
+                                    newPhone,
+                                    profileImageUrl
+                                )
+                            }
+                            //set hint for update
+                            etName.hint = newName
+                            emailEditText.hint = newEmail
+                            phoneeditText.hint = newPhone
+                            isImageChanged = false
+                            clearFields()
+                            Toast.makeText(
+                                this@Admin_Organization_EditProfile,
+                                "Profile updated successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+
                             emailEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(
                                 null,
                                 null,
-                                errorIcon,
+                                null,
                                 null
                             )
+                            phoneeditText.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                null,
+                                null,
+                                null,
+                                null
+                            )
+
+                            if (emailExists == 1) {
+                                emailEditText.error = "Email Exists"
+                                val errorIcon =
+                                    ContextCompat.getDrawable(this, R.drawable.baseline_error_24)
+                                emailEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                    null,
+                                    null,
+                                    errorIcon,
+                                    null
+                                )
+                            }
+                            if (phoneExists == 1) {
+                                phoneeditText.error = "Phone Exists"
+                                val errorIcon =
+                                    ContextCompat.getDrawable(this, R.drawable.baseline_error_24)
+                                phoneeditText.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                    null,
+                                    null,
+                                    errorIcon,
+                                    null
+                                )
+                            }
                         }
-                        if (phoneExists == 1) {
-                            phoneeditText.error = "Phone Exists"
-                            val errorIcon = ContextCompat.getDrawable(this, R.drawable.baseline_error_24)
-                            phoneeditText.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, errorIcon, null)
-                        }
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        Log.e("ResponseData", "JSON parsing error: ${e.message}")
                     }
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                    Log.e("ResponseData", "JSON parsing error: ${e.message}")
+                },
+                com.android.volley.Response.ErrorListener { error ->
+                    error.printStackTrace()
+                    Log.e("ResponseData", "Network error: ${error.message}")
                 }
-            },
-            com.android.volley.Response.ErrorListener { error ->
-                error.printStackTrace()
-                Log.e("ResponseData", "Network error: ${error.message}")
+            ) {
+                @Throws(AuthFailureError::class)
+                override fun getParams(): Map<String, String>? {
+                    val data: MutableMap<String, String> = HashMap()
+                    data["originalEmail"] = originalEmail
+                    data["originalPhone"] = originalPhone
+                    data["newName"] = newName
+                    data["newEmail"] = newEmail
+                    data["newPhone"] = newPhone
+                    data["profileImageUrl"] = profileImageUrl
+                    return data
+                }
             }
-        ) {
-            @Throws(AuthFailureError::class)
-            override fun getParams(): Map<String, String>? {
-                val data: MutableMap<String, String> = HashMap()
-                data["originalEmail"] = originalEmail
-                data["newName"] = newName
-                data["newEmail"] = newEmail
-                data["newPhone"] = newPhone
-                data["profileImageUrl"] = profileImageUrl
-                return data
-            }
+            val requestQueue = Volley.newRequestQueue(this@Admin_Organization_EditProfile)
+            requestQueue.add(stringRequestRemote)
         }
-        val requestQueue = Volley.newRequestQueue(this@Admin_Organization_EditProfile)
-        requestQueue.add(stringRequestRemote)
     }
 
 
@@ -486,7 +538,7 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
         if (requestCode == Companion.PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             val selectedImageUri = data.data
 
-            // 使用 Glide 加载图像并将其裁剪为椭圆形状
+
             Glide.with(this)
                 .load(selectedImageUri)
                 .apply(RequestOptions.bitmapTransform(CircleCrop()))
@@ -521,6 +573,40 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
         etName.hint = admin.aName
         emailEditText.hint = admin.aEmail
         phoneeditText.hint = admin.aPhone
+    }
+
+    fun logout(view: View?){
+        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+
+        editor.remove("isLoggedIn")
+        editor.remove("userRole")
+        editor.remove("userEmail")
+        editor.remove("userId")
+
+        editor.apply()
+
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+    }
+
+    private fun isNetworkConnected(): Boolean {
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    }
+
+    fun ChangePassword(view: View?) {
+        val intent = Intent(this, ProfileChangePassword::class.java)
+        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val userEmail = sharedPreferences.getString("userEmail", "")
+        intent.putExtra("userEmail", userEmail)
+        startActivity(intent)
+        finish()
     }
 
 }

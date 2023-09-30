@@ -17,20 +17,26 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ProfileChangePassword"
+            android:exported="false" />
+        <activity
+            android:name=".UserList"
+            android:exported="false" />
+        <activity
             android:name=".ResetPasswordActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="https"
                     android:host="azurefuture.com"
-                    android:pathPrefix="/reset_password" />
+                    android:pathPrefix="/reset_password"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".AddOrganization"
             android:exported="false" />
