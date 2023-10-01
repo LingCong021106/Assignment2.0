@@ -9,34 +9,12 @@ import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
-
-import android.util.AttributeSet
-import android.view.MenuItem
 import android.view.View
 import android.widget.Button
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import com.example.assignment.admin.AdminHome
-import com.example.assignment.admin.dashboard.DashboardFragment
-import com.example.assignment.admin.donate.AdminDonateFragment
-import com.example.assignment.admin.news.AdminNewsFragment
-import com.example.assignment.admin.report.AdminReportFragment
-import com.example.assignment.admin.user.AdminUserFragment
-import com.example.assignment.admin.volunteer.AdminVolunteerFragment
-import com.example.assignment.databinding.AdminHomeBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationView
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
@@ -55,15 +33,8 @@ import android.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.example.assignment.database.Admin
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
 import org.json.JSONObject
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import org.json.JSONException
-import java.time.LocalDateTime
-import java.time.ZoneId
 
 //jiahon
 class MainActivity : AppCompatActivity() {
@@ -100,23 +71,12 @@ class MainActivity : AppCompatActivity() {
     private var email: String? = null
     private var password: String? = null
     private var usersRole = "users"
-    private val URL: String = "http://192.168.0.4/Assignment(Mobile)/login.php"
-    private val findRemoteURL: String = "http://192.168.0.4/Assignment(Mobile)/findRemote.php"
+    private val URL: String = "http://192.168.0.177/Assignment(Mobile)/login.php"
+    private val findRemoteURL: String = "http://192.168.0.177/Assignment(Mobile)/findRemote.php"
     private lateinit var database: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //sb
-//        setContentView(R.layout.fundraising_details_donate_payment)
-
-//        val button2 = findViewById<Button>(R.id.button2).setOnClickListener {
-//            val intent = Intent(this, AdminHome::class.java)
-//            startActivity(intent)
-//        }
-//        val button3 = findViewById<Button>(R.id.button3).setOnClickListener {
-//            val intent = Intent(this, UserHome::class.java)
-//            startActivity(intent)
-//        }
         setContentView(R.layout.user_login)
 
 
@@ -124,7 +84,7 @@ class MainActivity : AppCompatActivity() {
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
         appDb = AppDatabase.getInstance(this)
 
-        if (!isLoggedIn) {
+        if (isLoggedIn) {
             // Logged in directly navigate
             val userRole = sharedPreferences.getString("userRole", "users")
             when (userRole) {
@@ -189,14 +149,6 @@ class MainActivity : AppCompatActivity() {
                 userlogin()
             }
 
-     val addOrgBtn = findViewById<Button>(R.id.addOrgBtn)
-            addOrgBtn.setOnClickListener {
-                val intent = Intent(this, ResetPasswordActivity::class.java)
-                val userRole = usersRole
-                intent.putExtra("user_role_key", userRole)
-                startActivity(intent)
-                finish()
-            }
         }
 
 
@@ -323,28 +275,52 @@ class MainActivity : AppCompatActivity() {
 
             var localEmail = etEmail.text.toString()
             val localPassword = etPassword.text.toString()
-            val encryptedPassword = localPassword
+            val encryptedPassword = md5(localPassword)
 
             lifecycleScope.launch(Dispatchers.IO) {
                 val user = appDb.userDao().checkUser(localEmail, encryptedPassword)
-                launch(Dispatchers.Main) {
-                    if (user != null) {
+                val admin = appDb.adminDao().checkAdmin(localEmail, encryptedPassword)
 
-                        if (usersRole == "admin") {
-                            val intent = Intent(this@MainActivity, Admin_Organization_EditProfile::class.java)
+                launch(Dispatchers.Main) {
+                    if (user != null || admin != null) {
+                        val LoggedInUserEmail = localEmail.toString()
+                        val userIdString = LoggedInUserEmail
+
+                        val sharedPreferences =
+                            getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+                        val editor = sharedPreferences.edit()
+
+
+                        editor.putString("userRole", usersRole)
+                        editor.putBoolean("isLoggedIn", true)
+                        editor.putString("userEmail", userIdString)
+                        editor.apply()
+
+                        if (admin != null && usersRole == "admin") {
+                            val intent =
+                                Intent(
+                                    this@MainActivity,
+                                    Admin_Organization_EditProfile::class.java
+                                )
                             startActivity(intent)
                             finish()
-                        } else if (usersRole == "organization") {
-                            val intent = Intent(this@MainActivity, Admin_Organization_EditProfile::class.java)
+                        } else if (admin != null && usersRole == "organization") {
+                            val intent = Intent(
+                                this@MainActivity,
+                                Admin_Organization_EditProfile::class.java
+                            )
+                            startActivity(intent)
+                            finish()
+                        } else if (user != null && usersRole == "users") {
+
+                            val intent =
+                                Intent(this@MainActivity, UserEditProfileActivity::class.java)
                             startActivity(intent)
                             finish()
                         } else {
-                             intent = Intent(this@MainActivity, UserEditProfileActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        }
 
-                    } else {
+                        }
+                    }else {
 
                         var email = etEmail.getText().toString().trim()
                         var password = etPassword.getText().toString().trim()
@@ -357,6 +333,8 @@ class MainActivity : AppCompatActivity() {
                                     Log.d("res", response)
                                     val jsonResponseLogin = JSONObject(response)
                                     val successLogin = jsonResponseLogin.getInt("loginSucess")
+
+
                                     if (successLogin == 1) {
 
                                         val LoggedInUserEmail = jsonResponseLogin.getString("userEmail")
@@ -404,7 +382,7 @@ class MainActivity : AppCompatActivity() {
                                                         if (usersRole == "users") {
                                                             val user = User(
                                                                 userName = username,
-                                                                password = password,
+                                                                password = encryptedPassword,
                                                                 userEmail = email,
                                                                 phone = phone,
                                                                 photo = photo,
@@ -418,7 +396,7 @@ class MainActivity : AppCompatActivity() {
                                                             val admin = Admin(
                                                                 aName = username,
                                                                 aEmail = email,
-                                                                aPassword = password,
+                                                                aPassword = encryptedPassword,
                                                                 aPhone = phone,
                                                                 role = usersRole,
                                                                 photo = photo,
@@ -429,8 +407,21 @@ class MainActivity : AppCompatActivity() {
                                                                 appDb.adminDao().insert(admin)
                                                             }
                                                         }
-
-                                                        // 用户信息存储成功
+                                                        if (usersRole == "admin") {
+                                                            val intent = Intent(this@MainActivity, Admin_Organization_EditProfile::class.java)
+                                                            startActivity(intent)
+                                                            finish()
+                                                        } else if (usersRole == "organization") {
+                                                            val intent = Intent(this@MainActivity, Admin_Organization_EditProfile::class.java)
+                                                            startActivity(intent)
+                                                            finish()
+                                                        } else {
+                                                            val intent =
+                                                                Intent(this@MainActivity, UserEditProfileActivity::class.java)
+                                                            startActivity(intent)
+                                                            finish()
+                                                        }
+                                                        //
                                                         Toast.makeText(
                                                             this@MainActivity,
                                                             "User information stored locally",
@@ -492,22 +483,13 @@ class MainActivity : AppCompatActivity() {
                                         val requestQueue = Volley.newRequestQueue(this@MainActivity)
                                         requestQueue.add(stringRequestRemote)
 
-                                        if (usersRole == "admin") {
-                                            val intent = Intent(this@MainActivity, Admin_Organization_EditProfile::class.java)
-                                            startActivity(intent)
-                                            finish()
-                                        } else if (usersRole == "organization") {
-                                            val intent = Intent(this@MainActivity, Admin_Organization_EditProfile::class.java)
-                                            startActivity(intent)
-                                            finish()
-                                        } else {
-                                            val intent =
-                                                Intent(this@MainActivity, UserEditProfileActivity::class.java)
-                                                startActivity(intent)
-                                                finish()
-                                        }
+
 
                                     } else if (successLogin == 0) {
+                                        Log.d("cMyApp", "userEmail: $email")
+                                        Log.d("cMyApp", "password: $password")
+                                        Log.d("cMyApp", "password: $usersRole")
+
                                         Toast.makeText(
                                             this@MainActivity,
                                             "Invalid Email Address/Password",
@@ -624,542 +606,7 @@ class MainActivity : AppCompatActivity() {
             result.append(String.format("%02x", byte))
         }
 
-
         return result.toString()
-    }
+    }
 
 }
-
-
-////lingcong
-//class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-//
-//    //cy
-//    private lateinit var appBarConfiguration: AppBarConfiguration
-//    private lateinit var binding: AdminHomeBinding
-//
-//    //    private val userHomeFragment = UserHomeFragment()
-////    private val eventFragment = EventFragment()
-////    private val donateFragment = DonateFragment()
-////    private val profileFragment = ProfileFragment()
-//    lateinit var bottomNav: BottomNavigationView
-//    lateinit var navigationView: NavigationView
-//
-//    //lc
-////        setContentView(R.layout.user_home)
-////
-//    private lateinit var dashboardUserBtn: Button
-//    private lateinit var navController: NavController
-//
-//        private lateinit var drawerLayout: DrawerLayout
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.admin_home)
-//
-//        drawerLayout = findViewById<DrawerLayout>(R.id.testDrawer_layout)
-//
-//        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-//        setSupportActionBar(toolbar)
-//
-//        val navigationView = findViewById<NavigationView>(R.id.nav_view)
-//        navigationView.setNavigationItemSelectedListener(this)
-//
-//        val toogle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-//        drawerLayout.addDrawerListener(toogle)
-//        toogle.syncState()
-//
-//        if(savedInstanceState == null){
-//            supportFragmentManager.beginTransaction()
-//                .replace(R.id.fragment_container, DashboardFragment()).commit()
-//            navigationView.setCheckedItem(R.id.admin_nav_dashboard)
-//        }
-//
-//    }
-//
-//    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-//        when(item.itemId){
-//            R.id.admin_nav_dashboard -> loadFragment(DashboardFragment())
-//            R.id.admin_nav_donate -> loadFragment(AdminDonateFragment())
-//            R.id.admin_nav_news -> loadFragment(AdminNewsFragment())
-//            R.id.admin_nav_report -> loadFragment(AdminReportFragment())
-//            R.id.admin_nav_volunteer -> loadFragment(AdminVolunteerFragment())
-//            R.id.admin_nav_user -> loadFragment(AdminUserFragment())
-//        }
-//        drawerLayout.closeDrawer(GravityCompat.START)
-//        return true
-//    }
-//
-//    override fun onBackPressed() {
-//        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
-//            drawerLayout.closeDrawer(GravityCompat.START)
-//        }
-//        else{
-//            onBackPressedDispatcher.onBackPressed()
-//        }
-////    }
-////    override fun onCreate(savedInstanceState: Bundle?) {
-////        super.onCreate(savedInstanceState)
-//////        setContentView(R.layout.admin_home)
-//////        setContentView(R.layout.user_home)
-////
-//////        cy
-////        binding = AdminHomeBinding.inflate(layoutInflater)
-////        setContentView(binding.root)
-////
-////        setSupportActionBar(binding.appBarMain.toolbar)
-////
-////        binding.appBarMain.fab.setOnClickListener { view ->
-////            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-////                .setAction("Action", null).show()
-////        }
-////        val drawerLayout: DrawerLayout = binding.drawerLayout
-////        val navView: NavigationView = binding.navView
-////        val navController = findNavController(R.id.nav_host_fragment_content_main)
-////        // Passing each menu ID as a set of Ids because each
-////        // menu should be considered as top level destinations.
-////        appBarConfiguration = AppBarConfiguration(
-////            setOf(
-////                R.id.admin_nav_dashboard,
-////                R.id.admin_nav_donate,
-////                R.id.admin_nav_volunteer,
-////                R.id.admin_nav_user,
-////                R.id.admin_nav_news,
-////                R.id.admin_nav_report
-////
-////            ), drawerLayout
-////        )
-////        setupActionBarWithNavController(navController, appBarConfiguration)
-////        navView.setupWithNavController(navController)
-//
-////        navigationView = findViewById(R.id.nav_view) as NavigationView
-////        navigationView.setNavigationItemSelectedListener() {
-////            when (it.itemId) {
-////                R.id.admin_nav_dashboard -> {
-////                    loadFragment(DashboardFragment())
-////                    true
-////                }
-////                R.id.admin_nav_donate -> {
-////                    loadFragment(AdminDonateFragment())
-////                    true
-////                }
-////                R.id.admin_nav_volunteer -> {
-////                    loadFragment(AdminVolunteerFragment())
-////                    true
-////                }
-////                R.id.admin_nav_user -> {
-////                    loadFragment(AdminUserFragment())
-////                    true
-////                }
-////                R.id.admin_nav_news -> {
-////                    loadFragment(AdminNewsFragment())
-////                    true
-////                }
-////                R.id.admin_nav_report -> {
-////                    loadFragment(AdminNewsFragment())
-////                    true
-////                }
-////                else -> {
-////                    true
-////                }
-////            }
-////            }
-//
-////        loadFragment(UserHomeFragment())
-////        bottomNav = findViewById(R.id.bottom_navigation) as BottomNavigationView
-////        bottomNav.setOnItemSelectedListener {
-////            when (it.itemId) {
-////                R.id.home -> {
-////                    loadFragment(UserHomeFragment())
-////                    true
-////                }
-////
-////                R.id.donate -> {
-////                    loadFragment(DonateFragment())
-////                    true
-////                }
-////
-////                R.id.profile -> {
-////                    loadFragment(ProfileFragment())
-////                    true
-////                }
-////
-////
-////                R.id.event -> {
-////                    loadFragment(EventFragment())
-////                    true
-////                }
-////
-////                else -> {
-////                    true
-////                }
-////            }
-////        }
-//    }
-//    override fun onSupportNavigateUp(): Boolean {
-//        val navController = findNavController(R.id.nav_host_fragment_content_main)
-//        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-//    }
-//
-//    private  fun loadFragment(fragment: Fragment){
-//        val transaction = supportFragmentManager.beginTransaction()
-//        transaction.replace(R.id.fragment_container,fragment)
-//        transaction.commit()
-//    }
-//
-//}
-//
-//
-//
-////        dashboardUserBtn = findViewById(R.id.dashboardUserBtn)
-////        dashboardUserBtn.setOnClickListener {
-////            val intent = Intent(this, AdminUserViewModel::class.java)
-////            startActivity(intent)
-////        }
-//
-//
-//
-////    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-////        // Inflate the menu; this adds items to the action bar if it is present.
-////        menuInflater.inflate(R.menu.main, menu)
-////        return true
-////    }
-//
-//
-//    //cy
-//
-//
-//    //lc
-////    private val userHomeFragment = UserHomeFragment()
-////    private val eventFragment = EventFragment()
-////    private val donateFragment = DonateFragment()
-////    private val profileFragment = ProfileFragment()
-////    lateinit var bottomNav : BottomNavigationView
-//    //sb
-////    lateinit var image1 : ImageView
-////    lateinit var image2 : ImageView
-////    private lateinit var listPeopleRecycler : RecyclerView
-////    private lateinit var newArrayList: ArrayList<ListDonate>
-////    lateinit var imageId : Array<Int>
-////    lateinit var name : Array<String>
-////    lateinit var btnJoin : Button
-////    lateinit var builder : AlertDialog.Builder
-////    override fun onCreate(savedInstanceState: Bundle?) {
-////        super.onCreate(savedInstanceState)
-////        setContentView(R.layout.user_home)
-//
-//
-//
-//
-//    //cy
-////    private lateinit var appBarConfiguration: AppBarConfiguration
-////    private lateinit var binding: AdminHomeBinding
-//
-//
-//        //setContentView(R.layout.admin_home)
-////        setContentView(R.layout.user_register_account2)
-//
-//        //cy
-////        binding = AdminHomeBinding.inflate(layoutInflater)
-////        setContentView(binding.root)
-////
-////
-//    }
-
-//
-//        //setContentView(R.layout.admin_home)
-////        setContentView(R.layout.user_register_account2)
-//
-//        //cy
-//
-//
-//
-//
-//
-//
-//    //cy
-////    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-////        // Inflate the menu; this adds items to the action bar if it is present.
-////        menuInflater.inflate(R.menu.main, menu)
-////        return true
-////    }
-//
-//
-//    //cy
-//
-//
-//
-////
-////        private
-////        //sb
-////        lateinit var image1: ImageView
-////        lateinit var image2: ImageView
-////        private lateinit var listPeopleRecycler: RecyclerView
-////        private lateinit var newArrayList: ArrayList<ListDonate>
-////        lateinit var imageId: Array<Int>
-////        lateinit var name: Array<String>
-////        override fun onCreate(savedInstanceState: Bundle?) {
-////            super.onCreate(savedInstanceState)
-////            setContentView(R.layout.user_home)
-////            //setContentView(R.layout.fundraising_details)
-//
-////
-////
-////            //setContentView(R.layout.user_home)
-////
-//////        val drawerLayout : DrawerLayout = findViewById(R.id.admin_home)
-//////        val navView : NavigationView = findViewById(R.id.nav_view)
-//////
-//////        toggle = ActionBarDrawerToggle(this,drawerLayout, R.string.open, R.string.close)
-//////        drawerLayout.addDrawerListener(toggle)
-//////        toggle.syncState()
-//////
-//////        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-//////
-//////        navView.setNavigationItemSelectedListener {
-//////
-//////            when(it.itemId){
-//////                R.id.admin_nav_dashboard -> Toast.makeText(applicationContext,"Clicked", Toast.LENGTH_LONG).show()
-//////            }
-//////
-//////            true
-//////
-//////        }
-////
-////
-//////        image1  = findViewById(R.id.event_img)
-//////        image1.setImageResource(R.drawable.dice_1)
-////
-////            image1 = findViewById(R.id.fundraising_img)
-////            image1.setImageResource(R.drawable.dice_1)
-////
-////            image2 = findViewById(R.id.fundraising_orgazation_img)
-////            image2.setImageResource(R.drawable.dice_1)
-////
-////            imageId = arrayOf(
-////                R.drawable.dice_1,
-////                R.drawable.dice_2,
-////                R.drawable.dice_3,
-////                R.drawable.dice_4,
-////                R.drawable.dice_5,
-////                R.drawable.dice_6
-////            )
-////
-////            name = arrayOf(
-////                "Ling Cong Cong",
-////                "Yong SHun Bin",
-////                "Yeam Chi Yong",
-////                "Tan Jia Hon",
-////                "Ng Ming Zhe",
-////                "Khoo Jie Kee"
-////            )
-////
-////            listPeopleRecycler = findViewById(R.id.fundraising_people_list)
-////            listPeopleRecycler.layoutManager = LinearLayoutManager(this)
-////            listPeopleRecycler.setHasFixedSize(true)
-////
-////            newArrayList = arrayListOf<ListDonate>()
-////            getUserdata()
-////
-//////    }
-////
-//////    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//////
-//////        if(toggle.onOptionsItemSelected(item)){
-//////            return true
-//////        }
-//////
-//////        return super.onOptionsItemSelected(item)
-//////    }
-////
-////
-////        }
-////        setContentView(R.layout.fundraising_details)
-////        setContentView(R.layout.event_details_display)
-////        setContentView(R.layout.event_join_confirmation)
-////        image1  = findViewById(R.id.event_img)
-////        image1.setImageResource(R.drawable.dice_1)
-//
-//
-//
-////        image1 = findViewById(R.id.fundraising_img)
-////        image1.setImageResource(R.drawable.dice_1)
-////
-////        image2 = findViewById(R.id.fundraising_orgazation_img)
-////        image2.setImageResource(R.drawable.dice_1)
-//
-////        btnJoin = findViewById(R.id.btn_join)
-////        imageId = arrayOf(
-////            R.drawable.dice_1,
-////            R.drawable.dice_2,
-////            R.drawable.dice_3,
-////            R.drawable.dice_4,
-////            R.drawable.dice_5,
-////            R.drawable.dice_6
-////        )
-////
-////        name = arrayOf(
-////            "Ling Cong Cong",
-////            "Yong SHun Bin",
-////            "Yeam Chi Yong",
-////            "Tan Jia Hon",
-////            "Ng Ming Zhe",
-////            "Khoo Jie Kee"
-////        )
-////
-////        listPeopleRecycler = findViewById(R.id.fundraising_people_list)
-////        listPeopleRecycler.layoutManager = LinearLayoutManager(this)
-////        listPeopleRecycler.setHasFixedSize(true)
-////
-////        newArrayList = arrayListOf<ListDonate>()
-////        getUserdata()
-////
-////        builder = AlertDialog.Builder(this)
-////
-////        btnJoin.setOnClickListener { confirmation(it) }
-//
-//
-//
-////    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-////        // Inflate the menu; this adds items to the action bar if it is present.
-////        menuInflater.inflate(R.menu.main, menu)
-////        return true
-////    }
-//
-//
-//
-//
-//    //cy
-////    private lateinit var appBarConfiguration: AppBarConfiguration
-////    private lateinit var binding: AdminHomeBinding
-//
-//
-//        //setContentView(R.layout.admin_home)
-////        setContentView(R.layout.user_register_account2)
-//
-////    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//
-////
-////        private fun getUserdata() {
-////            for (i in imageId.indices) {
-////                val people = ListDonate(imageId[i], name[i])
-////                newArrayList.add(people)
-////            }
-////
-////            listPeopleRecycler.adapter = MyAdapter(newArrayList)
-////        }
-////
-//
-////    private fun loadFragment(fragment: Fragment) {
-////        val transaction = supportFragmentManager.beginTransaction()
-////        transaction.replace(R.id.fragment_container, fragment)
-////        transaction.commit()
-////    }
-//
-////        return super.onOptionsItemSelected(item)
-////    }
-//        //cy
-////        binding = AdminHomeBinding.inflate(layoutInflater)
-////        setContentView(binding.root)
-////
-////
-////        }
-//
-//        //setContentView(R.layout.admin_home)
-////        setContentView(R.layout.user_register_account2)
-//
-//
-//
-////    private fun confirmation(view:View) {
-////        builder.setTitle("Confirmation")
-////            .setMessage("Are you sure want to join this event?")
-////            .setCancelable(true)
-////            .setPositiveButton("Yes", DialogInterface.OnClickListener { dialogInterface, i -> storeEventPeople() })
-////            .setNegativeButton("No",DialogInterface.OnClickListener { dialogInterface, i -> dialogInterface.cancel() })
-////            .show()
-////    }
-//
-////    private fun storeEventPeople(){
-////        builder.setTitle("Event")
-////            .setMessage("Thank for your joining")
-////            .setCancelable(true)
-////            .setPositiveButton("Back to home", DialogInterface.OnClickListener { dialogInterface, i -> finish() })
-////            .setNegativeButton("",DialogInterface.OnClickListener { dialogInterface, i -> dialogInterface.cancel() })
-////            .show()
-////    }
-//
-//
-//
-////    private fun getUserdata() {
-////        for (i in imageId.indices) {
-////            val people = ListDonate(imageId[i], name[i])
-////            newArrayList.add(people)
-////        }
-////    }
-//
-//
-//
-//
-////}
-//        //cy
-
-////    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-////        // Inflate the menu; this adds items to the action bar if it is present.
-////        menuInflater.inflate(R.menu.main, menu)
-////        return true
-////    }
-//
-//
-//    //cy
-
-////            //setContentView(R.layout.user_home)
-////
-//////        val drawerLayout : DrawerLayout = findViewById(R.id.admin_home)
-//////        val navView : NavigationView = findViewById(R.id.nav_view)
-//////
-//////        toggle = ActionBarDrawerToggle(this,drawerLayout, R.string.open, R.string.close)
-//////        drawerLayout.addDrawerListener(toggle)
-//////        toggle.syncState()
-//////
-//////        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-//////
-//////        navView.setNavigationItemSelectedListener {
-//////
-//////            when(it.itemId){
-//////                R.id.admin_nav_dashboard -> Toast.makeText(applicationContext,"Clicked", Toast.LENGTH_LONG).show()
-//////            }
-//////
-//////            true
-//////
-//////        }
-////
-////
-////
-//////    }
-////
-//////    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//////
-//////        if(toggle.onOptionsItemSelected(item)){
-//////            return true
-//////        }
-//////
-//////        return super.onOptionsItemSelected(item)
-//////    }
-////
-////
-////        }
-//
-////    }
-//
-////    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//
-////
-
-////
-//
-////
-////        return super.onOptionsItemSelected(item)
-////    }
-//
-
-//
-////}

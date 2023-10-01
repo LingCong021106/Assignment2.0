@@ -16,6 +16,7 @@ import com.example.assignment.R
 import com.example.assignment.admin.donate.AdminDonateFragment
 import com.example.assignment.admin.news.AdminNewsFragment
 import com.example.assignment.admin.report.AdminReportFragment
+//import com.example.assignment.admin.user.AdminUserFragment
 import com.example.assignment.admin.user.AdminUserDetailFragment
 import com.example.assignment.admin.user.AdminUserFragment
 import com.example.assignment.admin.volunteer.AdminVolunteerFragment
@@ -71,51 +72,45 @@ class DashboardFragment : Fragment() {
         var fragment = parentFragmentManager.findFragmentById(R.id.fragment_container)
 
 
-        binding.dashboardUserBtn.setOnClickListener{
-            if(savedInstanceState == null){
+        binding.dashboardUserBtn.setOnClickListener {
+            if (savedInstanceState == null) {
                 parentFragmentManager.beginTransaction()
                     .addToBackStack(null)
                     .replace(R.id.fragment_container, AdminUserFragment()).commit()
 
+
+                binding.dashboardDonateBtn.setOnClickListener {
+                    if (savedInstanceState == null) {
+                        parentFragmentManager.beginTransaction()
+                            .addToBackStack(null)
+                            .replace(R.id.fragment_container, AdminDonateFragment()).commit()
+                    }
+                }
+
+                binding.dashboardVolunteerBtn.setOnClickListener {
+                    if (savedInstanceState == null) {
+                        parentFragmentManager.beginTransaction()
+                            .addToBackStack(null)
+                            .replace(R.id.fragment_container, AdminVolunteerFragment()).commit()
+                    }
+                }
+
+                binding.dashboardNewsBtn.setOnClickListener {
+                    if (savedInstanceState == null) {
+                        parentFragmentManager.beginTransaction()
+                            .addToBackStack(null)
+                            .replace(R.id.fragment_container, AdminNewsFragment()).commit()
+                    }
+                }
+
+                binding.dashboardReportBtn.setOnClickListener {
+                    if (savedInstanceState == null) {
+                        parentFragmentManager.beginTransaction()
+                            .addToBackStack(null)
+                            .replace(R.id.fragment_container, AdminReportFragment()).commit()
+                    }
+                }
             }
         }
-
-        binding.dashboardDonateBtn.setOnClickListener{
-            if(savedInstanceState == null){
-                parentFragmentManager.beginTransaction()
-                    .addToBackStack(null)
-                    .replace(R.id.fragment_container, AdminDonateFragment()).commit()
-            }
-        }
-
-        binding.dashboardVolunteerBtn.setOnClickListener{
-            if(savedInstanceState == null){
-                parentFragmentManager.beginTransaction()
-                    .addToBackStack(null)
-                    .replace(R.id.fragment_container, AdminVolunteerFragment()).commit()
-            }
-        }
-
-        binding.dashboardNewsBtn.setOnClickListener{
-            if(savedInstanceState == null){
-                parentFragmentManager.beginTransaction()
-                    .addToBackStack(null)
-                    .replace(R.id.fragment_container, AdminNewsFragment()).commit()
-            }
-        }
-
-        binding.dashboardReportBtn.setOnClickListener{
-            if(savedInstanceState == null){
-                parentFragmentManager.beginTransaction()
-                    .addToBackStack(null)
-                    .replace(R.id.fragment_container, AdminReportFragment()).commit()
-            }
-        }
-    }
-
-    private fun loadFragment(fragment: Fragment) {
-        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container, fragment)
-        transaction.commit()
     }
 }

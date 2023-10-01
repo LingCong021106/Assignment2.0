@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -58,6 +59,7 @@ class AddOrganization : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_organization)
+
 
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
@@ -183,7 +185,7 @@ class AddOrganization : AppCompatActivity() {
             } else {
                 // Check Phone Format
                 if (!isValidPhone(phone)) {
-                    phoneEditText.error = "Invalid Phone(Eg:012x-xxxxxxx)"
+                    phoneEditText.error = "Invalid Phone(Eg:01x-xxxxxxx)"
                     val errorIcon = ContextCompat.getDrawable(this, R.drawable.baseline_error_24)
                     phoneEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, errorIcon, null)
                     hasError = true
@@ -231,86 +233,119 @@ class AddOrganization : AppCompatActivity() {
         }
     }
 
-    private fun addNewOrganization(name:String, email: String,password: String,phone: String, profileImageUrl:String){
+    private fun addNewOrganization(name:String, email: String,password: String,phone: String, profileImageUrl:String) {
+        if (!isNetworkConnected()) {
 
-        val stringRequestRemote = object : StringRequest(
-            Request.Method.POST, addNewOrganizationURL,
-            com.android.volley.Response.Listener { response ->
-                try {
-                    Log.d("ResponseData", "Server Response: $response")
-                    val jsonResponse = JSONObject(response)
-                    val success = jsonResponse.getInt("success")
-                    val emailExists = jsonResponse.getInt("emailExists")
-                    val phoneExists = jsonResponse.getInt("phoneExists")
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("No connection")
+            builder.setMessage("Please check your internet connection and try again")
+            builder.setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+            val dialog = builder.create()
+            dialog.show()
+
+        } else {
+            val stringRequestRemote = object : StringRequest(
+                Request.Method.POST, addNewOrganizationURL,
+                com.android.volley.Response.Listener { response ->
+                    try {
+                        Log.d("ResponseData", "Server Response: $response")
+                        val jsonResponse = JSONObject(response)
+                        val success = jsonResponse.getInt("success")
+                        val emailExists = jsonResponse.getInt("emailExists")
+                        val phoneExists = jsonResponse.getInt("phoneExists")
 
 
-                    if (success == 1) {
-                        val currentDateTime = Date()
-                        val dateFormat = SimpleDateFormat("dd-MM-yy HH:mm:ss", Locale.getDefault())
-                        val formattedDateTime = dateFormat.format(currentDateTime)
+                        if (success == 1) {
+                            val currentDateTime = Date()
+                            val dateFormat =
+                                SimpleDateFormat("dd-MM-yy HH:mm:ss", Locale.getDefault())
+                            val formattedDateTime = dateFormat.format(currentDateTime)
 
-                        val admin = Admin(
-                            aName = name,
-                            aPassword = md5(password),
-                            aEmail = email,
-                            aPhone = phone,
-                            photo = profileImageUrl,
-                            role = "organization",
-                            joinedDate = formattedDateTime
-                        )
-                        CoroutineScope(Dispatchers.IO).launch {
+                            val admin = Admin(
+                                aName = name,
+                                aPassword = md5(password),
+                                aEmail = email,
+                                aPhone = phone,
+                                photo = profileImageUrl,
+                                role = "organization",
+                                joinedDate = formattedDateTime
+                            )
+                            CoroutineScope(Dispatchers.IO).launch {
 
-                            appDb.adminDao().insert(admin)
-                        }
+                                appDb.adminDao().insert(admin)
+                            }
 
-                        isImageChanged=false
-                        clearFields()
-                        Toast.makeText(this@AddOrganization,"Profile updated successfully", Toast.LENGTH_SHORT).show()
-                    }else {
-                        emailEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null)
-                        phoneEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null)
-
-                        if (emailExists == 1) {
-                            emailEditText.error = "Email Exists"
-                            val errorIcon =
-                                ContextCompat.getDrawable(this, R.drawable.baseline_error_24)
+                            isImageChanged = false
+                            clearFields()
+                            Toast.makeText(
+                                this@AddOrganization,
+                                "Profile updated successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
                             emailEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(
                                 null,
                                 null,
-                                errorIcon,
+                                null,
                                 null
                             )
+                            phoneEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                null,
+                                null,
+                                null,
+                                null
+                            )
+
+                            if (emailExists == 1) {
+                                emailEditText.error = "Email Exists"
+                                val errorIcon =
+                                    ContextCompat.getDrawable(this, R.drawable.baseline_error_24)
+                                emailEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                    null,
+                                    null,
+                                    errorIcon,
+                                    null
+                                )
+                            }
+                            if (phoneExists == 1) {
+                                phoneEditText.error = "Phone Exists"
+                                val errorIcon =
+                                    ContextCompat.getDrawable(this, R.drawable.baseline_error_24)
+                                phoneEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                    null,
+                                    null,
+                                    errorIcon,
+                                    null
+                                )
+                            }
                         }
-                        if (phoneExists == 1) {
-                            phoneEditText.error = "Phone Exists"
-                            val errorIcon = ContextCompat.getDrawable(this, R.drawable.baseline_error_24)
-                            phoneEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, errorIcon, null)
-                        }
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        Log.e("ResponseData", "JSON parsing error: ${e.message}")
                     }
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                    Log.e("ResponseData", "JSON parsing error: ${e.message}")
+                },
+                com.android.volley.Response.ErrorListener { error ->
+                    error.printStackTrace()
+                    Log.e("ResponseData", "Network error: ${error.message}")
                 }
-            },
-            com.android.volley.Response.ErrorListener { error ->
-                error.printStackTrace()
-                Log.e("ResponseData", "Network error: ${error.message}")
+            ) {
+                @Throws(AuthFailureError::class)
+                override fun getParams(): Map<String, String>? {
+                    val data: MutableMap<String, String> = HashMap()
+                    data["name"] = name
+                    data["email"] = email
+                    data["password"] = password
+                    data["phone"] = phone
+                    data["profileImageUrl"] = profileImageUrl
+                    data["role"] = "organization"
+                    return data
+                }
             }
-        ) {
-            @Throws(AuthFailureError::class)
-            override fun getParams(): Map<String, String>? {
-                val data: MutableMap<String, String> = HashMap()
-                data["name"] = name
-                data["email"] = email
-                data["password"] = password
-                data["phone"] = phone
-                data["profileImageUrl"] = profileImageUrl
-                data["role"] = "organization"
-                return data
-            }
+            val requestQueue = Volley.newRequestQueue(this@AddOrganization)
+            requestQueue.add(stringRequestRemote)
         }
-        val requestQueue = Volley.newRequestQueue(this@AddOrganization)
-        requestQueue.add(stringRequestRemote)
     }
     private fun isValidEmail(email: String): Boolean {
         // Format @ , .  , com
@@ -468,6 +503,12 @@ class AddOrganization : AppCompatActivity() {
         emailEditText.error = null
         emailEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null)
 
+    }
 
+    private fun isNetworkConnected(): Boolean {
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 }

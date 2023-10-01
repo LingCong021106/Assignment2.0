@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Donate">
+    tools:context=".Payment">
 
     <RadioGroup
         android:id="@+id/donate_amount"
@@ -16,19 +16,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/donate_title">
 
-            <RadioButton
-                android:id="@+id/donate_5"
-                android:layout_width="69dp"
-                android:layout_height="59dp"
-                android:layout_marginTop="65dp"
-                android:background="@drawable/custom_radio_selector"
-                android:button="@color/black"
-                android:gravity="center_horizontal"
-                android:text="RM5"
-                tools:layout_editor_absoluteX="130dp"
-                tools:layout_editor_absoluteY="130dp" />
+        <RadioButton
+            android:id="@+id/donate_5"
+            android:layout_width="69dp"
+            android:layout_height="59dp"
+            android:layout_marginTop="65dp"
+            android:background="@drawable/custom_radio_selector"
+            android:button="@color/black"
+            android:gravity="center_horizontal"
+            android:text="RM5"
+            tools:layout_editor_absoluteX="130dp"
+            tools:layout_editor_absoluteY="130dp" />
 
-            <RadioButton
+        <RadioButton
             android:id="@+id/donate_10"
             android:layout_width="69dp"
             android:layout_height="59dp"
@@ -42,18 +42,18 @@
             tools:layout_editor_absoluteY="130dp" />
 
 
-            <RadioButton
-                android:id="@+id/donate_20"
-                android:layout_width="69dp"
-                android:layout_height="59dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="65dp"
-                android:background="@drawable/custom_radio_selector"
-                android:button="@color/black"
-                android:gravity="center_horizontal"
-                android:text="RM20"
-                tools:layout_editor_absoluteX="130dp"
-                tools:layout_editor_absoluteY="130dp" />
+        <RadioButton
+            android:id="@+id/donate_20"
+            android:layout_width="69dp"
+            android:layout_height="59dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="65dp"
+            android:background="@drawable/custom_radio_selector"
+            android:button="@color/black"
+            android:gravity="center_horizontal"
+            android:text="RM20"
+            tools:layout_editor_absoluteX="130dp"
+            tools:layout_editor_absoluteY="130dp" />
 
     </RadioGroup>
 

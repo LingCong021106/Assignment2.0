@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Test">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".user.event.EventDetails">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/event_img"
-            android:layout_width="0dp"
-            android:layout_height="274dp"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/dice_1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/dice_1"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/event_title"
@@ -26,8 +27,10 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:text="Malaysia Coastal Cleanup Initiative - Cleaning our oceans, safeguarding our future, united in action!"
-            android:textSize="20sp"
+            android:textSize="30sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/event_img" />
 
@@ -56,8 +59,8 @@
             android:id="@+id/event_numberpoeple"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
             android:layout_marginStart="6dp"
+            android:layout_marginTop="13dp"
             android:text="5 / 20"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/event_joinpeople"
@@ -101,9 +104,9 @@
             android:layout_height="27dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="15dp"
+            android:src="@drawable/baseline_location_on_24"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/event_time_img"
-            android:src="@drawable/baseline_location_on_24"/>
+            app:layout_constraintTop_toBottomOf="@+id/event_time_img" />
 
         <TextView
             android:id="@+id/event_location"
@@ -133,9 +136,9 @@
             android:layout_height="27dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="15dp"
+            android:src="@drawable/baseline_home_work_24"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/event_location_img"
-            android:src="@drawable/baseline_home_work_24"/>
+            app:layout_constraintTop_toBottomOf="@+id/event_location_img" />
 
         <TextView
             android:id="@+id/event_organization"
@@ -165,9 +168,9 @@
             android:layout_height="27dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="15dp"
+            android:src="@drawable/baseline_person_24"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/event_organization_img"
-            android:src="@drawable/baseline_person_24"/>
+            app:layout_constraintTop_toBottomOf="@+id/event_organization_img" />
 
         <TextView
             android:id="@+id/event_contactperson"
@@ -197,9 +200,9 @@
             android:layout_height="27dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="15dp"
+            android:src="@drawable/baseline_contact_phone_24"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/event_contactperson_img"
-            android:src="@drawable/baseline_contact_phone_24"/>
+            app:layout_constraintTop_toBottomOf="@+id/event_contactperson_img" />
 
         <TextView
             android:id="@+id/event_contactnumber"
@@ -219,6 +222,7 @@
             android:layout_marginStart="6dp"
             android:layout_marginTop="20dp"
             android:text="012-3456789"
+            android:textColor="#2196F3"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/event_contactnumber"
             app:layout_constraintTop_toBottomOf="@+id/event_contactperson_edit" />
@@ -271,10 +275,12 @@
             app:layout_constraintTop_toBottomOf="@+id/event_people" />
 
         <Button
-            android:id="@+id/donate_btn"
+            android:id="@+id/btnJoin"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="18dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/event_join_btn"
             android:text="Donate for this project"
@@ -282,6 +288,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fundraising_people_list" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,6 +3,7 @@ package com.example.assignment
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -29,10 +30,10 @@ class ResetPasswordActivity : AppCompatActivity() {
 
     lateinit var etPassword :EditText
     lateinit var etconPassword:EditText
-    lateinit var subtmitButton: Button
+    lateinit var submitButton: Button
     lateinit var etPasswordLayout : TextInputLayout
     lateinit var etconPasswordLayout: TextInputLayout
-    private var userEmail: String? = null
+    private var email: String? = null
     private val resetPasswordURL:String="http://192.168.0.4/Assignment(Mobile)/reset_password.php"
     private lateinit var appDb: AppDatabase
 
@@ -43,10 +44,12 @@ class ResetPasswordActivity : AppCompatActivity() {
         Log.d("ResetPasswordActivity", "ResetPasswordActivity started")
         etPasswordLayout = findViewById(R.id.etPasswordLayout)
         etconPasswordLayout = findViewById(R.id.etconPasswordLayout)
+        appDb = AppDatabase.getInstance(this)
 
+         email = intent.getStringExtra("userEmail")
+        Log.d("EmailDebug", "Email sending initiated for userEmail: $email")
 
-         userEmail = intent.getStringExtra("user_email") // 从Intent中检索用户电子邮件
-        if (userEmail != null) {
+        if (email != null) {
             etPassword = findViewById(R.id.etPassword)
             etconPassword = findViewById(R.id.etconPassword)
 
@@ -57,7 +60,7 @@ class ResetPasswordActivity : AppCompatActivity() {
 
         }
 
-        subtmitButton.setOnClickListener(){
+        submitButton.setOnClickListener(){
             // Show a confirmation dialog
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Confirmation")
@@ -128,6 +131,9 @@ class ResetPasswordActivity : AppCompatActivity() {
                         "Password must have at least 6 characters, including at least one uppercase letter, one lowercase letter, and one special character"
                     )
                     etPasswordLayout.setEndIconDrawable(R.drawable.baseline_error_24)
+                    etconPasswordLayout.setError(
+                        "Password must have at least 6 characters, including at least one uppercase letter, one lowercase letter, and one special character"
+                    )
                     etconPasswordLayout.setEndIconDrawable(R.drawable.baseline_error_24)
                     hasError = true
                 } else {
@@ -151,58 +157,83 @@ class ResetPasswordActivity : AppCompatActivity() {
     }
 
     fun storeNewPassword(password: String){
+        if (!isNetworkConnected()) {
 
-        val stringRequestRemote = object : StringRequest(
-            Request.Method.POST, resetPasswordURL,
-            com.android.volley.Response.Listener { response ->
-                try {
-                    Log.d("ResponseData", "Server Response: $response")
-                    val jsonResponse = JSONObject(response)
-                    val success = jsonResponse.getInt("success")
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("No connection")
+            builder.setMessage("Please check your internet connection and try again")
+            builder.setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+            val dialog = builder.create()
+            dialog.show()
 
-                    if (success == 1) {
+        } else {
+            val stringRequestRemote = object : StringRequest(
+                Request.Method.POST, resetPasswordURL,
+                com.android.volley.Response.Listener { response ->
+                    try {
+                        Log.d("ResponseData", "Server Response: $response")
+                        val jsonResponse = JSONObject(response)
+                        val success = jsonResponse.getInt("success")
+                        val role = jsonResponse.getInt("role")
+                        val roleAdmin = jsonResponse.getInt("roleAdmin")
+                        val encryptedPassword = md5(password)
+                        if (success == 1) {
 
-                        CoroutineScope(Dispatchers.IO).launch {
-                            val user = appDb.userDao().getUserByEmail(userEmail ?: "")
+                            CoroutineScope(Dispatchers.IO).launch {
+                                if (role == 1) {
+                                    val user = appDb.userDao().getUserByEmail(email ?: "")
+                                    appDb.userDao().updateUserPassword(encryptedPassword, email ?: "")
+                                } else if (roleAdmin == 1) {
+                                    val admin = appDb.adminDao().getAdminByEmail(email ?: "")
+                                    appDb.adminDao().updateAdminPassword(encryptedPassword, email ?: "")
+                                }
+//                            val user = appDb.userDao().getUserByEmail(userEmail ?: "")
 //                            appDb.userDao().updateUserInfo(originalEmail, newName, newEmail, newPhone, profileImageUrl)
-                        }
+                            }
 
-                        val intent = Intent(this, MainActivity::class.java) // 返回到登录活动
-                        startActivity(intent)
-                        finish()
-                        runOnUiThread {
+                            val intent = Intent(this, MainActivity::class.java) // 返回到登录活动
+                            startActivity(intent)
+                            finish()
+                            runOnUiThread {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Password reset successful. Please log in again.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
+                        } else {
+
                             Toast.makeText(
-                                applicationContext,
-                                "Password reset successful. Please log in again.",
+                                this@ResetPasswordActivity,
+                                "Password updated Failed....",
                                 Toast.LENGTH_SHORT
                             ).show()
+
                         }
-
-                    }else {
-
-                        Toast.makeText(this@ResetPasswordActivity,"Password updated Failed....", Toast.LENGTH_SHORT).show()
-
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        Log.e("ResponseData", "JSON parsing error: ${e.message}")
                     }
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                    Log.e("ResponseData", "JSON parsing error: ${e.message}")
+                },
+                com.android.volley.Response.ErrorListener { error ->
+                    error.printStackTrace()
+                    Log.e("ResponseData", "Network error: ${error.message}")
                 }
-            },
-            com.android.volley.Response.ErrorListener { error ->
-                error.printStackTrace()
-                Log.e("ResponseData", "Network error: ${error.message}")
+            ) {
+                @Throws(AuthFailureError::class)
+                override fun getParams(): Map<String, String>? {
+                    val data: MutableMap<String, String> = HashMap()
+                    data["email"] = email ?: ""
+                    data["password"] = password
+                    return data
+                }
             }
-        ) {
-            @Throws(AuthFailureError::class)
-            override fun getParams(): Map<String, String>? {
-                val data: MutableMap<String, String> = HashMap()
-                data["email"] = userEmail?: ""
-                data["password"] = password
-                return data
-            }
+            val requestQueue = Volley.newRequestQueue(this@ResetPasswordActivity)
+            requestQueue.add(stringRequestRemote)
         }
-        val requestQueue = Volley.newRequestQueue(this@ResetPasswordActivity)
-        requestQueue.add(stringRequestRemote)
     }
 
 
@@ -232,6 +263,11 @@ class ResetPasswordActivity : AppCompatActivity() {
             "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,}$"
         return password.matches(passwordPattern.toRegex())
     }
-
+    private fun isNetworkConnected(): Boolean {
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    }
 
 }

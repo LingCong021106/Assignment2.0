@@ -112,7 +112,7 @@ class Paypal : AppCompatActivity() {
                         .setCancelable(true)
                         .setPositiveButton("back to home", DialogInterface.OnClickListener { dialogInterface, i ->
                             dialogInterface.dismiss() // Dismiss the second dialog
-                            val intent = Intent(this@Paypal, FundraisingDetails::class.java)
+//                            val intent = Intent(this@Paypal, FundraisingDetails::class.java)
                             startActivity(intent)
                         })
                         .setNegativeButton("", DialogInterface.OnClickListener { dialogInterface, i ->
@@ -158,6 +158,6 @@ class Paypal : AppCompatActivity() {
         }
         val requestQueue = Volley.newRequestQueue(applicationContext)
         requestQueue.add(stringRequest)
-    }
+        }
 
 }

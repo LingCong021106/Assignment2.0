@@ -28,6 +28,11 @@ import javax.mail.internet.InternetAddress
 import javax.mail.internet.MimeMessage
 import java.util.Properties
 import java.util.UUID
+import android.app.AlertDialog
+import android.content.Context
+import android.net.ConnectivityManager
+import android.view.LayoutInflater
+import android.widget.ImageView
 
 import java.util.*
 
@@ -53,37 +58,56 @@ class ForgotPassword : AppCompatActivity() {
     }
 
     fun validateEmail(){
-        val email = etEmail.text.toString().trim()
 
-        if(email.isNotEmpty()) {
-            checkEmailExistence(email) { emailExists ->
-                if (emailExists) {
-                    runOnUiThread {
+        if (!isNetworkConnected()) {
+
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("No connection")
+            builder.setMessage("Please check your internet connection and try again")
+            builder.setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+            val dialog = builder.create()
+            dialog.show()
+
+        } else {
+            val email = etEmail.text.toString().trim()
+
+            if (email.isNotEmpty()) {
+                checkEmailExistence(email) { emailExists ->
+                    if (emailExists) {
+                        runOnUiThread {
+
 //                        val intent = Intent(this, ResetPasswordActivity::class.java)
 //                        val userEmail = email
-                        resetPassword(email)
+//                        intent.putExtra("userEmail", userEmail)
 //                        startActivity(intent)
 //                        finish()
+                            submitButton.isEnabled = false
+                            val otp = generateRandomOTP()
+                            sendOTPToEmail(email, otp)
+                            showOTPInputDialog(email, otp)
 
+                        }
+                    } else {
+                        Toast.makeText(
+                            applicationContext,
+                            "The Email Address is not exists",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        etEmailLayout.setError("Email Address is not exists")
+                        etEmailLayout.setErrorIconDrawable(R.drawable.baseline_error_24)
                     }
-                } else {
-                    Toast.makeText(
-                        applicationContext,
-                        "The Email Address is not exists",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                    etEmailLayout.setError("Email Address is not exists")
-                    etEmailLayout.setErrorIconDrawable(R.drawable.baseline_error_24)
                 }
-            }
-        }else{
-            Toast.makeText(
-                applicationContext,
-                "Email Address is Empty....",
-                Toast.LENGTH_SHORT
-            ).show()
+            } else {
+                Toast.makeText(
+                    applicationContext,
+                    "Email Address is Empty....",
+                    Toast.LENGTH_SHORT
+                ).show()
 
+            }
         }
     }
     private fun sendResetEmail(email: String) {
@@ -112,7 +136,7 @@ class ForgotPassword : AppCompatActivity() {
 
 
                 // generate token
-                val resetToken = generateResetToken()
+                val resetToken = null
                 val resetLink = "https://azurefuture.com/reset_password?token=$resetToken"
 
 
@@ -146,11 +170,7 @@ class ForgotPassword : AppCompatActivity() {
 
 
 fun resetPassword(email: String){
-    val intent = Intent(this, ResetPasswordActivity::class.java)
-    val userEmail = email
-    intent.putExtra("userEmail", userEmail)
-    startActivity(intent)
-    finish()
+
 }
 
 
@@ -192,14 +212,134 @@ fun resetPassword(email: String){
         requestQueue.add(stringRequestRemote)
     }
 
+
+    fun generateRandomOTP(): String {
+        val otpLength = 6
+        val otpBuilder = StringBuilder()
+
+        val random = Random()
+
+        repeat(otpLength) {
+            val digit = random.nextInt(10)
+            otpBuilder.append(digit)
+        }
+
+        return otpBuilder.toString()
+    }
+
+
+    fun sendOTPToEmail(email: String, otp: String) {
+        // email setting
+        val properties = Properties()
+        properties["mail.smtp.host"] = "smtp.gmail.com"
+        properties["mail.smtp.port"] = "587"
+        properties["mail.smtp.auth"] = "true"
+        properties["mail.smtp.starttls.enable"] = "true"
+
+        val username = "jhtan-wm20@student.tarc.edu.my"
+        val password = "020912100273"
+
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val session = Session.getInstance(properties, object : Authenticator() {
+                    override fun getPasswordAuthentication(): PasswordAuthentication {
+                        return PasswordAuthentication(username, password)
+                    }
+                })
+
+                val message = MimeMessage(session)
+                message.setFrom(InternetAddress(username))
+                message.addRecipient(Message.RecipientType.TO, InternetAddress(email))
+                message.subject = "Password Reset One Time Password"
+
+
+                // generate token
+                val resetToken = otp
+
+                // content click(user)
+                message.setText("Your reset password One Time Password(OTP) is :\n$resetToken")
+
+                Transport.send(message)
+
+                runOnUiThread {
+                    submitButton.isEnabled = true
+                    Toast.makeText(
+                        applicationContext,
+                        "Password reset email sent successfully. Please check your email...",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.e("EmailError", "Error sending reset email: ${e.message}")
+                runOnUiThread {
+                    submitButton.isEnabled = true
+                    Toast.makeText(
+                        applicationContext,
+                        "Error sending reset email: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
+    fun showOTPInputDialog(email: String, otp: String) {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.otp_input_dialog, null)
+
+        val otpEditText = dialogView.findViewById<EditText>(R.id.otpEditText)
+
+        val dialog = AlertDialog.Builder(this)
+//            .setTitle("OTP Verification")
+            .setView(dialogView)
+            .setPositiveButton("Submit", null) // 设置为 null，以便手动处理点击事件
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setCancelable(false)
+            .create()
+
+
+        dialog.setOnShowListener { _ ->
+            val submitButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            submitButton.setOnClickListener {
+                val enteredOTP = otpEditText.text.toString()
+
+                if (enteredOTP == otp) {
+
+                    val intent = Intent(this, ResetPasswordActivity::class.java)
+                    val userEmail = email
+                    intent.putExtra("userEmail", userEmail)
+                    startActivity(intent)
+                    finish()
+                    dialog.dismiss()
+                } else {
+
+                    Toast.makeText(
+                        applicationContext,
+                        "Invalid OTP. Please try again.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+
+        dialog.show()
+    }
+
     fun login(view: View?) {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
     }
-
-    fun generateResetToken(): String {
-        return UUID.randomUUID().toString()
+    private fun isNetworkConnected(): Boolean {
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
+
+
+
+
 
 }

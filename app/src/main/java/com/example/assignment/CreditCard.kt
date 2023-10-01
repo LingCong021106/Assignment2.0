@@ -168,7 +168,7 @@ class CreditCard : AppCompatActivity() {
                         .setCancelable(true)
                         .setPositiveButton("back to home", DialogInterface.OnClickListener { dialogInterface, i ->
                             dialogInterface.dismiss() // Dismiss the second dialog
-                            val intent = Intent(this@CreditCard, FundraisingDetails::class.java)
+//                            val intent = Intent(this@CreditCard, FundraisingDetails::class.java)
                             startActivity(intent)
                         })
                         .setNegativeButton("", DialogInterface.OnClickListener { dialogInterface, i ->
@@ -215,5 +215,5 @@ class CreditCard : AppCompatActivity() {
         val requestQueue = Volley.newRequestQueue(applicationContext)
         requestQueue.add(stringRequest)
 
-    }
+        }
 }
