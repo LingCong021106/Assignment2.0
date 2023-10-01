@@ -88,17 +88,17 @@
 <!--            android:name=".EventDetails"-->
 <!--            android:exported="false" />-->
 
-<!--        <activity-->
-<!--            android:name=".CreditCard"-->
-<!--            android:exported="false" />-->
+        <activity
+            android:name=".CreditCard"
+            android:exported="false" />
 
-<!--        <activity-->
-<!--            android:name=".Paypal"-->
-<!--            android:exported="false" />-->
+        <activity
+            android:name=".Paypal"
+            android:exported="false" />
 
-<!--        <activity-->
-<!--            android:name=".Donate"-->
-<!--            android:exported="false" />-->
+        <activity
+            android:name=".Payment"
+            android:exported="false" />
 
 <!--        <activity android:name=".admin.AdminHome"/>-->
 <!--        <activity android:name=".user.UserHome"/>-->
