@@ -35,9 +35,8 @@ class EventJoinedAdapter(var eventJoined : List<EventJoined>) :
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = eventJoined[position]
         val userName = currentItem.userName
-        imageString = currentItem.userImage
-        var bitmap = BitmapConverter.convertStringToBitmap(imageString)
-        holder.peopleImg.setImageBitmap(bitmap)
+
+        holder.peopleImg.setImageResource(R.drawable.baseline_person_24)
         holder.peopleName.text = "$userName joined this event !"
     }
 }

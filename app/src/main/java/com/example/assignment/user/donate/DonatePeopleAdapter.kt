@@ -41,9 +41,7 @@ class DonatePeopleAdapter (
         val middle = "RM" + currentItem.userTotalDonate
         val changeColor = "<font color = '#F30F0F'>$middle</font>"
         val last = " for this project!"
-        imageString = currentItem.userImage
-        var bitmap = BitmapConverter.convertStringToBitmap(imageString)
-        holder.peopleImg.setImageBitmap(bitmap)
+        holder.peopleImg.setImageResource(R.drawable.baseline_person_24)
         holder.comment.setText(Html.fromHtml(first + changeColor + last))
     }
 }
