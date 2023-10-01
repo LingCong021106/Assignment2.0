@@ -32,12 +32,28 @@ class AdminVolunteerFragment : Fragment() {
         AdminVolunteerViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
+
+        val bundle = Bundle()
+        bundle.putString("test", "123")
+        val fragmentB = test()
+        fragmentB.arguments = bundle
+
+
+        loadFragment(fragmentB)
+
+
         return root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun loadFragment(fragment: Fragment) {
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container, fragment)
+        transaction.commit()
     }
 
 }

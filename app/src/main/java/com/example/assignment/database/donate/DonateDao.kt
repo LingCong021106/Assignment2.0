@@ -1,14 +1,14 @@
-package com.example.assignment.database.user
+package com.example.assignment.database.donate
 
 import androidx.room.*
 
 @Dao
-interface UserDao {
-    @Query("SELECT * FROM user_table ORDER BY role")
-    fun getAll(): List<User>
+interface DonateDao {
+    @Query("SELECT * FROM donate_table")
+    fun getAll(): List<Donate>
 
-    @Query("SELECT * FROM user_table WHERE role LIKE :role")
-    fun getUsers(role : String): List<User>
+//    @Query("SELECT * FROM user_table WHERE role LIKE :role")
+//    fun getUsers(role : String): List<Donate>
 
    /* @Query("SELECT * FROM student_table WHERE uid IN (:userIds)")
     fun loadAllByIds(userIds: IntArray): List<Student>*/
@@ -16,20 +16,20 @@ interface UserDao {
 //    @Query("SELECT * FROM student_table WHERE roll_no LIKE :roll LIMIT 1")
 //    suspend fun findByRoll(roll: Int): Student
 
-    @Query("SELECT * FROM user_table WHERE id LIKE :id")
-    fun getUser(id: Int): User
+//    @Query("SELECT * FROM user_table WHERE id LIKE :id")
+//    fun getUser(id: Int): Donate
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(user: User)
+    fun insert(donate: Donate)
 
 //    @Query("UPDATE user_table SET userName=:name, role=:role, profile=:profile WHERE id=:id")
 //    fun update(id : Int, name : String, role: String, profile : String)
 
     @Update
-    fun update(user: User)
+    fun update(donate: Donate)
 
     @Delete
-    fun delete(user: User)
+    fun delete(donate: Donate)
 
 //    @Query("DELETE FROM student_table")
 //    suspend fun deleteAll()
