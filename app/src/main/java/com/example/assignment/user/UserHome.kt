@@ -9,7 +9,6 @@ import com.example.assignment.user.event.EventFragment
 import com.example.assignment.user.home.UserHomeFragment
 import com.example.assignment.user.profile.ProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationView
 
 class UserHome: AppCompatActivity(){
     lateinit var bottomNav : BottomNavigationView

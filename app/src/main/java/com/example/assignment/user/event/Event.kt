@@ -1,15 +1,14 @@
 package com.example.assignment.user.event
 
-import java.util.Date
-
 var eventList = mutableListOf<Event>()
-
+var eventJoinedList = mutableListOf<EventJoined>()
+var searchList = mutableListOf<Event>()
 data class Event(
-    var id:Int,
+    var id: Int,
     var name:String,
-    var description:String,
     var category:String,
-    var image:Int,
+    var description:String,
+    var image:String,
     var registrationEndDate:String,
     var orgatnizationName:String,
     var contactNumber:String,
@@ -18,3 +17,11 @@ data class Event(
     var eventDate:String,
     var location:String,
 )
+
+data class EventJoined(
+    var eventId: Int,
+    var userEmail: String,
+    var userImage: String,
+    var userName: String,
+)
+

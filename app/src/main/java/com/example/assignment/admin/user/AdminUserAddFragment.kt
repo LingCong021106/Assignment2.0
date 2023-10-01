@@ -61,6 +61,7 @@ class AdminUserAddFragment : Fragment() {
 
         val name = addName.text.toString()
         val role = addRole.text.toString()
+        bitmapString = ""
         val profile = bitmapString
 
         if(name.isNotEmpty() && role.isNotEmpty()) {
