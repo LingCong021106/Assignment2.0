@@ -51,6 +51,8 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+
 }
 
 
@@ -77,6 +79,16 @@ dependencies {
     implementation ("androidx.databinding:databinding-runtime:7.0.2")
     // To use Kotlin annotation processing tool (kapt)
     kapt("androidx.room:room-compiler:$room_version")
+
+    implementation("androidx.room:room-ktx:2.4.2")
+    implementation("androidx.room:room-runtime:2.4.2")
+    kapt("androidx.room:room-compiler:2.4.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
+
+    implementation("androidx.fragment:fragment:1.0.0")
+
+    //implementation("androidx.lifecycle:lifecycle-common:2.6.2")
 
 
     // optional - Kotlin Extensions and Coroutines support for Room
