@@ -5,21 +5,22 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
 
 @Dao
 interface EventDatabaseDao {
 
     @Query("SELECT * FROM event_table")
-    fun getAll(): List<Event>
+    fun getAll(): MutableList<EventData>
     @Query("SELECT * FROM event_table WHERE eventId LIKE :eventId")
-    fun getEvent(eventId: Int): List<Event>
+    fun getEvent(eventId: Int): List<EventData>
 
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(event: Event)
+    @Insert
+    fun insert(event:EventData)
 
     @Delete
-    fun delete(event:Event)
+    fun delete(event:EventData)
 
+    @Query("DELETE FROM event_table")
+    fun clear()
 }

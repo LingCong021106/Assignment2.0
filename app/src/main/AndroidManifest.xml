@@ -89,7 +89,7 @@
 <!--        <activity android:name=".user.UserHome"/>-->
 
         <activity
-            android:name=".Paypal"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -99,6 +99,9 @@
 
 
         </activity>
+        <activity
+            android:name=".admin.AdminHome"
+            android:exported="true" />
         <activity
             android:name=".admin.dashboard.DashboardFragment"
             android:exported="true" />
@@ -118,7 +121,29 @@
             android:name=".admin.volunteer.AdminVolunteerFragment"
             android:exported="true" />
         <activity
+            android:name=".user.UserHome"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
             android:name=".user.event.EventFragment"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="true" />
+        <activity
+            android:name=".user.event.EventDetails"
+            android:parentActivityName=".user.event.EventFragment"
+            android:theme="@style/Theme.AppCompat.DayNight"
+            android:label="Event Detail"
+            android:exported="true" />
+        <activity
+            android:name=".user.donate.DonateFragment"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="true" />
+        <activity
+            android:name=".user.donate.DonateDetails"
+            android:parentActivityName=".user.donate.DonateFragment"
+            android:theme="@style/Theme.AppCompat.DayNight"
+            android:label="Donate Detail"
             android:exported="true" />
         <meta-data
             android:name="preloaded_fonts"

@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/user_card_view"
+    android:id="@+id/donate_card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/rounded_circle"
@@ -18,7 +18,7 @@
         android:padding="16dp">
 
         <ImageView
-            android:id="@+id/event_image"
+            android:id="@+id/donate_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:scaleType="centerCrop"
@@ -27,34 +27,35 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/event_name"
+            android:id="@+id/donate_name"
             android:layout_width="236dp"
             android:layout_height="39dp"
             android:layout_marginStart="16dp"
             android:textSize="30sp"
-            app:layout_constraintLeft_toRightOf="@id/event_image"
+            app:layout_constraintLeft_toRightOf="@id/donate_image"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/event_registration_end_time"
+            android:id="@+id/donate_registration_end_time"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:text="TextView"
-            app:layout_constraintStart_toEndOf="@+id/event_image"
-            app:layout_constraintTop_toBottomOf="@+id/event_name" />
+            app:layout_constraintStart_toEndOf="@+id/donate_image"
+            app:layout_constraintTop_toBottomOf="@+id/donate_name" />
 
         <TextView
-            android:id="@+id/event_max_person"
+            android:id="@+id/donate_total"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/event_image" />
+            app:layout_constraintStart_toEndOf="@+id/donate_image" />
 
         <Button
-            android:id="@+id/event_selected_btn"
+            android:id="@+id/donate_selected_btn"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/signupbtn_shape"

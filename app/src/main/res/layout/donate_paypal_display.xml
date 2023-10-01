@@ -10,18 +10,19 @@
         android:id="@+id/donateAmount_paypal_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="28dp"
         android:layout_marginTop="40dp"
-        android:text="Donate Amount"
+        android:text="Donate Amount :"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/donatetxtpaypal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="112dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="40dp"
         android:text="RM"
         android:textSize="20sp"
@@ -35,10 +36,10 @@
         android:layout_marginTop="40dp"
         android:text="100"
         android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/donatetxtpaypal"
         app:layout_constraintTop_toTopOf="parent" />
-
-
 
     <ImageView
         android:id="@+id/imageView2"
@@ -126,4 +127,3 @@
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
