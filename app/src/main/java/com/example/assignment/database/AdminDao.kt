@@ -25,11 +25,14 @@ interface AdminDao {
     @Query("SELECT * FROM admin_table WHERE aEmail = :email")
     fun getAdminByEmail(email: String): Admin?
 
-    @Query("UPDATE admin_table SET aName = :newName, aEmail = :newEmail, aName = :newPhone, photo = :profileImageUrl WHERE aEmail = :originalEmail")
+    @Query("UPDATE admin_table SET aName = :newName, aEmail = :newEmail, aPhone = :newPhone, photo = :profileImageUrl WHERE aEmail = :originalEmail")
     fun updateAdminInfo(originalEmail: String, newName: String, newEmail: String, newPhone: String, profileImageUrl: String)
 
     @Query("UPDATE admin_table SET aPassword = :password WHERE aEmail = :email")
     fun updateAdminPassword(password: String, email: String,)
+
+    @Query("DELETE FROM admin_table WHERE aEmail = :email")
+    fun deleteorganization(email: String,)
 
 //    @Delete
 //    suspend fun delete(user: User)

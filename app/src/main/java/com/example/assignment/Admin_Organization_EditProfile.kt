@@ -31,6 +31,7 @@ import org.json.JSONObject
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
+import com.example.assignment.admin.user.UsersList
 import com.example.assignment.database.Admin
 
 class Admin_Organization_EditProfile : AppCompatActivity() {
@@ -113,6 +114,14 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        val listBtn = findViewById<Button>(R.id.listBtn)
+        listBtn.setOnClickListener{
+            val intent = Intent(this, UsersList::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         saveButton = findViewById(R.id.saveButton)
         saveButton.setOnClickListener {
             // Show a confirmation dialog
@@ -349,6 +358,8 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
                         val phoneExists = jsonResponse.getInt("phoneExists")
 
                         if (success == 1) {
+                            Log.d("name",newName)
+                            Log.d("name",newPhone)
 
                             CoroutineScope(Dispatchers.IO).launch {
                                 val admin = appDb.adminDao().getAdminByEmail(originalEmail)
@@ -369,6 +380,7 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
                                     newPhone,
                                     profileImageUrl
                                 )
+
                             }
                             //set hint for update
                             etName.hint = newName

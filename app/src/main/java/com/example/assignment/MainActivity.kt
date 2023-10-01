@@ -31,18 +31,10 @@ import kotlinx.coroutines.launch
 import java.security.MessageDigest
 import android.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
-import com.example.assignment.admin.user.UserFragment
 import com.example.assignment.database.Admin
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
 import org.json.JSONObject
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import org.json.JSONException
-import java.time.LocalDateTime
-import java.time.ZoneId
 
 //jiahon
 class MainActivity : AppCompatActivity() {
@@ -306,7 +298,10 @@ class MainActivity : AppCompatActivity() {
 
                         if (admin != null && usersRole == "admin") {
                             val intent =
-                                Intent(this@MainActivity, Admin_Organization_EditProfile::class.java)
+                                Intent(
+                                    this@MainActivity,
+                                    Admin_Organization_EditProfile::class.java
+                                )
                             startActivity(intent)
                             finish()
                         } else if (admin != null && usersRole == "organization") {
@@ -318,36 +313,14 @@ class MainActivity : AppCompatActivity() {
                             finish()
                         } else if (user != null && usersRole == "users") {
 
-                                val intent =
-                                    Intent(this@MainActivity, UserEditProfileActivity::class.java)
-                                startActivity(intent)
-                                finish()
-                            } else{
-                            Toast.makeText(
-                                this@MainActivity,
-                                "Invalid Email Address/Password",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            etEmail.text.clear()
-                            etPassword.text.clear()
-                            etEmailLayout.helperText = "*Invalid Email Address/Password"
-                            etEmailLayout.setHelperTextColor(
-                                ColorStateList.valueOf(
-                                    Color.RED
-                                )
+                            val intent =
+                                Intent(this@MainActivity, UserEditProfileActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        } else {
 
-                            )
-
-                            passwordInputLayout.helperText =
-                                "*Invalid Email Address/Password"
-                            passwordInputLayout.setHelperTextColor(
-                                ColorStateList.valueOf(
-                                    Color.RED
-                                )
-                            )
-                            }
-                    }
-                else {
+                        }
+                    }else {
 
                         var email = etEmail.getText().toString().trim()
                         var password = etPassword.getText().toString().trim()
@@ -360,6 +333,8 @@ class MainActivity : AppCompatActivity() {
                                     Log.d("res", response)
                                     val jsonResponseLogin = JSONObject(response)
                                     val successLogin = jsonResponseLogin.getInt("loginSucess")
+
+
                                     if (successLogin == 1) {
 
                                         val LoggedInUserEmail = jsonResponseLogin.getString("userEmail")
@@ -407,7 +382,7 @@ class MainActivity : AppCompatActivity() {
                                                         if (usersRole == "users") {
                                                             val user = User(
                                                                 userName = username,
-                                                                password = password,
+                                                                password = encryptedPassword,
                                                                 userEmail = email,
                                                                 phone = phone,
                                                                 photo = photo,
@@ -421,7 +396,7 @@ class MainActivity : AppCompatActivity() {
                                                             val admin = Admin(
                                                                 aName = username,
                                                                 aEmail = email,
-                                                                aPassword = password,
+                                                                aPassword = encryptedPassword,
                                                                 aPhone = phone,
                                                                 role = usersRole,
                                                                 photo = photo,
@@ -511,6 +486,10 @@ class MainActivity : AppCompatActivity() {
 
 
                                     } else if (successLogin == 0) {
+                                        Log.d("cMyApp", "userEmail: $email")
+                                        Log.d("cMyApp", "password: $password")
+                                        Log.d("cMyApp", "password: $usersRole")
+
                                         Toast.makeText(
                                             this@MainActivity,
                                             "Invalid Email Address/Password",
