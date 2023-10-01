@@ -10,18 +10,19 @@
         android:id="@+id/donateAmount_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="28dp"
         android:layout_marginTop="40dp"
-        android:text="Donate Amount"
+        android:text="Donate Amount :"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/donatetxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="112dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="40dp"
         android:text="RM"
         android:textSize="20sp"
@@ -35,10 +36,10 @@
         android:layout_marginTop="40dp"
         android:text="100"
         android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/donatetxt"
         app:layout_constraintTop_toTopOf="parent" />
-
-
 
     <ImageView
         android:id="@+id/donateBack"
@@ -70,6 +71,7 @@
         android:layout_marginTop="100dp"
         android:ems="10"
         android:hint="Enter 16 digits card number"
+        android:maxLength="16"
         android:inputType="number|numberSigned"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.336"
@@ -83,6 +85,7 @@
         android:layout_marginTop="40dp"
         android:ems="10"
         android:hint="MM"
+        android:maxLength="2"
         android:inputType="number|numberSigned"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.072"
@@ -98,6 +101,7 @@
         android:ems="10"
         android:hint="YY"
         android:inputType="number|numberSigned"
+        android:maxLength="2"
         app:layout_constraintStart_toEndOf="@+id/cardtxt"
         app:layout_constraintTop_toBottomOf="@+id/cardNumber" />
 
@@ -108,6 +112,7 @@
         android:layout_marginTop="40dp"
         android:ems="10"
         android:hint="CVV"
+        android:maxLength="3"
         android:inputType="number|numberSigned"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.6"
@@ -130,12 +135,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
-        android:text="Pay Now"
         android:background="@drawable/event_join_btn"
+        android:text="Pay Now"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/errorCardtxt"
+        app:layout_constraintVertical_bias="0.875" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -172,5 +179,16 @@
         app:layout_constraintStart_toEndOf="@+id/imageView3"
         app:layout_constraintTop_toBottomOf="@+id/textView5"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <TextView
+        android:id="@+id/errorCardtxt"
+        android:layout_width="279dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="84dp"
+        android:textColor="@color/error"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardcvv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

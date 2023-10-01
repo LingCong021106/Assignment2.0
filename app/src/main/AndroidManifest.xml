@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 
     <application
@@ -18,42 +19,56 @@
         android:theme="@style/Theme.Assignment"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-<!--        <activity-->
-<!--            android:name=".ResetPasswordActivity"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.VIEW" />-->
-<!--                <category android:name="android.intent.category.DEFAULT" />-->
-<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+        <activity
+            android:name=".admin.user.UsersList"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileChangePassword"
+            android:exported="false" />
 
-<!--                <data-->
-<!--                    android:scheme="https"-->
-<!--                    android:host="azurefuture.com"-->
-<!--                    android:pathPrefix="/reset_password" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-<!--        <activity-->
-<!--            android:name=".AddOrganization"-->
-<!--            android:exported="false" />-->
-<!--        <activity-->
-<!--            android:name=".ForgotPassword"-->
-<!--            android:exported="false" />-->
-<!--        <activity-->
-<!--            android:name=".Admin_Organization_EditProfile"-->
-<!--            android:exported="false" />-->
-<!--        <activity-->
-<!--            android:name=".UserEditProfileActivity"-->
-<!--            android:exported="false" />-->
-<!--        <activity-->
-<!--            android:name=".RegisterAccount"-->
-<!--            android:exported="false" />-->
-<!--        <activity-->
-<!--            android:name=".user_home"-->
-<!--            android:exported="false" />-->
-<!--        <activity-->
-<!--            android:name=".user_views"-->
-<!--            android:exported="false" />-->
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="azurefuture.com"
+                    android:pathPrefix="/reset_password"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".AddOrganization"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.DayNight"
+            android:label="Add New Organization
+"           android:parentActivityName=".admin.user.UsersList"/>
+        <activity
+            android:name=".ForgotPassword"
+            android:exported="false" />
+        <activity
+            android:name=".Admin_Organization_EditProfile"
+            android:exported="true"
+            android:label="Edit Profile Details"
+            android:theme="@style/Theme.AppCompat.DayNight"/>
+        <activity
+            android:name=".UserEditProfileActivity"
+            android:exported="true"
+            android:label="Edit My Profile Details"
+            android:theme="@style/Theme.AppCompat.DayNight" />
+        <activity
+            android:name=".RegisterAccount"
+            android:exported="false" />
+        <activity
+            android:name=".user_home"
+            android:exported="false" />
+        <activity
+            android:name=".user_views"
+            android:exported="false" />
 
 <!--        <activity-->
 <!--            android:name=".RegisterAccount"-->
@@ -87,12 +102,7 @@
 
 <!--        <activity android:name=".admin.AdminHome"/>-->
 <!--        <activity android:name=".user.UserHome"/>-->
-        <activity
-            android:name=".admin.donate.AdminDonateFragment"
-            android:exported="true" />
 
-        <activity android:name=".admin.AdminHome"/>
-        <activity android:name=".user.UserHome"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -104,28 +114,56 @@
 
 
         </activity>
-
-<!--        <activity-->
-<!--            android:name=".admin.dashboard.DashboardFragment"-->
-<!--            android:exported="true" />-->
-<!--        <activity-->
-<!--            android:name=".admin.donate.AdminDonateFragment"-->
-<!--            android:exported="true" />-->
-<!--        <activity-->
-<!--            android:name=".admin.news.AdminNewsFragment"-->
-<!--            android:exported="true" />-->
-<!--        <activity-->
-<!--            android:name=".admin.report.AdminReportFragment"-->
-<!--            android:exported="true" />-->
-<!--        <activity-->
-<!--            android:name=".admin.user.AdminUserFragment"-->
-<!--            android:exported="true" />-->
-<!--        <activity-->
-<!--            android:name=".admin.volunteer.AdminVolunteerFragment"-->
-<!--            android:exported="true" />-->
+        <activity
+            android:name=".admin.AdminHome"
+            android:exported="true" />
+        <activity
+            android:name=".admin.dashboard.DashboardFragment"
+            android:exported="true" />
+        <activity
+            android:name=".admin.donate.AdminDonateFragment"
+            android:exported="true" />
+        <activity
+            android:name=".admin.news.AdminNewsFragment"
+            android:exported="true" />
+        <activity
+            android:name=".admin.report.AdminReportFragment"
+            android:exported="true" />
+        <activity
+            android:name=".admin.user.AdminUserFragment"
+            android:exported="true" />
+        <activity
+            android:name=".admin.volunteer.AdminVolunteerFragment"
+            android:exported="true" />
+        <activity
+            android:name=".user.UserHome"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".user.event.EventFragment"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="true" />
+        <activity
+            android:name=".user.event.EventDetails"
+            android:parentActivityName=".user.event.EventFragment"
+            android:theme="@style/Theme.AppCompat.DayNight"
+            android:label="Event Detail"
+            android:exported="true" />
+        <activity
+            android:name=".user.donate.DonateFragment"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="true" />
+        <activity
+            android:name=".user.donate.DonateDetails"
+            android:parentActivityName=".user.donate.DonateFragment"
+            android:theme="@style/Theme.AppCompat.DayNight"
+            android:label="Donate Detail"
+            android:exported="true" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
     </application>
 
 </manifest>

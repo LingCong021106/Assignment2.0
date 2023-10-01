@@ -71,7 +71,8 @@ class RegisterAccount : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.user_register_account)        registerText=findViewById(R.id.registerText)
+        setContentView(R.layout.user_register_account)
+        registerText=findViewById(R.id.registerText)
         roleLayout = findViewById(R.id.roleLayout)
 
         userRole = intent.getStringExtra("user_role_key") ?: "User"
@@ -86,7 +87,7 @@ class RegisterAccount : AppCompatActivity() {
                 roleLayout.text = "Register As Organization"
             }
         } else {
-            // 如果没有传递用户角色数据，默认按钮文本
+
             registerText.text = "Register As User"
             roleLayout.text = "Register As Organization"
         }
@@ -318,7 +319,7 @@ class RegisterAccount : AppCompatActivity() {
                 }
 
                 val jobPhone = async {
-                    // 检查电话号码是否存在
+                    //
                     checkPhoneExistence(phone) { phoneExists ->
                         if (phoneExists) {
                             phoneExist = true
@@ -332,12 +333,12 @@ class RegisterAccount : AppCompatActivity() {
                     }
                 }
 
-                // 等待两个异步操作完成
+                //
                 jobEmail.await()
                 jobPhone.await()
 
                 if (!hasError && !emailExist && !phoneExist) {
-                    // 没有错误并且电子邮件和电话号码都不存在，可以保存数据
+                    //
                     save(userName, aEmail, password, phone)
                 }
             }
@@ -384,7 +385,7 @@ class RegisterAccount : AppCompatActivity() {
                     if (response == "success") {
                         Toast.makeText(
                             applicationContext,
-                            "Good",
+                            "Register Succesfully",
                             Toast.LENGTH_SHORT
                         ).show()
 
@@ -417,9 +418,11 @@ class RegisterAccount : AppCompatActivity() {
                             }
                         }
 
-                        // 在成功插入数据后清除字段
+                        //
                         clearFields()
-                        // 执行验证
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
 
                     } else if (response == "failure") {
                         Toast.makeText(
@@ -430,7 +433,7 @@ class RegisterAccount : AppCompatActivity() {
                     }
                 },
                 Response.ErrorListener { error ->
-                    // 网络错误或其他错误
+                    //
                     Toast.makeText(
                         applicationContext,
                         error.toString().trim { it <= ' ' },
