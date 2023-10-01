@@ -41,7 +41,7 @@
 
 
                 <ImageView
-                    android:id="@+id/imageView2"
+                    android:id="@+id/donateBack"
                     android:layout_width="60dp"
                     android:layout_height="49dp"
                     android:layout_gravity="left"
@@ -60,7 +60,7 @@
                     android:textStyle="bold" />
 
                 <ImageButton
-                    android:id="@+id/imageButton2"
+                    android:id="@+id/addDonateImage"
                     android:layout_width="274dp"
                     android:layout_height="130dp"
                     android:layout_gravity="center"
@@ -86,7 +86,7 @@
 
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/inputDonateTitle"
+                        android:id="@+id/addDonateTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/admin_radio_normal"
@@ -117,7 +117,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/admin_radio_normal"
-                        android:inputType="text"
+                        android:inputType="number"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -165,7 +165,6 @@
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/etEmailLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -183,7 +182,7 @@
 
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etEmail"
+                        android:id="@+id/addDonateDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/admin_radio_normal"

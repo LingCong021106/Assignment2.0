@@ -71,7 +71,7 @@ class RegisterAccount : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.user_register_account)        registerText=findViewById(R.id.registerText)
+        //setContentView(R.layout.user_register_account)        registerText=findViewById(R.id.registerText)
         roleLayout = findViewById(R.id.roleLayout)
 
         userRole = intent.getStringExtra("user_role_key") ?: "User"

@@ -5,24 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import com.example.assignment.R
-import com.example.assignment.admin.donate.AdminDonateAddFragment
-import com.example.assignment.admin.donate.AdminDonateDetailFragment
 import com.example.assignment.admin.donate.AdminDonateFragment
 import com.example.assignment.admin.news.AdminNewsFragment
 import com.example.assignment.admin.report.AdminReportFragment
-import com.example.assignment.admin.user.AdminUserDetailFragment
 import com.example.assignment.admin.user.AdminUserFragment
 import com.example.assignment.admin.volunteer.AdminVolunteerFragment
 import com.example.assignment.databinding.FragmentDashboardBinding
-import com.google.android.material.navigation.NavigationView
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -85,7 +77,7 @@ class DashboardFragment : Fragment() {
         binding.dashboardDonateBtn.setOnClickListener{
             if(savedInstanceState == null){
                 parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, AdminDonateAddFragment()).commit()
+                    .replace(R.id.fragment_container, AdminDonateFragment()).commit()
 
             }
         }
