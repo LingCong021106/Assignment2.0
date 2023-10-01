@@ -19,7 +19,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.assignment.admin.donate.AdminDonateFragment
 import com.example.assignment.admin.news.AdminNewsFragment
 import com.example.assignment.admin.report.AdminReportFragment
-import com.example.assignment.admin.user.AdminUserFragment
+//import com.example.assignment.admin.user.AdminUserFragment
 import com.example.assignment.admin.volunteer.AdminVolunteerFragment
 
 // TODO: Rename parameter arguments, choose names that match
@@ -74,10 +74,10 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        val button1 = view.findViewById<Button>(R.id.dashboardUserBtn)
-        button1.setOnClickListener {
-            loadFragment(AdminUserFragment())
-        }
+//        val button1 = view.findViewById<Button>(R.id.dashboardUserBtn)
+//        button1.setOnClickListener {
+//            loadFragment(AdminUserFragment())
+//        }
 
         val button2 = view.findViewById<Button>(R.id.dashboardDonateBtn)
         button2.setOnClickListener {
