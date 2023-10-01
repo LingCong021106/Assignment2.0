@@ -1,59 +1,76 @@
 package com.example.assignment.admin.user
 
+import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.assignment.BitmapConverter
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.example.assignment.R
-import com.example.assignment.database.user.User
+import com.example.assignment.database.User
+import com.google.android.material.imageview.ShapeableImageView
+import javax.sql.DataSource
 
+class UserAdapter(
+    private val peopleList: ArrayList<ListUsers>,
+    private val role: String,
+    private val onActionClick: (type: String, user: ListUsers) -> Unit
+) : RecyclerView.Adapter<UserAdapter.MyViewHolder>() {
 
-class UserAdapter(var userList : List<User>) :
-    RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
+    // Existing code for onCreateViewHolder and getItemCount
 
-    private var imageString: String? = null
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        val currentItem = peopleList[position]
 
-    inner class UserViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
-        //val profile : ImageView = itemView.findViewById(R.id.profile)
-        val username : TextView = itemView.findViewById(R.id.name)
-        val role : TextView = itemView.findViewById(R.id.role)
-        val profile : ImageView = itemView.findViewById(R.id.listProfile)
+        holder.nameTextView?.text = currentItem.name
+        holder.emailTextView?.text = currentItem.email
 
+        holder.imageView?.let {
+            Glide.with(holder.imageView.context)
+                .load(currentItem.photo)
+                .placeholder(R.drawable.baseline_person_2_24)
+//                .error(R.drawable.baseline_error_24)
+                .into(it)
+        }
+
+        if (role == "admin") {
+            holder.deleteBtn?.visibility = View.GONE
+        } else {
+            holder.deleteBtn?.visibility = View.VISIBLE
+        }
+
+        holder.deleteBtn?.setOnClickListener{
+            onActionClick("delete", currentItem)
+        }
 
     }
 
-    fun setFilteredList(userList: List<User>){
-        this.userList = userList
-        notifyDataSetChanged()
-    }
-
-//    fun getBitMap(): Int {
-//        val bitmap = BitmapConverter.convertStringToBitmap(imageString)
-//        return userList.size
-//    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.admin_list_user , parent , false)
-        return UserViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val itemView = LayoutInflater.from(parent.context).inflate(
+            R.layout.admin_list_user,
+            parent, false
+        )
+        return MyViewHolder(itemView)
     }
 
     override fun getItemCount(): Int {
-        return userList.size
+        return peopleList.size
     }
 
-    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        //holder.profile.setImageResource(userList[position].profile)
-        holder.username.text = userList[position].userName
-        holder.role.text = userList[position].role
-
-        imageString = userList[position].profile
-        val bitmap = BitmapConverter.convertStringToBitmap(imageString)
-
-        holder.profile.setImageBitmap(bitmap)
+    inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val emailTextView: TextView? = itemView.findViewById(R.id.email)
+        val nameTextView: TextView? = itemView.findViewById(R.id.name)
+        val imageView: ImageView? = itemView.findViewById(R.id.listProfile)
+        val deleteBtn: ImageButton? = itemView.findViewById(R.id.userDeleteBtn)
     }
-
 
 }
+

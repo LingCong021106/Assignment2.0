@@ -1,0 +1,39 @@
+<!-- res/layout/custom_otp_dialog.xml -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    >
+
+    <ImageView
+        android:id="@+id/lockImageView"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_gravity="center"
+        android:src="@drawable/otp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="One-Time-Password Verification"
+        android:textAlignment="center"
+        android:textColor="#2196F3"
+        android:layout_marginTop="30dp"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/otpEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="OTP"
+        android:inputType="number"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:textSize="16sp" />
+
+</LinearLayout>

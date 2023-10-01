@@ -10,9 +10,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import com.android.volley.AuthFailureError
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
@@ -26,10 +24,10 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.security.MessageDigest
 
-class ResetPasswordActivity : AppCompatActivity() {
+class ProfileChangePassword : AppCompatActivity() {
 
-    lateinit var etPassword :EditText
-    lateinit var etconPassword:EditText
+    lateinit var etPassword : EditText
+    lateinit var etconPassword: EditText
     lateinit var submitButton: Button
     lateinit var etPasswordLayout : TextInputLayout
     lateinit var etconPasswordLayout: TextInputLayout
@@ -39,14 +37,15 @@ class ResetPasswordActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.user_reset_password)
+        setContentView(R.layout.profile_change_password)
+
         submitButton  = findViewById(R.id.submitButton)
         Log.d("ResetPasswordActivity", "ResetPasswordActivity started")
         etPasswordLayout = findViewById(R.id.etPasswordLayout)
         etconPasswordLayout = findViewById(R.id.etconPasswordLayout)
         appDb = AppDatabase.getInstance(this)
 
-         email = intent.getStringExtra("userEmail")
+        email = intent.getStringExtra("userEmail")
         Log.d("EmailDebug", "Email sending initiated for userEmail: $email")
 
         if (email != null) {
@@ -207,7 +206,7 @@ class ResetPasswordActivity : AppCompatActivity() {
                         } else {
 
                             Toast.makeText(
-                                this@ResetPasswordActivity,
+                                this@ProfileChangePassword,
                                 "Password updated Failed....",
                                 Toast.LENGTH_SHORT
                             ).show()
@@ -231,7 +230,7 @@ class ResetPasswordActivity : AppCompatActivity() {
                     return data
                 }
             }
-            val requestQueue = Volley.newRequestQueue(this@ResetPasswordActivity)
+            val requestQueue = Volley.newRequestQueue(this@ProfileChangePassword)
             requestQueue.add(stringRequestRemote)
         }
     }

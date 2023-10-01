@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    tools:context=".admin.user.AdminUserFragment">
 
 
 
@@ -97,32 +97,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/adminUserSearch" />
 
-    <ImageButton
-        android:id="@+id/addOrgBtn"
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/moveAddFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:clickable="true"
         android:src="@drawable/baseline_person_add_alt_1_24"
-        app:backgroundTint="#F4F2F2"
+        app:backgroundTint="#FFFFFF"
         app:fabCustomSize="60sp"
         app:layout_constraintStart_toEndOf="@+id/adminUserSearch"
         app:layout_constraintTop_toBottomOf="@+id/userGroup"
-        app:maxImageSize="40sp"
-        android:onClick="AddOrganization" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="218dp"
-        android:layout_height="227dp"
-        app:layout_constraintBottom_toBottomOf="@+id/userRecycleView"
-        app:layout_constraintEnd_toEndOf="@+id/userRecycleView"
-        app:layout_constraintStart_toStartOf="@+id/userRecycleView"
-        app:layout_constraintTop_toTopOf="@+id/userRecycleView" />
-
+        app:maxImageSize="40sp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

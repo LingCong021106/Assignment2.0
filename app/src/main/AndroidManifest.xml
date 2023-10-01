@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 
     <application
@@ -19,32 +20,46 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".admin.user.UsersList"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileChangePassword"
+            android:exported="false" />
+
+        <activity
             android:name=".ResetPasswordActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="https"
                     android:host="azurefuture.com"
-                    android:pathPrefix="/reset_password" />
+                    android:pathPrefix="/reset_password"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".AddOrganization"
-            android:exported="false" />
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.DayNight"
+            android:label="Add New Organization
+"           android:parentActivityName=".admin.user.UsersList"/>
         <activity
             android:name=".ForgotPassword"
             android:exported="false" />
         <activity
             android:name=".Admin_Organization_EditProfile"
-            android:exported="false" />
+            android:exported="true"
+            android:label="Edit Profile Details"
+            android:theme="@style/Theme.AppCompat.DayNight"/>
         <activity
             android:name=".UserEditProfileActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:label="Edit My Profile Details"
+            android:theme="@style/Theme.AppCompat.DayNight" />
         <activity
             android:name=".RegisterAccount"
             android:exported="false" />

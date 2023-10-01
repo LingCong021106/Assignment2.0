@@ -16,6 +16,7 @@ import com.example.assignment.R
 import com.example.assignment.admin.donate.AdminDonateFragment
 import com.example.assignment.admin.news.AdminNewsFragment
 import com.example.assignment.admin.report.AdminReportFragment
+//import com.example.assignment.admin.user.AdminUserFragment
 import com.example.assignment.admin.user.AdminUserDetailFragment
 import com.example.assignment.admin.user.AdminUserFragment
 import com.example.assignment.admin.volunteer.AdminVolunteerFragment
@@ -77,8 +78,6 @@ class DashboardFragment : Fragment() {
                     .addToBackStack(null)
                     .replace(R.id.fragment_container, AdminUserFragment()).commit()
 
-            }
-        }
 
         binding.dashboardDonateBtn.setOnClickListener{
             if(savedInstanceState == null){
