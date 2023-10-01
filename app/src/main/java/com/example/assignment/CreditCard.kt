@@ -1,6 +1,7 @@
 package com.example.assignment
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.textservice.TextInfo
@@ -15,6 +16,9 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class CreditCard : AppCompatActivity() {
 
@@ -26,11 +30,12 @@ class CreditCard : AppCompatActivity() {
     lateinit var errorMsgCard : TextView
     lateinit var builder : AlertDialog.Builder
     lateinit var amountTxt : TextView
-    private var eventID : String =""
+    private var donateID : String =""
     private var username : String =""
     private var amount : String = ""
     private var methodPay : String = "card"
-    private val URLinsertDonate :String = "http://192.168.0.21:8081/mobile/insertDonateRecord.php"
+    private var userID : String = ""
+    private val URLinsertDonate :String = "http://192.168.0.21:8081/Assignment(Mobile)/insertDonateRecord.php"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,9 +54,10 @@ class CreditCard : AppCompatActivity() {
 
         amountTxt.text = intent.getStringExtra("amount").toString()
 
-        eventID = intent.getStringExtra("eventID").toString()
+        donateID = intent.getStringExtra("donateID").toString()
         username = intent.getStringExtra("username").toString()
         amount = intent.getStringExtra("amount").toString()
+        userID = intent.getStringExtra("userID").toString()
 
         btnPayCard.setOnClickListener { validationInput() }
 
@@ -59,17 +65,82 @@ class CreditCard : AppCompatActivity() {
 
     private fun validationInput() {
 
-        if(inputCard.text.toString().isEmpty() || inputCvv.text.toString().isEmpty()){
+        val card  =inputCard.text.toString().toIntOrNull()
+        val month = inputMonth.text.toString().toIntOrNull()
+        val year = inputYear.text.toString().toIntOrNull()
+        val cvv = inputCvv.text.toString().toIntOrNull()
+        val currentYearLast2Digits = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yy")).toInt()
+        val currentMonth = LocalDate.now().monthValue
+
+        if(inputCard.text.toString().isEmpty() || inputMonth.text.toString().isEmpty() || inputYear.text.toString().isEmpty() || inputCvv.text.toString().isEmpty()){
             errorMsgCard.text="Can't empty, please fill in"
+            builder.setMessage("can't empty, please fill in")
+                .setCancelable(true)
+                .setPositiveButton("", DialogInterface.OnClickListener { dialogInterface, i ->
+                    dialogInterface.dismiss()
+                })
+                .setNegativeButton("Okay", DialogInterface.OnClickListener { dialogInterface, i ->
+                    dialogInterface.cancel()
+                })
+                .show()
         }else{
             if(inputCard.length() !=16){
                 errorMsgCard.text="Invalid card number"
-            }
-            else{
-                if(inputCvv.length() !=3){
+                builder.setMessage("Invalid card number")
+                    .setCancelable(true)
+                    .setPositiveButton("", DialogInterface.OnClickListener { dialogInterface, i ->
+                        dialogInterface.dismiss()
+                    })
+                    .setNegativeButton("Okay", DialogInterface.OnClickListener { dialogInterface, i ->
+                        dialogInterface.cancel()
+                    })
+                    .show()
+            }else if(inputYear.length()!=2){
+                errorMsgCard.text="Invalid year"
+                builder.setMessage("Invalid year")
+                    .setCancelable(true)
+                    .setPositiveButton("", DialogInterface.OnClickListener { dialogInterface, i ->
+                        dialogInterface.dismiss()
+                    })
+                    .setNegativeButton("Okay", DialogInterface.OnClickListener { dialogInterface, i ->
+                        dialogInterface.cancel()
+                    })
+                    .show()
+            }else if(inputMonth.length()!=2 || month !in 1..12){
+                errorMsgCard.text="Invalid month"
+                builder.setMessage("Invalid month")
+                    .setCancelable(true)
+                    .setPositiveButton("", DialogInterface.OnClickListener { dialogInterface, i ->
+                        dialogInterface.dismiss()
+                    })
+                    .setNegativeButton("Okay", DialogInterface.OnClickListener { dialogInterface, i ->
+                        dialogInterface.cancel()
+                    })
+                    .show()
+            }else if(year != null && (year < currentYearLast2Digits || (year == currentYearLast2Digits && month != null && month < currentMonth))){
+                errorMsgCard.text = "Invalid expiration date"
+                builder.setMessage("Invalid expiration date")
+                    .setCancelable(true)
+                    .setPositiveButton("", DialogInterface.OnClickListener { dialogInterface, i ->
+                        dialogInterface.dismiss()
+                    })
+                    .setNegativeButton("Okay", DialogInterface.OnClickListener { dialogInterface, i ->
+                        dialogInterface.cancel()
+                    })
+                    .show()
+            }else{
+                if(inputCvv.length() != 3){
                     errorMsgCard.text="Invalid CVV"
-                }
-                else{
+                    builder.setMessage("Invalid CVV")
+                        .setCancelable(true)
+                        .setPositiveButton("", DialogInterface.OnClickListener { dialogInterface, i ->
+                            dialogInterface.dismiss()
+                        })
+                        .setNegativeButton("Okay", DialogInterface.OnClickListener { dialogInterface, i ->
+                            dialogInterface.cancel()
+                        })
+                        .show()
+                }else{
                     builder.setMessage("Confirm to donate?")
                         .setCancelable(true)
                         .setPositiveButton("Yes", DialogInterface.OnClickListener { dialogInterface, i ->
@@ -82,6 +153,7 @@ class CreditCard : AppCompatActivity() {
                         .show()
                 }
             }
+
         }
 
     }
@@ -96,14 +168,15 @@ class CreditCard : AppCompatActivity() {
                         .setCancelable(true)
                         .setPositiveButton("back to home", DialogInterface.OnClickListener { dialogInterface, i ->
                             dialogInterface.dismiss() // Dismiss the second dialog
-                            finish()
+                            val intent = Intent(this@CreditCard, FundraisingDetails::class.java)
+                            startActivity(intent)
                         })
                         .setNegativeButton("", DialogInterface.OnClickListener { dialogInterface, i ->
                             dialogInterface.cancel()
                         })
                         .show()
                 } else if (response == "failure") {
-                    builder.setMessage("So sorry, this is full already, please try to join other event")
+                    builder.setMessage("")
                         .setCancelable(true)
                         .setPositiveButton("back to home", DialogInterface.OnClickListener { dialogInterface, i ->
                             dialogInterface.dismiss() // Dismiss the second dialog
@@ -125,9 +198,16 @@ class CreditCard : AppCompatActivity() {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String>? {
                 val data: MutableMap<String, String> = HashMap()
-                data["id"] = eventID
+                //database
+                val currentDateTime = LocalDateTime.now()
+                val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")
+                val formattedDateTime = currentDateTime.format(formatter)
+
+                data["id"] = donateID
+                data["userID"] = userID
                 data["name"] = username
                 data["amount"] = amount
+                data["date"] = formattedDateTime
                 data["method"] = methodPay
                 return data
             }

@@ -11,29 +11,30 @@ abstract class EventDatabase : RoomDatabase() {
 
     abstract fun eventDao() : EventDatabaseDao
 
-    companion object{
+    companion object {
 
         @Volatile
-        private var INSTANCE : EventDatabase? = null
+        private var INSTANCE: EventDatabase? = null
 
         fun getDatabase(context: Context): EventDatabase {
 
             val tempInstance = INSTANCE
-            if(tempInstance != null){
+            if (tempInstance != null) {
                 return tempInstance
             }
-            synchronized(this){
+            synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     EventDatabase::class.java,
-                    "app_database"
-                ).build()
+                    "event_database"
+                )
+                    .build()
                 INSTANCE = instance
                 return instance
             }
 
-        }
 
+        }
     }
 
 }

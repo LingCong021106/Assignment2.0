@@ -30,8 +30,8 @@ class EventDetails : AppCompatActivity(){
     lateinit var name : Array<String>
     lateinit var btnJoin : Button
     lateinit var builder : AlertDialog.Builder
-    private val URL :String = "http://192.168.0.19:8081/mobile/eventjoin.php"
-    private val URLinsert : String = "http://192.168.0.19:8081/mobile/insertEventPeople.php"
+    private val URL :String = "http://192.168.0.19:8081/Assignment(Mobile)/eventjoin.php"
+    private val URLinsert : String = "http://192.168.0.19:8081/Assignment(Mobile)/insertEventPeople.php"
 
     private val nameList: ArrayList<String> = ArrayList()
     private val imageIdList: ArrayList<Int> = ArrayList()

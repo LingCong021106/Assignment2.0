@@ -2,6 +2,7 @@ package com.example.assignment
 
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -17,6 +18,9 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class Paypal : AppCompatActivity() {
 
@@ -26,11 +30,12 @@ class Paypal : AppCompatActivity() {
     lateinit var errorMsg : TextView
     lateinit var builder : AlertDialog.Builder
     lateinit var amountText : TextView
-    private var eventID : String =""
+    private var donateID : String =""
     private var username : String =""
     private var amount : String = ""
     private var methodPay : String = "paypal"
-    private val URLinsertDonate :String = "http://192.168.0.21:8081/mobile/insertDonateRecord.php"
+    private var userID : String = ""
+    private val URLinsertDonate :String = "http://192.168.0.21:8081/Assignment(Mobile)/insertDonateRecord.php"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -45,9 +50,10 @@ class Paypal : AppCompatActivity() {
 
         amountText.text = intent.getStringExtra("amount").toString()
 
-        eventID = intent.getStringExtra("eventID").toString()
+        donateID = intent.getStringExtra("donateID").toString()
         username = intent.getStringExtra("username").toString()
         amount = intent.getStringExtra("amount").toString()
+        userID = intent.getStringExtra("userID").toString()
 
         buttonPay.setOnClickListener { validateInput() }
 
@@ -106,7 +112,8 @@ class Paypal : AppCompatActivity() {
                         .setCancelable(true)
                         .setPositiveButton("back to home", DialogInterface.OnClickListener { dialogInterface, i ->
                             dialogInterface.dismiss() // Dismiss the second dialog
-                            finish()
+                            val intent = Intent(this@Paypal, FundraisingDetails::class.java)
+                            startActivity(intent)
                         })
                         .setNegativeButton("", DialogInterface.OnClickListener { dialogInterface, i ->
                             dialogInterface.cancel()
@@ -135,7 +142,14 @@ class Paypal : AppCompatActivity() {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String>? {
                 val data: MutableMap<String, String> = HashMap()
-                data["id"] = eventID
+                //database
+                val currentDateTime = LocalDateTime.now()
+                val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")
+                val formattedDateTime = currentDateTime.format(formatter)
+
+                data["id"] = donateID
+                data["userID"] = userID
+                data["date"] = formattedDateTime
                 data["name"] = username
                 data["amount"] = amount
                 data["method"] = methodPay

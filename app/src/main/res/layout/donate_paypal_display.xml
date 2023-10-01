@@ -12,22 +12,22 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginTop="40dp"
-        android:text="Donate Amount"
+        android:text="Donate Amount :"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/donatetxtpaypal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="40dp"
         android:text="RM"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/donateAmount_paypal_title"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <TextView
         android:id="@+id/donateAmount_txt_paypal"

@@ -19,22 +19,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class Donate: AppCompatActivity() {
-    lateinit var textViewAmount : TextView
     lateinit var editTextAmount : EditText
     lateinit var radioGroupAmount: RadioGroup
     lateinit var radioGroupMethod : RadioGroup
     lateinit var buttonDonate : Button
     private var method: String = ""
     private var amount: String = ""
+    private var donateID : String =""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fundraising_details_donate_payment)
 
-        textViewAmount = findViewById(R.id.donate_amount_txt)
+
         editTextAmount = findViewById(R.id.donate_amount_edit)
         radioGroupAmount = findViewById(R.id.donate_amount)
         buttonDonate = findViewById(R.id.donate_payment_btn)
         radioGroupMethod = findViewById(R.id.donate_payment_method)
+
+        donateID = intent.getStringExtra("donateID").toString()
 
         radioGroupAmount.setOnCheckedChangeListener { group, checkedId ->
             val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -42,22 +44,21 @@ class Donate: AppCompatActivity() {
 
             when (checkedId) {
                 R.id.donate_5 -> {
-                    textViewAmount.text = "5"
                     amount = "5"
+                    editTextAmount.setText("5")
                 }
 
                 R.id.donate_10 -> {
-                    textViewAmount.text = "10"
                     amount = "10"
+                    editTextAmount.setText("10")
                 }
 
                 R.id.donate_20 -> {
-                    textViewAmount.text = "20"
                     amount = "20"
+                    editTextAmount.setText("20")
                 }
             }
-            editTextAmount.visibility = View.GONE
-            textViewAmount.visibility = View.VISIBLE
+
         }
 
         radioGroupMethod.setOnCheckedChangeListener { group, methodId ->
@@ -68,13 +69,10 @@ class Donate: AppCompatActivity() {
                     method = "paypal"
             }
         }
-
-        textViewAmount.setOnClickListener { openEditText(it) }
-
         buttonDonate.setOnClickListener { storeDonate(it) }
     }
 
-    private fun storeDonate(view:View) {
+    private fun storeDonate(view: View) {
         val inputAmount = editTextAmount.text.toString().trim()
 
         if (inputAmount.isEmpty() && amount.isEmpty()) {
@@ -85,47 +83,48 @@ class Donate: AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
             return
-        } else if (inputAmount.isNotEmpty()) {
+        }else if(inputAmount =="0"){
+            Toast.makeText(
+                this@Donate,
+                "Donation amount cant 0",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+        else if (inputAmount.isNotEmpty()) {
             // User entered a custom donation amount, use it
             amount = inputAmount
+            when (method) {
+                "card" -> {
+                    val intent = Intent(this@Donate, CreditCard::class.java)
+                    intent.putExtra("donateID", donateID)
+                    intent.putExtra("userID","123")
+                    intent.putExtra("username", "test name")
+                    intent.putExtra("amount", amount)
+                    startActivity(intent)
+                }
+
+                "paypal" -> {
+                    val intent = Intent(this@Donate, Paypal::class.java)
+                    intent.putExtra("donateID", donateID)
+                    intent.putExtra("userID","123")
+                    intent.putExtra("username", "test name")
+                    intent.putExtra("amount", amount)
+                    startActivity(intent)
+                }
+
+                "" -> {
+                    Toast.makeText(
+                        this@Donate,
+                        "Please select a donate method",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         }
-
-        when (method) {
-            "card" -> {
-                val intent = Intent(this@Donate, CreditCard::class.java)
-                intent.putExtra("eventID","1")
-                intent.putExtra("username","test")
-                intent.putExtra("amount", amount.toString())
-                startActivity(intent)
-                finish()
-            }
-
-            "paypal" -> {
-                val intent = Intent(this@Donate, Paypal::class.java)
-                intent.putExtra("eventID","1")
-                intent.putExtra("username","test")
-                intent.putExtra("amount", amount.toString())
-                startActivity(intent)
-                finish()
-            }
-
-            "" -> {
-                Toast.makeText(
-                    this@Donate,
-                    "Please select a donate method",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-
 
     }
 
-    private fun openEditText(view:View) {
-        editTextAmount.text = null
-        radioGroupAmount.clearCheck()
-        editTextAmount.visibility=View.VISIBLE
-        textViewAmount.visibility=View.GONE
-    }
+
 
 }
