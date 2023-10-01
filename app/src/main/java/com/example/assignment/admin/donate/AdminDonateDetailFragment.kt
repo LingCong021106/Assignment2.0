@@ -46,12 +46,12 @@ import java.util.Locale
 
 class AdminDonateDetailFragment : Fragment() {
 
-    val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-    val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
-    val userRole = sharedPreferences.getString("userRole", "users")
-    val userName= sharedPreferences.getString("userName", "")
-    val userEmail = sharedPreferences.getString("userEmail", "")
-    val userId = sharedPreferences.getString("userId","")
+//    val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+//    val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+//    val userRole = sharedPreferences.getString("userRole", "users")
+//    val userName= sharedPreferences.getString("userName", "")
+//    val userEmail = sharedPreferences.getString("userEmail", "")
+//    val userId = sharedPreferences.getString("userId","")
 
     private lateinit var back : ImageView
     private lateinit var donateImage : ImageView

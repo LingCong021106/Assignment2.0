@@ -139,18 +139,18 @@
                         android:layout_marginEnd="16dp"
 
                         android:text="Target Donation:"
-                        android:textSize="20sp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/textView4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginStart="45dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginEnd="16dp"
                         android:text="Current Amount:"
-                        android:textSize="20sp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -162,7 +162,7 @@
                     android:layout_marginTop="-10dp">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="170sp"
+                        android:layout_width="150sp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
@@ -187,7 +187,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="170sp"
+                        android:layout_width="150sp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
                         android:textColorHint="#706969"
@@ -267,7 +267,7 @@
                     android:layout_marginEnd="95dp"
 
                     android:text="Start Date:"
-                    android:textSize="20sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -278,7 +278,7 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="16dp"
                     android:text="End Date:"
-                    android:textSize="20sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
 
@@ -293,7 +293,7 @@
 
                     <Button
                         android:id="@+id/detailDonateStartBtn"
-                        android:layout_width="150sp"
+                        android:layout_width="130sp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center|left"
                         android:layout_marginTop="10dp"
@@ -307,8 +307,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
                         android:fontFamily="@font/abeezee"
                         android:text="to"
                         android:textSize="25sp"
@@ -316,7 +316,7 @@
 
                     <Button
                         android:id="@+id/detailDonateEndBtn"
-                        android:layout_width="150sp"
+                        android:layout_width="130sp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center|left"
                         android:layout_marginTop="10dp"
