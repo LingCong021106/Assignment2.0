@@ -1,24 +1,17 @@
 package com.example.assignment
 
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.RadioGroup
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 
-class Donate: AppCompatActivity() {
+class Payment: AppCompatActivity() {
     lateinit var editTextAmount : EditText
     lateinit var radioGroupAmount: RadioGroup
     lateinit var radioGroupMethod : RadioGroup
@@ -78,14 +71,14 @@ class Donate: AppCompatActivity() {
         if (inputAmount.isEmpty() && amount.isEmpty()) {
             // Neither the radio buttons nor the input field have a value
             Toast.makeText(
-                this@Donate,
+                this@Payment,
                 "Please fill in the donate amount",
                 Toast.LENGTH_SHORT
             ).show()
             return
         }else if(inputAmount =="0"){
             Toast.makeText(
-                this@Donate,
+                this@Payment,
                 "Donation amount cant 0",
                 Toast.LENGTH_SHORT
             ).show()
@@ -96,7 +89,7 @@ class Donate: AppCompatActivity() {
             amount = inputAmount
             when (method) {
                 "card" -> {
-                    val intent = Intent(this@Donate, CreditCard::class.java)
+                    val intent = Intent(this@Payment, CreditCard::class.java)
                     intent.putExtra("donateID", donateID)
                     intent.putExtra("userID","123")
                     intent.putExtra("username", "test name")
@@ -105,7 +98,7 @@ class Donate: AppCompatActivity() {
                 }
 
                 "paypal" -> {
-                    val intent = Intent(this@Donate, Paypal::class.java)
+                    val intent = Intent(this@Payment, Paypal::class.java)
                     intent.putExtra("donateID", donateID)
                     intent.putExtra("userID","123")
                     intent.putExtra("username", "test name")
@@ -115,7 +108,7 @@ class Donate: AppCompatActivity() {
 
                 "" -> {
                     Toast.makeText(
-                        this@Donate,
+                        this@Payment,
                         "Please select a donate method",
                         Toast.LENGTH_SHORT
                     ).show()

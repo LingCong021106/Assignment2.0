@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assignment.BitmapConverter
 import com.example.assignment.CheckConnection
+import com.example.assignment.Payment
 import com.example.assignment.R
 import com.example.assignment.databinding.DonateDetailsBinding
 import com.example.assignment.databinding.EventDetailsBinding
@@ -72,6 +73,12 @@ class DonateDetails : AppCompatActivity(){
 
         adapter = DonatePeopleAdapter(getDonatePerson(donateId))
         binding.fundraisingPeopleList.adapter  = adapter
+
+        binding.donateBtn.setOnClickListener{
+            intent = Intent(this,Payment::class.java)
+            intent.putExtra("donateID",donateId)
+            startActivity(intent)
+        }
 
 //        builder = AlertDialog.Builder(this)
 //        if(!checkAvailability()){
