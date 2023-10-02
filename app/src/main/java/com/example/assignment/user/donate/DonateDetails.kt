@@ -1,11 +1,13 @@
 package com.example.assignment.user.donate
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Paint
 import android.icu.text.DecimalFormat
 import android.net.Uri
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +24,8 @@ import com.example.assignment.user.event.EventJoined
 import com.example.assignment.user.event.EventJoinedAdapter
 import com.example.assignment.user.event.eventJoinedList
 import com.example.assignment.user.event.eventList
+import com.google.android.material.snackbar.Snackbar
+import java.security.AccessController.getContext
 import java.time.format.DateTimeFormatter
 
 class DonateDetails : AppCompatActivity(){
@@ -32,6 +36,7 @@ class DonateDetails : AppCompatActivity(){
     var donateId : Int = 0
     private var imageString: String? = null
     lateinit var builder : AlertDialog.Builder
+    private var connection : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +44,10 @@ class DonateDetails : AppCompatActivity(){
         binding = DonateDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //check connection
+        if(CheckConnection.checkForInternet(this)){
+            connection = true
+        }
 
         donateId = intent.getIntExtra("donateId", -1)
         val currentDonate = intent.getDoubleExtra("currentDonate", 0.0)
@@ -47,23 +56,29 @@ class DonateDetails : AppCompatActivity(){
 
         val donate = getDonate(donateId)
         if(donate!= null){
-            imageString = donate.image
+            imageString = donate.donateImage
             var bitmap = BitmapConverter.convertStringToBitmap(imageString)
             binding.fundraisingImg.setImageBitmap(bitmap)
-            binding.fundraisingOrganizationEdit.setText(donate.organizationName)
-            binding.fundraisingTitleEdit.setText(donate.name)
-            binding.fundraisingStarttimeEdit.setText(donate.startTime)
-            binding.fundraisingEndtimeEdit.setText(donate.endTime)
+            binding.fundraisingOrganizationEdit.setText(donate.donateOrgName)
+            binding.fundraisingTitleEdit.setText(donate.donateName)
+            binding.fundraisingStarttimeEdit.setText(donate.donateStartTime.format(dateFormated))
+            binding.fundraisingEndtimeEdit.setText(donate.donateEndTime.format(dateFormated))
             var decimalFormat = DecimalFormat("#,##0.00")
             binding.fundraisingTotaldonateEdit.setText("RM" + decimalFormat.format(donate.totalDonation))
             binding.fundraisingCurrentdonateEdit.setText("RM" + decimalFormat.format(currentDonate))
-            binding.eventContentEdit.setText(donate.description)
+            binding.eventContentEdit.setText(donate.donateDescription)
             var donatePercent = (currentDonate/donate.totalDonation)*100
             if(donatePercent>=100){
                 donatePercent = 100.00
             }
             binding.progressDonateTxt.setText(decimalFormat.format(donatePercent) + "%")
             binding.progressDonate.progress = donatePercent.toInt()
+
+            if(donatePercent == 100.00) {
+                binding.donateBtn.isEnabled = false
+                binding.donateBtn.setBackgroundResource(R.drawable.event_joined_btn)
+                binding.donateBtn.text = "This fundraising already enough"
+            }
         }
 
         recycleView = binding.fundraisingPeopleList
@@ -74,33 +89,28 @@ class DonateDetails : AppCompatActivity(){
         adapter = DonatePeopleAdapter(getDonatePerson(donateId))
         binding.fundraisingPeopleList.adapter  = adapter
 
-        binding.donateBtn.setOnClickListener{
-            intent = Intent(this,Payment::class.java)
-            intent.putExtra("donateID",donateId)
-            startActivity(intent)
+        if(!connection){
+            binding.donateBtn.setOnClickListener{
+                Snackbar.make(findViewById(android.R.id.content), "No connection now!", Snackbar.LENGTH_SHORT)
+                    .setAction("Retry", View.OnClickListener {
+                        finish();
+                        startActivity(intent);
+                    })
+                    .show()
+            }
         }
-
-//        builder = AlertDialog.Builder(this)
-//        if(!checkAvailability()){
-//            binding.btnJoin.isEnabled = false
-//            binding.btnJoin.setBackgroundResource(R.drawable.event_joined_btn)
-//            binding.btnJoin.text = "Your Are Joined"
-//        }
-//
-//        binding.btnJoin.setOnClickListener{
-//            if (CheckConnection.checkForInternet(this)) {
-//                if(binding.btnJoin.isEnabled) {
-//                    confirmation()
-//                }
-//            } else {
-//                Toast.makeText(this, "Connection error, Please try later", Toast.LENGTH_SHORT).show()
-//            }
-//        }
+        else{
+            binding.donateBtn.setOnClickListener{
+                intent = Intent(this,Payment::class.java)
+                intent.putExtra("donateID",donateId)
+                startActivity(intent)
+            }
+        }
     }
 
     private fun getDonate(donateId: Int): Donate?{
         for(donate in donateList){
-            if(donate.id == donateId){
+            if(donate.donateId == donateId){
                 return donate
             }
         }
@@ -125,5 +135,9 @@ class DonateDetails : AppCompatActivity(){
             }
         }
         return true
+    }
+
+    fun refresh(){
+
     }
 }

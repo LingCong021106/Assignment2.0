@@ -24,10 +24,14 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.assignment.CheckConnection
 import com.example.assignment.R
-import com.example.assignment.databaseEvent.EventDatabase
-import com.example.assignment.databaseEvent.EventViewModel
 import com.example.assignment.databinding.FragmentUserEventBinding
+import com.example.assignment.user.donate.DonateAdapter
+import com.example.assignment.user.donate.DonateDatabase
+import com.example.assignment.user.donate.DonateFragment
+import com.example.assignment.user.donate.donateList
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -54,12 +58,13 @@ class EventFragment : Fragment(){
     private var _binding: FragmentUserEventBinding? = null
     private val binding get() = _binding!!
     private lateinit var appDb : EventDatabase
-    private lateinit var eventViewModel : EventViewModel
     private lateinit var recyclerView : RecyclerView
     private lateinit var adapter: EventAdapter
     private lateinit var searchView: SearchView
     private lateinit var menuView : Menu
     private lateinit var mToolbar : Toolbar
+    private lateinit var eventDB : EventDatabase
+    private var connection : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +79,7 @@ class EventFragment : Fragment(){
         val searchItem = menu.findItem(R.id.search)
         if(searchItem != null){
             val searchView = searchItem.actionView as SearchView
+            searchView.queryHint = "Type here to search..."
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     return true
@@ -85,7 +91,7 @@ class EventFragment : Fragment(){
                         searchList.clear()
                         val search = newText.lowercase(Locale.getDefault())
                         eventList.forEach {
-                            if(it.name.lowercase(Locale.getDefault()).contains(search)){
+                            if(it.eventName.lowercase(Locale.getDefault()).contains(search)){
                                 searchList.add(it)
                             }
                         }
@@ -118,14 +124,25 @@ class EventFragment : Fragment(){
         _binding = FragmentUserEventBinding.inflate(inflater, container, false)
         val rootView : View = binding.root
 
-//        eventViewModel = ViewModelProvider(this).get(EventViewModel::class.java)
+        //check connection
+        if(CheckConnection.checkForInternet(requireContext())){
+            connection = true
+        }
 
+        //refresh button
+        binding.refreshbtn.setOnClickListener{
+            parentFragmentManager.beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.fragment_container, EventFragment()).commit()
+        }
+
+        //toolbar
         setHasOptionsMenu(true)
         mToolbar = requireActivity().findViewById(R.id.toolbar)
         if (mToolbar != null) {
             (activity as AppCompatActivity?)?.setSupportActionBar(mToolbar)
         }
-        mToolbar.setTitle(null)
+        mToolbar.title = "Event"
 
         eventList.clear()
         eventJoinedList.clear()
@@ -133,11 +150,50 @@ class EventFragment : Fragment(){
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
 
-        getEventJoined()
-        eventGetAll()
-        binding.imageButton6.setOnClickListener{
-            eventList.clear()
+        //initial donate room database
+        eventDB = EventDatabase.getInstance(requireContext())
+
+        //check connection, if yes initial donate room database
+        if(connection) {
+            CoroutineScope(Dispatchers.IO).launch {
+                if (eventDB.eventDatabaseDao().getAllEvent() != null) {
+                    eventDB.eventDatabaseDao().deleteAllEvent()
+                }
+                if (eventDB.eventDatabaseDao().getAllEventJoined() != null) {
+                    eventDB.eventDatabaseDao().deleteEventJoined()
+                }
+            }
+            getEventJoined()
             eventGetAll()
+            binding.progressBar.visibility = View.GONE
+            binding.loading.visibility = View.GONE
+        }
+        else{
+            //get data from room
+            CoroutineScope(Dispatchers.IO).launch {
+                eventList = eventDB.eventDatabaseDao().getAllEvent()
+                eventJoinedList = eventDB.eventDatabaseDao().getAllEventJoined()
+                if(eventList.size>0){
+                    adapter = EventAdapter(eventList)
+                    binding.eventRecycleView.adapter  = adapter
+
+                    binding.progressBar.visibility = View.GONE
+                    binding.loading.visibility = View.GONE
+
+                }
+                else{
+                    binding.progressBar.visibility = View.GONE
+                    binding.loading.visibility = View.GONE
+                    binding.refreshbtn.visibility = View.VISIBLE
+                }
+                Snackbar.make(rootView, "No connection now!", Snackbar.LENGTH_SHORT).show()
+            }
+        }
+
+
+        binding.imageButton6.setOnClickListener{
+            adapter = EventAdapter(eventList)
+            binding.eventRecycleView.adapter  = adapter
         }
         binding.imageButton7.setOnClickListener{
             val event = searchByCategory("category1")
@@ -155,15 +211,8 @@ class EventFragment : Fragment(){
             binding.eventRecycleView.adapter  = adapter
         }
 
-//
-
-//        adapter = EventAdapter(eventList)
-//        binding.eventRecycleView.adapter  = adapter
-
         return rootView
     }
-
-//
 
 
     companion object {
@@ -187,7 +236,7 @@ class EventFragment : Fragment(){
     }
 
     private fun eventGetAll(){
-        val url = "http://192.168.0.135/Assignment(Mobile)/eventGetAll.php"
+        val url = "http://10.0.2.2/Assignment(Mobile)/eventGetAll.php"
 
         val stringRequest: StringRequest = object : StringRequest(
             Request.Method.POST, url,
@@ -203,8 +252,8 @@ class EventFragment : Fragment(){
                                 event.getInt("eventId"),
                                 event.getString("eventName"),
                                 event.getString("eventCategory"),
-                                event.getString("eventDescription"),
                                 event.getString("eventImage"),
+                                event.getString("eventDescription"),
                                 event.getString("eventRegEndTime"),
                                 event.getString("eventOrgName"),
                                 event.getString("eventContactNumber"),
@@ -215,10 +264,13 @@ class EventFragment : Fragment(){
                             )
                             eventList.add(data)
 
+                            CoroutineScope(Dispatchers.IO).launch{
+                                eventDB.eventDatabaseDao().insertEvent(data)
+                            }
                         }
                         adapter = EventAdapter(eventList)
                         binding.eventRecycleView.adapter  = adapter
-//
+
                         binding.progressBar.visibility = View.GONE
                         binding.loading.visibility = View.GONE
 
@@ -240,7 +292,7 @@ class EventFragment : Fragment(){
     }
 
     private fun getEventJoined(){
-        val url = "http://192.168.0.135/Assignment(Mobile)/eventJoined.php"
+        val url = "http://10.0.2.2/Assignment(Mobile)/eventJoined.php"
         val stringRequest: StringRequest =
             object : StringRequest(
                 Request.Method.POST, url,
@@ -252,14 +304,18 @@ class EventFragment : Fragment(){
 
                             for (i in 0 until array.length()) {
                                 val eventJoined = array.getJSONObject(i)
-                                eventJoinedList.add(
-                                    EventJoined(
+                                val data = EventJoined(
+                                        eventJoined.getInt("eventJoinedId"),
                                         eventJoined.getInt("eventId"),
                                         eventJoined.getString("userEmail"),
                                         eventJoined.getString("userImage"),
                                         eventJoined.getString("userName"),
                                     )
-                                )
+                                eventJoinedList.add(data)
+                                CoroutineScope(Dispatchers.IO).launch{
+                                    eventDB.eventDatabaseDao().insertEventJoined(data)
+                                }
+
                             }
                         }
                     }catch (e: JSONException){
@@ -283,7 +339,7 @@ class EventFragment : Fragment(){
     private fun searchByCategory(category:String): MutableList<Event>{
         var events = mutableListOf<Event>()
         for (event in eventList){
-            if(event.category == category){
+            if(event.eventCategory == category){
                 events.add(event)
             }
         }

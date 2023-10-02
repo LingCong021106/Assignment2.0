@@ -44,17 +44,17 @@ class DonateAdapter(var donaeList : List<Donate>): RecyclerView.Adapter<DonateAd
 
     override fun onBindViewHolder(holder: DonateViewHolder, position: Int) {
         var currentDonate = donaeList[position]
-        var startDate = currentDonate.startTime
-        var endDate = currentDonate.endTime
+        var startDate = currentDonate.donateStartTime
+        var endDate = currentDonate.donateEndTime
         var totalNeed = currentDonate.totalDonation
         var decimalFormat = DecimalFormat("#,##0.00")
         var formattedValue: String = decimalFormat.format(totalNeed)
-        imageString = currentDonate.image.toString()
+        imageString = currentDonate.donateImage.toString()
         var bitmap = BitmapConverter.convertStringToBitmap(imageString)
-        var totalRaised = getCurrentDonate(currentDonate.id)
+        var totalRaised = getCurrentDonate(currentDonate.donateId)
         holder.donateImage.setImageBitmap(bitmap)
-        holder.donateName.text = currentDonate.name
-        holder.donateRegTime.text = "Available Time:\n$startDate to $endDate"
+        holder.donateName.text = currentDonate.donateName
+        holder.donateRegTime.text = "Available Time:\n$startDate until $endDate"
         holder.donateTotalNeed.text = "RM $formattedValue"
         holder.donateCardView.setOnClickListener{
             val intent = Intent(context, DonateDetails::class.java)
@@ -64,7 +64,7 @@ class DonateAdapter(var donaeList : List<Donate>): RecyclerView.Adapter<DonateAd
         }
         holder.donateCardView.setOnClickListener{
             val intent = Intent(context, DonateDetails::class.java)
-            intent.putExtra("donateId", currentDonate.id)
+            intent.putExtra("donateId", currentDonate.donateId)
             intent.putExtra("currentDonate", totalRaised)
             context?.startActivity(intent)
         }

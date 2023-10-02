@@ -51,11 +51,11 @@ class EventAdapter(var eventList : List<Event>) : RecyclerView.Adapter<EventAdap
 
     override fun onBindViewHolder(holder: EventAdapter.EventViewHolder, position: Int) {
         val currentEvent = eventList[position]
-        var totalPerson = personJoined(currentEvent.id)
-        var maxPerson = currentEvent.maxPerson
-        holder.eventName.text = currentEvent.name
-        holder.eventRegEndTime.text = currentEvent.registrationEndDate
-        imageString = currentEvent.image
+        var totalPerson = personJoined(currentEvent.eventId)
+        var maxPerson = currentEvent.eventMaxPerson
+        holder.eventName.text = currentEvent.eventName
+        holder.eventRegEndTime.text = currentEvent.eventRegEndDate
+        imageString = currentEvent.eventImage
         var bitmap = BitmapConverter.convertStringToBitmap(imageString)
         holder.eventImage.setImageBitmap(bitmap)
         holder.eventMaxPerson.text = "$totalPerson/$maxPerson person joined"
@@ -68,7 +68,7 @@ class EventAdapter(var eventList : List<Event>) : RecyclerView.Adapter<EventAdap
         }
         holder.userCardView.setOnClickListener {
             val intent = Intent(context, EventDetails::class.java)
-            intent.putExtra("eventId", currentEvent.id)
+            intent.putExtra("eventId", currentEvent.eventId)
             intent.putExtra("totalPerson", totalPerson)
             context?.startActivity(intent)
         }
