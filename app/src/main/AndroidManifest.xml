@@ -90,14 +90,23 @@
 
         <activity
             android:name=".CreditCard"
+            android:theme="@style/Theme.AppCompat.DayNight"
+            android:parentActivityName=".Payment"
+            android:label="Credit Card"
             android:exported="false" />
 
         <activity
             android:name=".Paypal"
+            android:theme="@style/Theme.AppCompat.DayNight"
+            android:parentActivityName=".Payment"
+            android:label="Paypal"
             android:exported="false" />
 
         <activity
             android:name=".Payment"
+            android:theme="@style/Theme.AppCompat.DayNight"
+            android:parentActivityName=".user.donate.DonateDetails"
+            android:label="Payment"
             android:exported="false" />
 
 <!--        <activity android:name=".admin.AdminHome"/>-->

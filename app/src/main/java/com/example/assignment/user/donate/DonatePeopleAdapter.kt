@@ -1,5 +1,6 @@
 package com.example.assignment.user.donate
 
+import android.icu.text.DecimalFormat
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -36,9 +37,10 @@ class DonatePeopleAdapter (
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = donatePerson[position]
+        var decimalFormat = DecimalFormat("#,##0.00")
         val userName = currentItem.userName
         val first = "$userName has donated "
-        val middle = "RM" + currentItem.userTotalDonate
+        val middle = "RM" + decimalFormat.format(currentItem.userTotalDonate)
         val changeColor = "<font color = '#F30F0F'>$middle</font>"
         val last = " for this project!"
         holder.peopleImg.setImageResource(R.drawable.baseline_person_24)

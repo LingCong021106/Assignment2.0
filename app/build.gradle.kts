@@ -57,6 +57,7 @@ android {
 
 
 dependencies {
+    implementation("com.google.android.gms:play-services-fido:20.1.0")
     val room_version = "2.5.2"
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

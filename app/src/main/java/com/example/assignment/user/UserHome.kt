@@ -9,9 +9,14 @@ import com.example.assignment.user.event.EventFragment
 import com.example.assignment.user.home.UserHomeFragment
 import com.example.assignment.user.profile.ProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.internal.ContextUtils.getActivity
 
 class UserHome: AppCompatActivity(){
     lateinit var bottomNav : BottomNavigationView
+
+    private var _binding: UserHome? = null
+    private val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.user_home)

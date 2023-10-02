@@ -1,33 +1,36 @@
 package com.example.assignment.user.donate
 
+import android.R.*
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.assignment.CheckConnection
 import com.example.assignment.R
 import com.example.assignment.databinding.FragmentUserDonateBinding
-import com.example.assignment.databinding.FragmentUserEventBinding
-import com.example.assignment.user.event.Event
-import com.example.assignment.user.event.EventAdapter
-import com.example.assignment.user.event.eventJoinedList
-import com.example.assignment.user.event.eventList
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONException
 import java.util.Locale
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,6 +50,8 @@ class DonateFragment : Fragment() {
     private lateinit var recyclerView : RecyclerView
     private lateinit var adapter: DonateAdapter
     private lateinit var mToolbar : Toolbar
+    private lateinit var donateDB : DonateDatabase
+    private var connection : Boolean = false
     private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +66,7 @@ class DonateFragment : Fragment() {
         val searchItem = menu.findItem(R.id.search)
         if(searchItem != null){
             val searchView = searchItem.actionView as SearchView
+            searchView.queryHint = "Type here to search..."
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     return true
@@ -72,7 +78,7 @@ class DonateFragment : Fragment() {
                         com.example.assignment.user.donate.searchList.clear()
                         val search = newText.lowercase(Locale.getDefault())
                         donateList.forEach {
-                            if(it.name.lowercase(Locale.getDefault()).contains(search)){
+                            if(it.donateName.lowercase(Locale.getDefault()).contains(search)){
                                 com.example.assignment.user.donate.searchList.add(it)
                             }
                         }
@@ -94,6 +100,7 @@ class DonateFragment : Fragment() {
         return super.onCreateOptionsMenu(menu, inflater)
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -101,12 +108,26 @@ class DonateFragment : Fragment() {
         _binding = FragmentUserDonateBinding.inflate(inflater, container, false)
         val rootView: View = binding.root
 
+
+        //check connection
+        if(CheckConnection.checkForInternet(requireContext())){
+            connection = true
+        }
+
+        //refresh buton
+        binding.refreshbtn.setOnClickListener{
+            parentFragmentManager.beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.fragment_container, DonateFragment()).commit()
+        }
+
+        //toolbar
         setHasOptionsMenu(true)
         mToolbar = requireActivity().findViewById(R.id.toolbar)
         if (mToolbar != null) {
             (activity as AppCompatActivity?)?.setSupportActionBar(mToolbar)
         }
-        mToolbar.setTitle(null)
+        mToolbar.title = "Donate"
 
         donateList.clear()
         donatePersonList.clear()
@@ -114,12 +135,52 @@ class DonateFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
 
-        getDonatePerson()
-        donateGetAll()
+        //initial donate room database
+        donateDB = DonateDatabase.getInstance(requireContext())
+
+        //check connection, if yes initial donate room database
+        if(connection) {
+            CoroutineScope(Dispatchers.IO).launch {
+                if (donateDB.donateDatabaseDao().getAllDonate() != null) {
+                    donateDB.donateDatabaseDao().deleteAllFromDonate()
+                }
+                if (donateDB.donateDatabaseDao().getAllDonatePerson() != null) {
+                    donateDB.donateDatabaseDao().deleteAllFromDonatePerson()
+                }
+            }
+            getDonatePerson()
+            donateGetAll()
+            binding.progressBar.visibility = View.GONE
+            binding.loading.visibility = View.GONE
+        }
+        else{
+            //get data from room
+            CoroutineScope(Dispatchers.IO).launch {
+                donateList = donateDB.donateDatabaseDao().getAllDonate()
+                donatePersonList = donateDB.donateDatabaseDao().getAllDonatePerson()
+                if(donateList.size>0){
+                    adapter = DonateAdapter(donateList)
+                    binding.donateRecycleView.adapter  = adapter
+
+                    binding.progressBar.visibility = View.GONE
+                    binding.loading.visibility = View.GONE
+
+                }
+                else{
+                    binding.progressBar.visibility = View.GONE
+                    binding.loading.visibility = View.GONE
+                    binding.refreshbtn.visibility = View.VISIBLE
+                }
+
+                Snackbar.make(rootView, "No connection now!", Snackbar.LENGTH_SHORT).show()
+            }
+        }
+
+
 
         binding.imageButton6.setOnClickListener{
-            donateList.clear()
-            donateGetAll()
+            adapter = DonateAdapter(donateList)
+            binding.donateRecycleView.adapter  = adapter
         }
         binding.imageButton7.setOnClickListener{
             val donate = searchByCategory("category1")
@@ -172,6 +233,7 @@ class DonateFragment : Fragment() {
                         for (i in 0 until array.length()) {
                             val donatePerson = array.getJSONObject(i)
                             val data = DonatePerson(
+                                donatePerson.getInt("donateJoinedId"),
                                 donatePerson.getInt("donateId"),
                                 donatePerson.getString("userEmail"),
                                 donatePerson.getString("userName"),
@@ -180,18 +242,16 @@ class DonateFragment : Fragment() {
                             )
                             donatePersonList.add(data)
 
+                            CoroutineScope(Dispatchers.IO).launch{
+                                donateDB.donateDatabaseDao().insertDonatePerson(data)
+                            }
                         }
                     }
                 }catch (e: JSONException){
                     e.printStackTrace()
                 }
             },
-            Response.ErrorListener { error ->
-                Toast.makeText(
-                    activity,
-                    "Error Connection, Please Try Later",
-                    Toast.LENGTH_SHORT
-                ).show()
+            Response.ErrorListener {
             }) {
         }
         val requestQueue = Volley.newRequestQueue(context?.applicationContext)
@@ -224,6 +284,10 @@ class DonateFragment : Fragment() {
                             )
                             donateList.add(data)
 
+                            CoroutineScope(Dispatchers.IO).launch{
+                                donateDB.donateDatabaseDao().insertDonate(data)
+                            }
+
                         }
                         adapter = DonateAdapter(donateList)
                         binding.donateRecycleView.adapter  = adapter
@@ -236,12 +300,7 @@ class DonateFragment : Fragment() {
                     e.printStackTrace()
                 }
             },
-            Response.ErrorListener { error ->
-                Toast.makeText(
-                    activity,
-                    "Error Connection, Please Try Later",
-                    Toast.LENGTH_SHORT
-                ).show()
+            Response.ErrorListener {
             }) {
         }
         val requestQueue = Volley.newRequestQueue(context?.applicationContext)
@@ -251,10 +310,21 @@ class DonateFragment : Fragment() {
     private fun searchByCategory(category:String): MutableList<Donate>{
         var donates = mutableListOf<Donate>()
         for (donate in donateList){
-            if(donate.category == category){
+            if(donate.donateCategory == category){
                 donates.add(donate)
             }
         }
         return donates
     }
+
+    override fun onResume() {
+        super.onResume()
+        val activity: Activity? = activity
+        if (activity != null) {
+            activity.title = "R.string.my_title"
+        }
+    }
+
+
+
 }

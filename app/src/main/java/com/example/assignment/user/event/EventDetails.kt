@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
@@ -29,6 +30,7 @@ import com.example.assignment.ListDonate
 import com.example.assignment.R
 import com.example.assignment.databinding.EventDetailsBinding
 import com.example.assignment.user.UserHome
+import com.google.android.material.snackbar.Snackbar
 import java.time.format.DateTimeFormatter
 
 
@@ -49,7 +51,7 @@ class EventDetails : AppCompatActivity(){
     private val nameList: ArrayList<String> = ArrayList()
     private val imageIdList: ArrayList<Int> = ArrayList()
     private var imageString: String? = null
-
+    private var connection : Boolean = false
     lateinit var userName : String
     var eventId : Int = 0
     //user Id
@@ -60,23 +62,27 @@ class EventDetails : AppCompatActivity(){
         binding = EventDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //check connection
+        if(CheckConnection.checkForInternet(this)){
+            connection = true
+        }
 
         eventId  = intent.getIntExtra("eventId", -1)
         val dateFormated = DateTimeFormatter.ofPattern("dd-MM-yyyy")
         val personJoined = intent.getIntExtra("totalPerson", -1)
         val event = getEvent(eventId)
         if(event!= null){
-            val contactNumber = event.contactNumber
-            val eventMaxJoined = event.maxPerson.toString()
-            imageString = event.image
+            val contactNumber = event.eventContactNumber
+            val eventMaxJoined = event.eventMaxPerson.toString()
+            imageString = event.eventImage
             var bitmap = BitmapConverter.convertStringToBitmap(imageString)
             binding.eventImg.setImageBitmap(bitmap)
-            binding.eventLocationEdit.text = event.location
-            binding.eventTitle.text = event.name
+            binding.eventLocationEdit.text = event.eventLocation
+            binding.eventTitle.text = event.eventName
             binding.eventNumberpoeple.text = "$personJoined/$eventMaxJoined"
             binding.eventTimeEdit.text = event.eventDate.format(dateFormated)
-            binding.eventLocationEdit.text = event.location
-            binding.eventOrganizationEdit.text = event.orgatnizationName
+            binding.eventLocationEdit.text = event.eventLocation
+            binding.eventOrganizationEdit.text = event.eventOrgName
             binding.eventContactnumberEdit.text = contactNumber
             binding.eventContactnumberEdit.setPaintFlags(binding.eventContactnumberEdit.getPaintFlags() or Paint.UNDERLINE_TEXT_FLAG)
 
@@ -85,10 +91,10 @@ class EventDetails : AppCompatActivity(){
                 intent.setData(Uri.parse("tel:$contactNumber"))
                 startActivity(intent)
             }
-            binding.eventContactpersonEdit.text = event.contactPerson
-            binding.eventContentEdit.text = event.description
+            binding.eventContactpersonEdit.text = event.eventContactPerson
+            binding.eventContentEdit.text = event.eventDescription
 
-            if(personJoined >= event.maxPerson){
+            if(personJoined >= event.eventMaxPerson){
                 binding.btnJoin.isEnabled = false
                 binding.btnJoin.setBackgroundResource(R.drawable.event_joined_btn )
                 binding.btnJoin.text = "This Event is Full"
@@ -104,22 +110,30 @@ class EventDetails : AppCompatActivity(){
         adapter = EventJoinedAdapter(getPersonJoined(eventId))
         binding.fundraisingPeopleList.adapter  = adapter
 
-        builder = AlertDialog.Builder(this)
-        if(!checkAvailability()){
-            binding.btnJoin.isEnabled = false
-            binding.btnJoin.setBackgroundResource(R.drawable.event_joined_btn)
-            binding.btnJoin.text = "Your Are Joined"
-        }
-
-        binding.btnJoin.setOnClickListener{
-            if (CheckConnection.checkForInternet(this)) {
-                if(binding.btnJoin.isEnabled) {
-                    confirmation()
-                }
-            } else {
-                Toast.makeText(this, "Connection error, Please try later", Toast.LENGTH_SHORT).show()
+        if(!connection){
+            binding.btnJoin.setOnClickListener{
+                Snackbar.make(findViewById(android.R.id.content), "No connection now!", Snackbar.LENGTH_SHORT)
+                    .setAction("Retry", View.OnClickListener {
+                        finish();
+                        startActivity(intent);
+                    })
+                    .show()
             }
         }
+        else{
+            builder = AlertDialog.Builder(this)
+            if(!checkAvailability()){
+                binding.btnJoin.isEnabled = false
+                binding.btnJoin.setBackgroundResource(R.drawable.event_joined_btn)
+                binding.btnJoin.text = "Your Are Joined"
+            }
+
+            binding.btnJoin.setOnClickListener{
+                confirmation()
+            }
+        }
+
+
     }
 
     private fun checkAvailability(): Boolean{
@@ -134,7 +148,7 @@ class EventDetails : AppCompatActivity(){
 
     private fun getEvent(eventId: Int): Event?{
         for(event in eventList){
-            if(event.id == eventId){
+            if(event.eventId == eventId){
                 return event
             }
         }
@@ -150,19 +164,6 @@ class EventDetails : AppCompatActivity(){
         }
         return personJoinedList
     }
-
-//    private fun getUserdata() {
-//
-//        val nameArray = nameList.toTypedArray()
-//        val imageIdArray = imageIdList.toTypedArray()
-//
-//        for (i in imageIdArray.indices) {
-//            val people = ListDonate(imageIdArray[i], nameArray[i])
-//            newArrayList.add(people)
-//        }
-//
-//        listPeopleRecycler.adapter = EventJoinedAdapter(newArrayList)
-//    }
 
     private fun confirmation() {
         builder.setMessage("Are you sure want to join this event?")
