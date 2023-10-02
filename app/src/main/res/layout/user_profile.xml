@@ -1,0 +1,272 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#aad3ff"
+        app:cardCornerRadius="30dp"
+        android:layout_marginTop="65dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteY="81dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="237dp">
+
+            <ImageView
+                android:id="@+id/userImageView"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/profile_circular_shape"
+                android:contentDescription="User Image"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/profileName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="8dp"
+                android:text="Ling Cong"
+                android:textSize="24sp"
+                app:layout_constraintStart_toEndOf="@+id/userImageView"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/baseline_email_24"
+                app:layout_constraintStart_toEndOf="@+id/userImageView"
+                app:layout_constraintTop_toBottomOf="@+id/profileName" />
+
+            <TextView
+                android:id="@+id/profileEmail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="9dp"
+                android:text="lingcong123@gmail.com"
+                app:layout_constraintStart_toEndOf="@+id/imageView2"
+                app:layout_constraintTop_toBottomOf="@+id/profileName" />
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/baseline_phone_android_24"
+                app:layout_constraintStart_toEndOf="@+id/userImageView"
+                app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+            <TextView
+                android:id="@+id/profilContact"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="13dp"
+                android:text="012-3456789"
+                app:layout_constraintStart_toEndOf="@+id/imageView3"
+                app:layout_constraintTop_toBottomOf="@+id/profileEmail" />
+
+            <TextView
+                android:id="@+id/donateEventTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64dp"
+                android:layout_marginTop="44dp"
+                android:text="1"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/userImageView" />
+
+            <TextView
+                android:id="@+id/donateEvent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="Donation Events"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/donateEventTotal" />
+
+            <TextView
+                android:id="@+id/donateValueTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="104dp"
+                android:layout_marginTop="44dp"
+                android:text="1000"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/donateEventTotal"
+                app:layout_constraintTop_toBottomOf="@+id/userImageView" />
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="12dp"
+                android:text="Value (RM)"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/donateEvent"
+                app:layout_constraintTop_toBottomOf="@+id/donateValueTotal" />
+
+            <TextView
+                android:id="@+id/joinedEventTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="44dp"
+                android:layout_marginEnd="60dp"
+                android:text="12"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/donateValueTotal"
+                app:layout_constraintTop_toBottomOf="@+id/userImageView" />
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="12dp"
+                android:text="Event Joined"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.64"
+                app:layout_constraintStart_toEndOf="@+id/textView12"
+                app:layout_constraintTop_toBottomOf="@+id/joinedEventTotal" />
+
+            <Button
+                android:id="@+id/btnEdit"
+                android:layout_width="51dp"
+                android:layout_height="34dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:drawableStart="@drawable/baseline_edit_24"
+                app:layout_constraintStart_toEndOf="@+id/profileName"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/servicetxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="8dp"
+        android:text="Services"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+    <RadioGroup
+        android:id="@+id/serviceGroup"
+        android:layout_width="357dp"
+        android:layout_height="181dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/servicetxt">
+
+        <RadioButton
+            android:id="@+id/eventJoinedRecord"
+            android:layout_width="88dp"
+            android:layout_height="91dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/custom_radio_selector"
+            android:button="@color/black"
+            android:drawableTop="@drawable/baseline_add_task_24"
+            android:gravity="center_horizontal"
+            android:text="@string/event"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RadioButton
+            android:id="@+id/volunteerRecord"
+            android:layout_width="88dp"
+            android:layout_height="91dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/custom_radio_selector"
+            android:button="@color/black"
+            android:drawableTop="@drawable/baseline_event_available_24"
+            android:gravity="center_horizontal"
+            android:text="@string/volunteer"
+            app:layout_constraintEnd_toStartOf="@+id/donationRecord"
+            app:layout_constraintStart_toEndOf="@+id/eventJoinedRecord"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RadioButton
+            android:id="@+id/donationRecord"
+            android:layout_width="88dp"
+            android:layout_height="91dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/custom_radio_selector"
+            android:button="@color/black"
+            android:drawableTop="@drawable/baseline_attach_money_24"
+            android:gravity="center_horizontal"
+            android:text="@string/donation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnContact"
+        android:layout_width="226dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/btn_contact_profile"
+        android:text="Contact Us : 012-3456789"
+        android:textAllCaps="false"
+        android:textColor="@color/design_default_color_secondary"
+        android:drawableStart="@drawable/baseline_local_phone_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingHorizontal="14dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/serviceGroup" />
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="139dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/btn_contact_profile"
+        android:drawableStart="@drawable/baseline_logout_24"
+        android:paddingHorizontal="14dp"
+        android:text="Log Out"
+        android:textAllCaps="false"
+        android:textColor="@color/design_default_color_error"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnContact" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
