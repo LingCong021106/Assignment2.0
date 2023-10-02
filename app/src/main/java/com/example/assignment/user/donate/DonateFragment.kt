@@ -150,8 +150,6 @@ class DonateFragment : Fragment() {
             }
             getDonatePerson()
             donateGetAll()
-            binding.progressBar.visibility = View.GONE
-            binding.loading.visibility = View.GONE
         }
         else{
             //get data from room

@@ -46,9 +46,9 @@ class UserEditProfileActivity : AppCompatActivity() {
     private var imageUrl: String? = null
     private var isImageChanged = false
     private var originalProfileImageUrl: String? = null
-    private val check_emailURL:String="http://192.168.0.4/Assignment(Mobile)/check_email.php"
-    private val check_phoneURL:String="http://192.168.0.4/Assignment(Mobile)/check_phone.php"
-    private val updateProfileURL:String="http://192.168.0.4/Assignment(Mobile)/update_profile.php"
+    private val check_emailURL:String="http://10.0.2.2/Assignment(Mobile)/check_email.php"
+    private val check_phoneURL:String="http://10.0.2.2/Assignment(Mobile)/check_phone.php"
+    private val updateProfileURL:String="http://10.0.2.2/Assignment(Mobile)/update_profile.php"
 
     companion object {
         private const val PICK_IMAGE_REQUEST = 1

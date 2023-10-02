@@ -35,7 +35,7 @@ class CreditCard : AppCompatActivity() {
     private var amount : String = ""
     private var methodPay : String = "card"
     private var userID : String = ""
-    private val URLinsertDonate :String = "http://192.168.0.21:8081/Assignment(Mobile)/insertDonateRecord.php"
+    private val URLinsertDonate :String = "http://10.0.2.2/Assignment(Mobile)/insertDonateRecord.php"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

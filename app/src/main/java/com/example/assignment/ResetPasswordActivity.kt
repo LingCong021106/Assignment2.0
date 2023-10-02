@@ -34,7 +34,7 @@ class ResetPasswordActivity : AppCompatActivity() {
     lateinit var etPasswordLayout : TextInputLayout
     lateinit var etconPasswordLayout: TextInputLayout
     private var email: String? = null
-    private val resetPasswordURL:String="http://192.168.0.4/Assignment(Mobile)/reset_password.php"
+    private val resetPasswordURL:String="http://10.0.2.2/Assignment(Mobile)/reset_password.php"
     private lateinit var appDb: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
