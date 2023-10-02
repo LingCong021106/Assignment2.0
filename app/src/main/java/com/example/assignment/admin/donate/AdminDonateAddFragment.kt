@@ -30,8 +30,6 @@ import com.example.assignment.BitmapConverter
 import com.example.assignment.R
 import com.example.assignment.database.donate.Donate
 import com.example.assignment.database.donate.DonateDatabase
-import com.example.assignment.database.donate.donateList
-import com.example.assignment.database.user.UserDatabase
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

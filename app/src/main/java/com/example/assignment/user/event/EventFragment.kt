@@ -124,6 +124,14 @@ class EventFragment : Fragment(){
         _binding = FragmentUserEventBinding.inflate(inflater, container, false)
         val rootView : View = binding.root
 
+        //share preference
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+        val userRole = sharedPreferences.getString("userRole", "users")
+        val userName= sharedPreferences.getString("userName", "")
+        val userEmail = sharedPreferences.getString("userEmail", "")
+        val userId = sharedPreferences.getString("userId","")
+
         //check connection
         if(CheckConnection.checkForInternet(requireContext())){
             connection = true
@@ -165,8 +173,6 @@ class EventFragment : Fragment(){
             }
             getEventJoined()
             eventGetAll()
-            binding.progressBar.visibility = View.GONE
-            binding.loading.visibility = View.GONE
         }
         else{
             //get data from room

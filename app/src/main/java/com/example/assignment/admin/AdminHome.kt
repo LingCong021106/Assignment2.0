@@ -1,13 +1,17 @@
 package com.example.assignment.admin
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.example.assignment.MainActivity
 import com.example.assignment.R
 import com.example.assignment.admin.dashboard.DashboardFragment
 import com.example.assignment.admin.donate.AdminDonateFragment
@@ -71,6 +75,7 @@ class AdminHome: AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
             R.id.admin_nav_report -> loadFragment(AdminReportFragment())
             R.id.admin_nav_volunteer -> loadFragment(AdminVolunteerFragment())
 //            R.id.admin_nav_user -> loadFragment(AdminUserFragment())
+            R.id.admin_nav_logout -> logout()
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
@@ -89,4 +94,23 @@ class AdminHome: AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
         transaction.replace(R.id.fragment_container,fragment)
         transaction.commit()
     }
+
+    fun logout(){
+        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+
+        editor.remove("isLoggedIn")
+        editor.remove("userRole")
+        editor.remove("userEmail")
+        editor.remove("userId")
+
+        editor.apply()
+
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+    }
+
 }

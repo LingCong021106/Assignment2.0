@@ -46,9 +46,9 @@ class AddOrganization : AppCompatActivity() {
     private var isImageChanged = false
     private lateinit var binding: ActivityMainBinding
     private lateinit var appDb: AppDatabase
-    private val check_emailURL:String="http://192.168.0.4/Assignment(Mobile)/check_email.php"
-    private val check_phoneURL:String="http://192.168.0.4/Assignment(Mobile)/check_phone.php"
-    private val addNewOrganizationURL:String="http://192.168.0.4/Assignment(Mobile)/addNewOrganization.php"
+    private val check_emailURL:String="http://10.0.2.2/Assignment(Mobile)/check_email.php"
+    private val check_phoneURL:String="http://10.0.2.2/Assignment(Mobile)/check_phone.php"
+    private val addNewOrganizationURL:String="http://10.0.2.2/Assignment(Mobile)/addNewOrganization.php"
 
     companion object {
         private const val PICK_IMAGE_REQUEST = 1
