@@ -24,4 +24,8 @@
         \nYou should ask someone else about fishing, though.\n\n
     </string>
 
+    <string name="volunteer">Volunteer\nEvents</string>
+    <string name="donation">Donation\nRecords</string>
+    <string name="event">Joined\nEvents</string>
+
 </resources>
