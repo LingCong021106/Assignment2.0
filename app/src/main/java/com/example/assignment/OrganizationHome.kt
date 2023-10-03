@@ -1,0 +1,93 @@
+package com.example.assignment.admin
+
+import android.os.Bundle
+import android.view.MenuItem
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
+import com.example.assignment.OrganizationDashboard
+import com.example.assignment.R
+import com.example.assignment.admin.dashboard.DashboardFragment
+import com.example.assignment.admin.donate.AdminDonateFragment
+import com.example.assignment.admin.news.AdminNewsFragment
+import com.example.assignment.admin.report.AdminReportFragment
+import com.example.assignment.admin.user.AdminUserFragment
+import com.example.assignment.admin.volunteer.AdminVolunteerFragment
+import com.google.android.material.navigation.NavigationView
+
+private lateinit var drawerLayout: DrawerLayout
+
+
+class OrganizationHome: AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.organization_home)
+
+
+        drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        val navigationView = findViewById<NavigationView>(R.id.nav_view)
+        navigationView.setNavigationItemSelectedListener(this)
+
+        val toggle = ActionBarDrawerToggle(
+            this,
+            drawerLayout,
+            toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
+
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+        if(savedInstanceState == null){
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, OrganizationDashboard()).commit()
+            navigationView.setCheckedItem(R.id.admin_nav_dashboard)
+        }
+
+        toolbar.setNavigationOnClickListener{
+            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                drawerLayout.closeDrawer(GravityCompat.START)
+
+            } else {
+                var currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+                when(currentFragment){
+                    is AdminDonateFragment -> navigationView.setCheckedItem(R.id.organization_nav_donate)
+                    is AdminVolunteerFragment -> navigationView.setCheckedItem(R.id.organization_nav_volunteer)
+                    else -> navigationView.setCheckedItem(R.id.admin_nav_dashboard)
+                }
+                drawerLayout.openDrawer(GravityCompat.START)
+            }
+        }
+
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.admin_nav_donate -> loadFragment(AdminDonateFragment())
+            R.id.admin_nav_volunteer -> loadFragment(AdminVolunteerFragment())
+        }
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
+    }
+
+    override fun onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            onBackPressedDispatcher.onBackPressed()
+        }
+    }
+
+    private fun loadFragment(fragment: Fragment){
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container,fragment)
+        transaction.commit()
+    }
+}

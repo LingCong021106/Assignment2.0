@@ -29,7 +29,6 @@
             android:layout_height="wrap_content">
 
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,7 +36,6 @@
                 android:orientation="vertical"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="217dp">
-
 
 
                 <ImageView
@@ -141,8 +139,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
                         android:layout_marginStart="5dp"
+                        android:layout_marginTop="18dp"
                         android:layout_marginEnd="10dp"
                         android:fontFamily="@font/abeezee"
                         android:text="to"
@@ -160,8 +158,6 @@
                         android:text="End Date"
                         android:textColor="@color/white" />
                 </LinearLayout>
-
-
 
 
                 <com.google.android.material.textfield.TextInputLayout

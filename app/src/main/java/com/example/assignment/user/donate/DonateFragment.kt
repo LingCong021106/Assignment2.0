@@ -122,17 +122,17 @@ class DonateFragment : Fragment() {
             donateGetAll()
         }
         binding.imageButton7.setOnClickListener{
-            val donate = searchByCategory("category1")
+            val donate = searchByCategory("ocean")
             adapter = DonateAdapter(donate)
             binding.donateRecycleView.adapter  = adapter
         }
         binding.imageButton8.setOnClickListener{
-            val donate = searchByCategory("category2")
+            val donate = searchByCategory("animal")
             adapter = DonateAdapter(donate)
             binding.donateRecycleView.adapter  = adapter
         }
         binding.imageButton9.setOnClickListener{
-            val donate = searchByCategory("category3")
+            val donate = searchByCategory("education")
             adapter = DonateAdapter(donate)
             binding.donateRecycleView.adapter  = adapter
         }

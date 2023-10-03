@@ -607,6 +607,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         return result.toString()
-    }
+}
 
 }

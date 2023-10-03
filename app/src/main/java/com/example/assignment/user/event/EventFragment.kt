@@ -140,17 +140,17 @@ class EventFragment : Fragment(){
             eventGetAll()
         }
         binding.imageButton7.setOnClickListener{
-            val event = searchByCategory("category1")
+            val event = searchByCategory("beachcleanup")
             adapter = EventAdapter(event)
             binding.eventRecycleView.adapter  = adapter
         }
         binding.imageButton8.setOnClickListener{
-            val event = searchByCategory("category2")
+            val event = searchByCategory("campaigns")
             adapter = EventAdapter(event)
             binding.eventRecycleView.adapter  = adapter
         }
         binding.imageButton9.setOnClickListener{
-            val event = searchByCategory("category3")
+            val event = searchByCategory("boattour")
             adapter = EventAdapter(event)
             binding.eventRecycleView.adapter  = adapter
         }
