@@ -91,6 +91,7 @@
                 app:counterMaxLength="20" />
         </com.google.android.material.textfield.TextInputLayout>
 
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etEmailLayout"
             android:layout_width="match_parent"
@@ -118,6 +119,7 @@
             app:layout_constraintTop_toBottomOf="@+id/nameLayout"
             app:startIconDrawable="@drawable/baseline_email_24"
             app:startIconTint="#FFFFFF">
+
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEmailEditText"
@@ -204,6 +206,7 @@
                 app:boxStrokeColor="#FFFFFF"
                 app:counterMaxLength="20" />
         </com.google.android.material.textfield.TextInputLayout>
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/conpasswordLayout"

@@ -75,6 +75,40 @@
         <activity
             android:name=".user_views"
             android:exported="false" />
+
+<!--        <activity-->
+<!--            android:name=".RegisterAccount"-->
+<!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".user_home"-->
+<!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".user_views"-->
+<!--            android:exported="false" />-->
+
+<!--        <activity-->
+<!--            android:name=".FundraisingDetails"-->
+<!--            android:exported="false" />-->
+
+<!--        <activity-->
+<!--            android:name=".EventDetails"-->
+<!--            android:exported="false" />-->
+
+<!--        <activity-->
+<!--            android:name=".CreditCard"-->
+<!--            android:exported="false" />-->
+
+<!--        <activity-->
+<!--            android:name=".Paypal"-->
+<!--            android:exported="false" />-->
+
+<!--        <activity-->
+<!--            android:name=".Donate"-->
+<!--            android:exported="false" />-->
+
+<!--        <activity android:name=".admin.AdminHome"/>-->
+<!--        <activity android:name=".user.UserHome"/>-->
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -83,11 +117,59 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
 
+
+        </activity>
+        <activity
+            android:name=".admin.AdminHome"
+            android:exported="true" />
+        <activity
+            android:name=".admin.dashboard.DashboardFragment"
+            android:exported="true" />
+        <activity
+            android:name=".admin.donate.AdminDonateFragment"
+            android:exported="true" />
+        <activity
+            android:name=".admin.news.AdminNewsFragment"
+            android:exported="true" />
+        <activity
+            android:name=".admin.report.AdminReportFragment"
+            android:exported="true" />
+        <activity
+            android:name=".admin.user.AdminUserFragment"
+            android:exported="true" />
+        <activity
+            android:name=".admin.volunteer.AdminVolunteerFragment"
+            android:exported="true" />
+        <activity
+            android:name=".user.UserHome"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".user.event.EventFragment"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="true" />
+        <activity
+            android:name=".user.event.EventDetails"
+            android:parentActivityName=".user.event.EventFragment"
+            android:theme="@style/Theme.AppCompat.DayNight"
+            android:label="Event Detail"
+            android:exported="true" />
+        <activity
+            android:name=".user.donate.DonateFragment"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="true" />
+        <activity
+            android:name=".user.donate.DonateDetails"
+            android:parentActivityName=".user.donate.DonateFragment"
+            android:theme="@style/Theme.AppCompat.DayNight"
+            android:label="Donate Detail"
+            android:exported="true" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
     </application>
 
 </manifest>
