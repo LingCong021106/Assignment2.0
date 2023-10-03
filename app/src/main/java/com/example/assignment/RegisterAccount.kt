@@ -63,9 +63,9 @@ class RegisterAccount : AppCompatActivity() {
     var phone : String? = ""
 
     //device ipv4 address
-    private val URL:String="http://192.168.0.4/Assignment(Mobile)/register.php"
-    private val check_emailURL:String="http://192.168.0.4/Assignment(Mobile)/check_email.php"
-    private val check_phoneURL:String="http://192.168.0.4/Assignment(Mobile)/check_phone.php"
+    private val URL:String="http://192.168.0.3/Assignment(Mobile)/register.php"
+    private val check_emailURL:String="http://192.168.0.3/Assignment(Mobile)/check_email.php"
+    private val check_phoneURL:String="http://192.168.0.3/Assignment(Mobile)/check_phone.php"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

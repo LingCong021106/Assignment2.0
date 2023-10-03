@@ -53,8 +53,8 @@ class UsersList : AppCompatActivity() {
 //    private lateinit var deleteBtn:ImageButton
 
     //private lateinit var deleteBtn :ImageButton
-    private val URL: String = "http://192.168.0.4/Assignment(Mobile)/getAllUser.php"
-    private val deleteUrl: String = "http://192.168.0.4/Assignment(Mobile)/deleteUser.php"
+    private val URL: String = "http://192.168.0.3/Assignment(Mobile)/getAllUser.php"
+    private val deleteUrl: String = "http://192.168.0.3/Assignment(Mobile)/deleteUser.php"
     private val imageList: ArrayList<String> = ArrayList()
     private val userNameList: ArrayList<String> = ArrayList()
     private val userEmailList: ArrayList<String> = ArrayList()

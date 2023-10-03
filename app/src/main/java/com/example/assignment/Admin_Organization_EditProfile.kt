@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -33,6 +35,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.example.assignment.admin.user.UsersList
 import com.example.assignment.database.Admin
+import java.io.InputStream
 
 class Admin_Organization_EditProfile : AppCompatActivity() {
 
@@ -46,9 +49,9 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
     private var imageUrl: String? = null
     private var isImageChanged = false
     private var originalProfileImageUrl: String? = null
-    private val check_emailURL: String = "http://192.168.0.4/Assignment(Mobile)/check_email.php"
-    private val check_phoneURL: String = "http://192.168.0.4/Assignment(Mobile)/check_phone.php"
-    private val updateProfileURL: String = "http://192.168.0.4/Assignment(Mobile)/update_admin_profile.php"
+    private val check_emailURL: String = "http://192.168.0.3/Assignment(Mobile)/check_email.php"
+    private val check_phoneURL: String = "http://192.168.0.3/Assignment(Mobile)/check_phone.php"
+    private val updateProfileURL: String = "http://192.168.0.3/Assignment(Mobile)/update_admin_profile.php"
 
     companion object {
         private const val PICK_IMAGE_REQUEST = 1
@@ -62,8 +65,12 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
         val userId = sharedPreferences.getString("userId", "")
         val userEmail = sharedPreferences.getString("userEmail", "")
-
-
+        val logoutBtn = findViewById<Button>(R.id.button2)
+        val orgbtn = findViewById<Button>(R.id.orgbtn)
+        val listBtn = findViewById<Button>(R.id.listBtn)
+//
+//        orgbtn.visibility=View.GONE
+//        listBtn.visibility=View.GONE
         Log.d("MyApp", "isLoggedIn: $isLoggedIn")
         Log.d("MyApp", "userId: $userId")
         Log.d("MyApp", "userEmail: $userEmail")
@@ -93,10 +100,13 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
                         setUserData(admin)
                         originalProfileImageUrl = admin.photo
 
+                        var bitmap = BitmapConverter.convertStringToBitmap(originalProfileImageUrl)
+
                         Glide.with(this@Admin_Organization_EditProfile)
-                            .load(admin.photo) // 用户照片的 URL
+                            .load(bitmap)
                             .apply(RequestOptions.bitmapTransform(CircleCrop()))
                             .into(userImageView)
+
                     } else {
                         Toast.makeText(
                             this@Admin_Organization_EditProfile,
@@ -108,14 +118,14 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
                 }
             }
         }
-        val orgbtn = findViewById<Button>(R.id.orgbtn)
+
         orgbtn.setOnClickListener{
             val intent = Intent(this, AddOrganization::class.java)
             startActivity(intent)
             finish()
         }
 
-        val listBtn = findViewById<Button>(R.id.listBtn)
+
         listBtn.setOnClickListener{
             val intent = Intent(this, UsersList::class.java)
             startActivity(intent)
@@ -547,21 +557,32 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == Companion.PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == Admin_Organization_EditProfile.PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             val selectedImageUri = data.data
 
 
-            Glide.with(this)
-                .load(selectedImageUri)
-                .apply(RequestOptions.bitmapTransform(CircleCrop()))
-                .into(userImageView)
+            val inputStream: InputStream? = selectedImageUri?.let { contentResolver.openInputStream(it) }
 
-            imageUrl = selectedImageUri.toString()
-            isImageChanged = true
+            if (inputStream != null) {
+
+                val bitmap: Bitmap = BitmapFactory.decodeStream(inputStream)
+
+
+                imageUrl = BitmapConverter.convertBitmapToString(bitmap)
+
+
+                Glide.with(this)
+                    .load(selectedImageUri)
+                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                    .into(userImageView)
+
+
+                isImageChanged = true
+            } else {
+                isImageChanged = false
+            }
         }
     }
-
-
     private fun openImageChooser() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         intent.type = "image/*"
@@ -617,6 +638,7 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val userEmail = sharedPreferences.getString("userEmail", "")
         intent.putExtra("userEmail", userEmail)
+        intent.putExtra("callingActivityName", "Admin_Organization_EditProfile")
         startActivity(intent)
         finish()
     }

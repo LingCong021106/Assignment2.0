@@ -22,9 +22,13 @@
         <activity
             android:name=".admin.user.UsersList"
             android:exported="false" />
+
         <activity
             android:name=".ProfileChangePassword"
-            android:exported="false" />
+            android:exported="true"
+            android:label="Change My Password"
+            android:theme="@style/Theme.AppCompat.DayNight"
+            />
 
         <activity
             android:name=".ResetPasswordActivity"
@@ -60,6 +64,8 @@
             android:exported="true"
             android:label="Edit My Profile Details"
             android:theme="@style/Theme.AppCompat.DayNight" />
+
+
         <activity
             android:name=".RegisterAccount"
             android:exported="false" />

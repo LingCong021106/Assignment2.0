@@ -7,6 +7,7 @@ import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -38,6 +39,10 @@ class ProfileChangePassword : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.profile_change_password)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+
 
         submitButton  = findViewById(R.id.submitButton)
         Log.d("ResetPasswordActivity", "ResetPasswordActivity started")
@@ -79,6 +84,32 @@ class ProfileChangePassword : AppCompatActivity() {
 
             val dialog = builder.create()
             dialog.show()
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                val callingActivityName = intent.getStringExtra("callingActivityName")
+
+                when (callingActivityName) {
+                    "UserEditProfileActivity" -> {
+                        val userIntent = Intent(this, UserEditProfileActivity::class.java)
+                        startActivity(userIntent)
+                    }
+                    "Admin_Organization_EditProfile" -> {
+                        val adminIntent = Intent(this, Admin_Organization_EditProfile::class.java)
+                        startActivity(adminIntent)
+                    }
+
+                    else -> {
+
+                    }
+                }
+
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
         }
     }
 

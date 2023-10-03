@@ -32,7 +32,17 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.assignment.database.User
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.Rect
+import android.graphics.RectF
 import android.net.ConnectivityManager
+import java.io.InputStream
 
 class UserEditProfileActivity : AppCompatActivity() {
     lateinit var nameText: TextView
@@ -46,9 +56,9 @@ class UserEditProfileActivity : AppCompatActivity() {
     private var imageUrl: String? = null
     private var isImageChanged = false
     private var originalProfileImageUrl: String? = null
-    private val check_emailURL:String="http://192.168.0.4/Assignment(Mobile)/check_email.php"
-    private val check_phoneURL:String="http://192.168.0.4/Assignment(Mobile)/check_phone.php"
-    private val updateProfileURL:String="http://192.168.0.4/Assignment(Mobile)/update_profile.php"
+    private val check_emailURL:String="http://192.168.0.3/Assignment(Mobile)/check_email.php"
+    private val check_phoneURL:String="http://192.168.0.3/Assignment(Mobile)/check_phone.php"
+    private val updateProfileURL:String="http://192.168.0.3/Assignment(Mobile)/update_profile.php"
 
     companion object {
         private const val PICK_IMAGE_REQUEST = 1
@@ -57,6 +67,7 @@ class UserEditProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.user_edit_profile)
+
 
 //testing
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
@@ -94,8 +105,10 @@ class UserEditProfileActivity : AppCompatActivity() {
                         setUserData(user)
                         originalProfileImageUrl = user.photo
 
+                        var bitmap = BitmapConverter.convertStringToBitmap(originalProfileImageUrl)
+
                         Glide.with(this@UserEditProfileActivity)
-                            .load(user.photo)
+                            .load(bitmap)
                             .apply(RequestOptions.bitmapTransform(CircleCrop()))
                             .into(userImageView)
                     }else{
@@ -153,6 +166,8 @@ class UserEditProfileActivity : AppCompatActivity() {
         val originalName = etName.hint.toString()
         val originalEmail = emailEditText.hint.toString()
         val originalPhone = phoneeditText.hint.toString()
+        val isImage = isImageChanged.toString()
+        Log.d("image",isImage)
 
         val fieldsChanged = (newName != originalName || newEmail != originalEmail || newPhone != originalPhone || isImageChanged)
 
@@ -494,19 +509,34 @@ class UserEditProfileActivity : AppCompatActivity() {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             val selectedImageUri = data.data
 
-            // glide set circle shape immage
-            Glide.with(this)
-                .load(selectedImageUri)
-                .apply(RequestOptions.bitmapTransform(CircleCrop()))
-                .into(userImageView)
 
-            imageUrl = selectedImageUri.toString()
-            isImageChanged = true
+            val inputStream: InputStream? = selectedImageUri?.let { contentResolver.openInputStream(it) }
+
+            if (inputStream != null) {
+                // 使用 BitmapFactory.decodeStream 从输入流创建 Bitmap
+                val bitmap: Bitmap = BitmapFactory.decodeStream(inputStream)
+
+
+                imageUrl = BitmapConverter.convertBitmapToString(bitmap)
+
+
+                Glide.with(this)
+                    .load(selectedImageUri)
+                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                    .into(userImageView)
+
+
+                isImageChanged = true
+            } else {
+                isImageChanged = false
+            }
         }
     }
 
 
-    private fun openImageChooser() {
+
+
+        private fun openImageChooser() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         intent.type = "image/*"
 
@@ -560,6 +590,7 @@ class UserEditProfileActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val userEmail = sharedPreferences.getString("userEmail", "")
         intent.putExtra("userEmail", userEmail)
+        intent.putExtra("callingActivityName", "UserEditProfileActivity")
         startActivity(intent)
         finish()
     }

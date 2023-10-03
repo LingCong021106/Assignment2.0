@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -31,6 +33,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.InputStream
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -48,9 +51,9 @@ class AddOrganization : AppCompatActivity() {
     private var isImageChanged = false
     private lateinit var binding: ActivityMainBinding
     private lateinit var appDb: AppDatabase
-    private val check_emailURL:String="http://192.168.0.4/Assignment(Mobile)/check_email.php"
-    private val check_phoneURL:String="http://192.168.0.4/Assignment(Mobile)/check_phone.php"
-    private val addNewOrganizationURL:String="http://192.168.0.4/Assignment(Mobile)/addNewOrganization.php"
+    private val check_emailURL:String="http://192.168.0.3/Assignment(Mobile)/check_email.php"
+    private val check_phoneURL:String="http://192.168.0.3/Assignment(Mobile)/check_phone.php"
+    private val addNewOrganizationURL:String="http://192.168.0.3/Assignment(Mobile)/addNewOrganization.php"
 
     companion object {
         private const val PICK_IMAGE_REQUEST = 1
@@ -370,29 +373,38 @@ class AddOrganization : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == Companion.PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == AddOrganization.PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             val selectedImageUri = data.data
 
-            runOnUiThread {
-                // Use Glide to load the image and apply the circular crop transformation
-                Glide.with(this@AddOrganization)
+
+            val inputStream: InputStream? = selectedImageUri?.let { contentResolver.openInputStream(it) }
+
+            if (inputStream != null) {
+
+                val bitmap: Bitmap = BitmapFactory.decodeStream(inputStream)
+
+
+                imageUrl = BitmapConverter.convertBitmapToString(bitmap)
+
+
+                Glide.with(this)
                     .load(selectedImageUri)
                     .apply(RequestOptions.bitmapTransform(CircleCrop()))
                     .into(userImageView)
-            }
 
-            imageUrl = selectedImageUri.toString()
-            isImageChanged = true
-        } else {
-            runOnUiThread {
-                // Load a default image if no image is selected
-                Glide.with(this@AddOrganization)
-                    .load(R.drawable.user)
+
+                isImageChanged = true
+            } else {
+
+                val encodedImage = "/9j/4AAQSkZJRgABAQAAAQABAAD/4gIoSUNDX1BST0ZJTEUAAQEAAAIYAAAAAAQwAABtbnRyUkdC"
+                val bitmap2 = BitmapConverter.convertStringToBitmap(encodedImage)
+
+                Glide.with(this)
+                    .load(bitmap2)
                     .apply(RequestOptions.bitmapTransform(CircleCrop()))
                     .into(userImageView)
+                isImageChanged = false
             }
-
-            imageUrl = R.drawable.user.toString()
         }
     }
 

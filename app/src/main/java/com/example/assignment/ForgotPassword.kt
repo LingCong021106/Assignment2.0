@@ -40,7 +40,7 @@ lateinit var submitButton: Button
 lateinit var etEmail: EditText
 lateinit var etEmailLayout : TextInputLayout
 
-private val check_emailURL:String="http://192.168.0.4/Assignment(Mobile)/check_email.php"
+private val check_emailURL:String="http://192.168.0.3/Assignment(Mobile)/check_email.php"
 
 class ForgotPassword : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
