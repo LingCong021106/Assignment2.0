@@ -79,10 +79,10 @@ class UsersList : AppCompatActivity() {
         newArrayList = arrayListOf<ListUsers>()
         recyclerView = findViewById(R.id.userRecycleView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = UserAdapter(newArrayList, role) { type, user ->
-            onActionClick(type, user)
-
-        }
+//        recyclerView.adapter = UserAdapter(newArrayList, role) { type, user ->
+//            onActionClick(type, user)
+//
+//        }
 
         addOrgButton = findViewById(R.id.addOrgBtn)
 //        deleteBtn = findViewById(R.id.userDeleteBtn)
@@ -210,9 +210,9 @@ class UsersList : AppCompatActivity() {
             }
         }
 
-        recyclerView.adapter = UserAdapter(filteredList, role) { type, user ->
-            onActionClick(type, user)
-        }
+//        recyclerView.adapter = UserAdapter(filteredList, role) { type, user ->
+//            onActionClick(type, user)
+//        }
     }
 
 
@@ -373,9 +373,9 @@ class UsersList : AppCompatActivity() {
             newArrayList.add(people)
         }
 
-        recyclerView.adapter = UserAdapter(newArrayList, role) { type, user ->
-            onActionClick(type, user)
-        }
+//        recyclerView.adapter = UserAdapter(newArrayList, role) { type, user ->
+//            onActionClick(type, user)
+//        }
     }
 
 

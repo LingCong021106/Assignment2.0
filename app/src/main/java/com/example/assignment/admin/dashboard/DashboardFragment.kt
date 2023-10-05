@@ -17,8 +17,8 @@ import com.example.assignment.admin.donate.AdminDonateFragment
 import com.example.assignment.admin.news.AdminNewsFragment
 import com.example.assignment.admin.report.AdminReportFragment
 //import com.example.assignment.admin.user.AdminUserFragment
-import com.example.assignment.admin.user.AdminUserDetailFragment
-import com.example.assignment.admin.user.AdminUserFragment
+//import com.example.assignment.admin.user.AdminUserDetailFragment
+//import com.example.assignment.admin.user.AdminUserFragment
 import com.example.assignment.admin.volunteer.AdminVolunteerFragment
 import com.example.assignment.databinding.FragmentDashboardBinding
 import com.google.android.material.navigation.NavigationView
@@ -72,13 +72,6 @@ class DashboardFragment : Fragment() {
         var fragment = parentFragmentManager.findFragmentById(R.id.fragment_container)
 
 
-        binding.dashboardUserBtn.setOnClickListener{
-            if(savedInstanceState == null){
-                parentFragmentManager.beginTransaction()
-                    .addToBackStack(null)
-                    .replace(R.id.fragment_container, AdminUserFragment()).commit()
-
-
         binding.dashboardDonateBtn.setOnClickListener{
             if(savedInstanceState == null){
                 parentFragmentManager.beginTransaction()
@@ -110,11 +103,10 @@ class DashboardFragment : Fragment() {
                     .replace(R.id.fragment_container, AdminReportFragment()).commit()
             }
         }
+
     }
 
-    private fun loadFragment(fragment: Fragment) {
-        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container, fragment)
-        transaction.commit()
-    }
+
 }
+
+

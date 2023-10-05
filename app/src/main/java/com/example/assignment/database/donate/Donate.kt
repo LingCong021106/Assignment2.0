@@ -5,27 +5,22 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 var donateList = mutableListOf<Donate>()
-var donatePeopleList = mutableListOf<DonatePeople>()
 @Entity(tableName = "donate_table")
 data class Donate(
-    @PrimaryKey(autoGenerate = true) val donateID: Int?,
+    @PrimaryKey val donateId: Int?,
+    @ColumnInfo(name = "adminId") val adminId: Int?,
+    @ColumnInfo(name = "donateName") val donateName: String?,
     @ColumnInfo(name = "donateImage") val donateImage: String?,
-    @ColumnInfo(name = "organization") val organization: String?,
-    @ColumnInfo(name = "title") val title: String?,
-    @ColumnInfo(name = "target") val target: Int?,
-    @ColumnInfo(name = "startDate") val startDate: String?,
-    @ColumnInfo(name = "endDate") val endDate: String?,
-    @ColumnInfo(name = "Description") val description: String?,
-    @ColumnInfo(name = "userID") val userID: Int?
+    @ColumnInfo(name = "donateCategory") val donateCategory: String?,
+    @ColumnInfo(name = "donateOrgname") val donateOrgname: String?,
+    @ColumnInfo(name = "donateStartTime") val donateStartTime: String?,
+    @ColumnInfo(name = "donateEndTime") val donateEndTime: String?,
+    @ColumnInfo(name = "totalDonation") val target: Double?,
+    @ColumnInfo(name = "donateDescription") val donateDescription: String?,
+    @ColumnInfo(name = "isDeleted") val isDeleted: Int?,
+    @ColumnInfo(name = "percentages") val percentages: Int?
+
 )
 
 
-@Entity(tableName = "donate_people_table")
-data class DonatePeople(
-    @PrimaryKey(autoGenerate = true) val donatePeopleID: Int?,
-    @ColumnInfo(name = "donateID") val donateID: Int?,
-    @ColumnInfo(name = "userID") val userID: Int?,
-    @ColumnInfo(name = "userName") val userName: String?,
-    @ColumnInfo(name = "amount") val amount: Int?,
-    @ColumnInfo(name = "date") val date: String?
-)
+

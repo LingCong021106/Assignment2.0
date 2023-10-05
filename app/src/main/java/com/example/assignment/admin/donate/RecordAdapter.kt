@@ -66,10 +66,13 @@ class RecordAdapter(
         val donate = donatePeople[position]
 
         holder.name.text = donatePeople[position].userName
-        holder.amount.text = donatePeople[position].amount.toString()
-        holder.date.text = donatePeople[position].date
-        val drawableResId = R.drawable.baseline_person_24
-        holder.peopleImage.setImageResource(drawableResId)
+        holder.amount.text = donatePeople[position].userTotalDonate.toString()
+        holder.date.text = donatePeople[position].createDate
+//        val drawableResId = R.drawable.baseline_person_24
+//        holder.peopleImage.setImageResource(drawableResId)
+        imageString = donatePeople[position].userImage
+        val bitmap = BitmapConverter.convertStringToBitmap(imageString)
+        holder.peopleImage.setImageBitmap(bitmap)
 
 
 

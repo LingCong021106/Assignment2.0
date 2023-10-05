@@ -24,4 +24,11 @@
         \nYou should ask someone else about fishing, though.\n\n
     </string>
 
+
+    <string-array name="donateCategory">
+        <item>Select the Category</item>
+        <item>Marine Animal</item>
+        <item>Ocean Conservation</item>
+    </string-array>
+
 </resources>

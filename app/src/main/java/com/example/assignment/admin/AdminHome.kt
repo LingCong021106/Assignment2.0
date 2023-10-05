@@ -13,7 +13,7 @@ import com.example.assignment.admin.dashboard.DashboardFragment
 import com.example.assignment.admin.donate.AdminDonateFragment
 import com.example.assignment.admin.news.AdminNewsFragment
 import com.example.assignment.admin.report.AdminReportFragment
-import com.example.assignment.admin.user.AdminUserFragment
+//import com.example.assignment.admin.user.AdminUserFragment
 import com.example.assignment.admin.volunteer.AdminVolunteerFragment
 import com.google.android.material.navigation.NavigationView
 
@@ -51,7 +51,7 @@ class AdminHome: AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
             } else {
                 var currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
                 when(currentFragment){
-                    is AdminUserFragment -> navigationView.setCheckedItem(R.id.admin_nav_user)
+                    //is AdminUserFragment -> navigationView.setCheckedItem(R.id.admin_nav_user)
                     is AdminReportFragment -> navigationView.setCheckedItem(R.id.admin_nav_report)
                     is AdminNewsFragment -> navigationView.setCheckedItem(R.id.admin_nav_news)
                     is AdminDonateFragment -> navigationView.setCheckedItem(R.id.admin_nav_donate)
@@ -71,7 +71,7 @@ class AdminHome: AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
             R.id.admin_nav_news -> loadFragment(AdminNewsFragment())
             R.id.admin_nav_report -> loadFragment(AdminReportFragment())
             R.id.admin_nav_volunteer -> loadFragment(AdminVolunteerFragment())
-            R.id.admin_nav_user -> loadFragment(AdminUserFragment())
+            //R.id.admin_nav_user -> loadFragment(AdminUserFragment())
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true

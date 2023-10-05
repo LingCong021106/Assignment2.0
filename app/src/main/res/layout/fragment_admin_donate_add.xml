@@ -59,12 +59,31 @@
                     android:textSize="30sp"
                     android:textStyle="bold" />
 
-                <ImageButton
-                    android:id="@+id/addDonateImage"
-                    android:layout_width="274dp"
-                    android:layout_height="130dp"
+<!--                <ImageButton-->
+<!--                    android:id="@+id/addDonateImage"-->
+<!--                    android:layout_width="274dp"-->
+<!--                    android:layout_height="130dp"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:scaleType="fitCenter"-->
+<!--                    android:src="@drawable/baseline_add_a_photo_24" />-->
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="180dp"
+                    android:layout_height="150dp"
+                    app:cardCornerRadius="10dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/baseline_add_a_photo_24" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/addDonateImage"
+                        android:layout_width="180dp"
+                        android:layout_height="150dp"
+                        android:layout_gravity="center"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/baseline_add_a_photo_24" />
+                </androidx.cardview.widget.CardView>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/donateTitle"
@@ -92,7 +111,19 @@
                         android:background="@drawable/admin_radio_normal"
                         android:inputType="text"
                         android:textColor="@color/black" />
+
+
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <Spinner
+                    android:id="@+id/spinnerDonateCategory"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:autofillHints="Category" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
