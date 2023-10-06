@@ -10,8 +10,8 @@ interface DonateDao {
 //    @Query("SELECT * FROM user_table WHERE role LIKE :role")
 //    fun getUsers(role : String): List<Donate>
 
-   /* @Query("SELECT * FROM student_table WHERE uid IN (:userIds)")
-    fun loadAllByIds(userIds: IntArray): List<Student>*/
+    /* @Query("SELECT * FROM student_table WHERE uid IN (:userIds)")
+     fun loadAllByIds(userIds: IntArray): List<Student>*/
 
 //    @Query("SELECT * FROM student_table WHERE roll_no LIKE :roll LIMIT 1")
 //    suspend fun findByRoll(roll: Int): Student
@@ -31,6 +31,6 @@ interface DonateDao {
     @Delete
     fun delete(donate: Donate)
 
-//    @Query("DELETE FROM student_table")
-//    suspend fun deleteAll()
+    @Query("DELETE FROM donate_table")
+    fun deleteAll()
 }

@@ -6,11 +6,15 @@ import androidx.room.PrimaryKey
 
 var eventList = mutableListOf<Event>()
 var eventJoinedList = mutableListOf<EventJoined>()
+var eventJoinedListById = mutableListOf<EventJoined>()
 var searchList = mutableListOf<Event>()
 @Entity(tableName = "event_table")
 data class Event(
     @PrimaryKey()
     var eventId: Int,
+
+    @ColumnInfo(name = "adminId")
+    var adminId:Int,
 
     @ColumnInfo(name = "eventName")
     var eventName:String,
@@ -19,7 +23,7 @@ data class Event(
     var eventCategory:String,
 
     @ColumnInfo(name = "eventImage")
-    var eventImage:String,
+    var eventImage:String?,
 
     @ColumnInfo(name = "eventDescription")
     var eventDescription:String,
@@ -44,7 +48,12 @@ data class Event(
 
     @ColumnInfo(name = "eventLocation")
     var eventLocation:String,
-)
+
+    @ColumnInfo(name = "isDeleted")
+    var deleted:Int,
+) {
+    constructor() : this(0, 0, "", "", "", "", "", "", "", "", 0, "", "", 0)
+}
 
 @Entity(tableName = "event_joined_table")
 data class EventJoined(
@@ -54,13 +63,19 @@ data class EventJoined(
     @ColumnInfo(name = "eventId")
     var eventId: Int,
 
+    @ColumnInfo(name = "userId")
+    var userId: Int,
+
     @ColumnInfo(name = "userEmail")
     var userEmail: String,
 
     @ColumnInfo(name = "userImage")
-    var userImage: String,
+    var userImage: String?,
 
     @ColumnInfo(name = "userName")
     var userName: String,
+
+    @ColumnInfo(name = "createDate")
+    var createDate: String
 )
 

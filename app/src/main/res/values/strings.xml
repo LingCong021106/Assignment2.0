@@ -28,4 +28,15 @@
     <string name="donation">Donation\nRecords</string>
     <string name="event">Joined\nEvents</string>
 
+    <string-array name="event_category">
+        <item>--Select--</item>
+        <item>Beach Cleanup</item>
+        <item>Boat Tours and Marine Ecotourism</item>
+        <item>Ocean Awareness Campaigns</item>
+    </string-array>
+    <string-array name="donateCategory">
+        <item>Select the Category</item>
+        <item>Marine Animal</item>
+        <item>Ocean Conservation</item>
+    </string-array>
 </resources>

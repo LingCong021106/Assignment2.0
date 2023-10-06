@@ -7,13 +7,15 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "admin_table")
 data class Admin(
-    @PrimaryKey(autoGenerate = true)
-    var aId: Long = 0L,
-    @ColumnInfo(name="aName") val aName: String?,
-    @ColumnInfo(name="aEmail") val aEmail: String?,
-    @ColumnInfo(name="aPassword") val aPassword: String?,
-    @ColumnInfo(name="aPhone") val aPhone: String?,
-    @ColumnInfo(name="role") val role: String?,
-    @ColumnInfo(name="photo") val photo: String?,
-    @ColumnInfo(name = "joinedDate") val joinedDate: String?
-)
+    @PrimaryKey()
+    var aId: Int,
+    @ColumnInfo(name="aName") var aName: String?,
+    @ColumnInfo(name="aEmail") var aEmail: String?,
+    @ColumnInfo(name="aPassword") var aPassword: String?,
+    @ColumnInfo(name="aPhone") var aPhone: String?,
+    @ColumnInfo(name="role") var role: String?,
+    @ColumnInfo(name="photo") var photo: String?,
+    @ColumnInfo(name = "joinedDate") var joinedDate: String?
+){
+    constructor() : this(0, "", "", "", "", "", "" , "")
+}

@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 "organization" -> {
-                    val intent = Intent(this@MainActivity, Admin_Organization_EditProfile::class.java)
+                    val intent = Intent(this@MainActivity, AdminHome::class.java)
                     startActivity(intent)
                     finish()
                 }
@@ -284,6 +284,7 @@ class MainActivity : AppCompatActivity() {
                 val user = appDb.userDao().checkUser(localEmail, encryptedPassword)
                 val admin = appDb.adminDao().checkAdmin(localEmail, encryptedPassword)
 
+                //check local login
                 launch(Dispatchers.Main) {
                     if (user != null || admin != null) {
                         val LoggedInUserEmail = localEmail.toString()
@@ -294,12 +295,13 @@ class MainActivity : AppCompatActivity() {
                         val editor = sharedPreferences.edit()
 
 
-                        editor.putString("userRole", usersRole)
-                        editor.putBoolean("isLoggedIn", true)
-                        editor.putString("userEmail", userIdString)
-                        editor.apply()
-
                         if (admin != null && usersRole == "admin") {
+                            editor.putString("userRole", "admin")
+                            editor.putInt("userId", admin!!.aId)
+                            editor.putBoolean("isLoggedIn", true)
+                            editor.putString("userEmail", userIdString)
+                            editor.putString("userName", admin!!.aName)
+                            editor.apply()
                             val intent =
                                 Intent(
                                     this@MainActivity,
@@ -308,23 +310,54 @@ class MainActivity : AppCompatActivity() {
                             startActivity(intent)
                             finish()
                         } else if (admin != null && usersRole == "organization") {
+                            editor.putString("userRole", "organization")
+                            editor.putInt("userId", admin!!.aId)
+                            editor.putBoolean("isLoggedIn", true)
+                            editor.putString("userEmail", userIdString)
+                            editor.putString("userName", admin!!.aName)
+                            editor.apply()
                             val intent = Intent(
                                 this@MainActivity,
-                                Admin_Organization_EditProfile::class.java
+                                AdminHome::class.java
                             )
                             startActivity(intent)
                             finish()
                         } else if (user != null && usersRole == "users") {
-
+                            editor.putInt("userId", user!!.userId)
+                            editor.putBoolean("isLoggedIn", true)
+                            editor.putString("userEmail", userIdString)
+                            editor.putString("userName", user!!.userName)
+                            editor.apply()
                             val intent =
                                 Intent(this@MainActivity, UserHome::class.java)
                             startActivity(intent)
                             finish()
                         } else {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Invalid Email Address/Password",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            etEmail.text.clear()
+                            etPassword.text.clear()
+                            etEmailLayout.helperText = "*Invalid Email Address/Password"
+                            etEmailLayout.setHelperTextColor(
+                                ColorStateList.valueOf(
+                                    Color.RED
+                                )
 
+                            )
+
+                            passwordInputLayout.helperText =
+                                "*Invalid Email Address/Password"
+                            passwordInputLayout.setHelperTextColor(
+                                ColorStateList.valueOf(
+                                    Color.RED
+                                )
+                            )
                         }
                     }else {
-
+                        //check from remote database
                         var email = etEmail.getText().toString().trim()
                         var password = etPassword.getText().toString().trim()
                         if (email != "" && password != "") {
@@ -344,7 +377,8 @@ class MainActivity : AppCompatActivity() {
                                         val userIdString = LoggedInUserEmail
 
                                         val LoggedInUserId = jsonResponseLogin.getInt("user_id")
-                                        val user_id = LoggedInUserId.toString()
+                                        val LoggedInUserName = jsonResponseLogin.getString("user_name")
+                                        val user_id = LoggedInUserId
 
                                         val sharedPreferences =
                                             getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
@@ -352,13 +386,14 @@ class MainActivity : AppCompatActivity() {
                                         editor.putBoolean("isLoggedIn", true)
                                         editor.putString("userRole", usersRole)
                                         editor.putString("userEmail", userIdString)
-                                        editor.putString("userId", user_id)
+                                        editor.putInt("userId", user_id)
+                                        editor.putString("userName", LoggedInUserName)
                                         editor.apply()
 
                                         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
                                         val userRole = sharedPreferences.getString("userRole", "users")
                                         val userEmail = sharedPreferences.getString("userEmail", "")
-                                        val userId = sharedPreferences.getString("userId", "")
+                                        val userId = sharedPreferences.getInt("userId", -1)
                                         Log.d("cMyApp", "isLoggedIn: $isLoggedIn")
                                         Log.d("cMyApp", "userId: $userId")
                                         Log.d("cMyApp", "userEmail: $userEmail")
@@ -384,6 +419,7 @@ class MainActivity : AppCompatActivity() {
 
                                                         if (usersRole == "users") {
                                                             val user = User(
+                                                                userId = userId,
                                                                 userName = username,
                                                                 password = encryptedPassword,
                                                                 userEmail = email,
@@ -397,6 +433,7 @@ class MainActivity : AppCompatActivity() {
                                                             }
                                                         } else {
                                                             val admin = Admin(
+                                                                aId = userId,
                                                                 aName = username,
                                                                 aEmail = email,
                                                                 aPassword = encryptedPassword,
@@ -415,7 +452,7 @@ class MainActivity : AppCompatActivity() {
                                                             startActivity(intent)
                                                             finish()
                                                         } else if (usersRole == "organization") {
-                                                            val intent = Intent(this@MainActivity, Admin_Organization_EditProfile::class.java)
+                                                            val intent = Intent(this@MainActivity, AdminHome::class.java)
                                                             startActivity(intent)
                                                             finish()
                                                         } else {
@@ -591,14 +628,6 @@ class MainActivity : AppCompatActivity() {
         finish()
 
     }
-
-    private fun isNetworkConnected(): Boolean {
-        val connectivityManager =
-            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetworkInfo = connectivityManager.activeNetworkInfo
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected
-    }
-
 
     fun md5(input: String): String {
         val md = MessageDigest.getInstance("MD5")

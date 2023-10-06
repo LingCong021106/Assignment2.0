@@ -6,7 +6,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Donate :: class], version = 1)
+@Database(entities = [Donate :: class], version = 15)
 abstract class DonateDatabase : RoomDatabase() {
 
     abstract fun donateDao() : DonateDao

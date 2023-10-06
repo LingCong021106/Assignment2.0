@@ -12,9 +12,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/baseline_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/baseline_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.Assignment"
         android:usesCleartextTraffic="true"
@@ -24,7 +24,11 @@
             android:exported="false" />
         <activity
             android:name=".ProfileChangePassword"
-            android:exported="false" />
+            android:parentActivityName=".UserEditProfileActivity"
+            android:exported="true"
+            android:label="Change My Password"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            />
 
         <activity
             android:name=".ResetPasswordActivity"
@@ -46,7 +50,7 @@
             android:exported="true"
             android:theme="@style/Theme.AppCompat.DayNight"
             android:label="Add New Organization
-"           android:parentActivityName=".admin.user.UsersList"/>
+"           android:parentActivityName=".admin.user.AdminUserFragment"/>
         <activity
             android:name=".ForgotPassword"
             android:exported="false" />
@@ -54,21 +58,20 @@
             android:name=".Admin_Organization_EditProfile"
             android:exported="true"
             android:label="Edit Profile Details"
-            android:theme="@style/Theme.AppCompat.DayNight"/>
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
         <activity
             android:name=".UserEditProfileActivity"
+            android:parentActivityName=".user.profile.ProfileFragment"
             android:exported="true"
             android:label="Edit My Profile Details"
-            android:theme="@style/Theme.AppCompat.DayNight" />
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".RegisterAccount"
             android:exported="false" />
         <activity
             android:name=".user_home"
             android:exported="false" />
-        <activity
-            android:name=".user_views"
-            android:exported="false" />
+
 
 <!--        <activity-->
 <!--            android:name=".RegisterAccount"-->
@@ -89,21 +92,21 @@
 <!--            android:exported="false" />-->
 
         <activity
-            android:name=".CreditCard"
+            android:name=".user.donate.CreditCard"
             android:theme="@style/Theme.AppCompat.DayNight"
-            android:parentActivityName=".Payment"
+            android:parentActivityName=".user.donate.Payment"
             android:label="Credit Card"
             android:exported="false" />
 
         <activity
-            android:name=".Paypal"
+            android:name=".user.donate.Paypal"
             android:theme="@style/Theme.AppCompat.DayNight"
-            android:parentActivityName=".Payment"
+            android:parentActivityName=".user.donate.Payment"
             android:label="Paypal"
             android:exported="false" />
 
         <activity
-            android:name=".Payment"
+            android:name=".user.donate.Payment"
             android:theme="@style/Theme.AppCompat.DayNight"
             android:parentActivityName=".user.donate.DonateDetails"
             android:label="Payment"
@@ -134,13 +137,28 @@
             android:name=".admin.news.AdminNewsFragment"
             android:exported="true" />
         <activity
+            android:name=".admin.news.AdminNewAddFragment"
+            android:parentActivityName=".admin.news.AdminNewsFragment"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="true" />
+        <activity
             android:name=".admin.report.AdminReportFragment"
             android:exported="true" />
         <activity
             android:name=".admin.user.AdminUserFragment"
             android:exported="true" />
         <activity
-            android:name=".admin.volunteer.AdminVolunteerFragment"
+            android:name=".admin.event.AdminEventFragment"
+            android:exported="true" />
+        <activity
+            android:name=".admin.event.AdminEventAddFragment"
+            android:parentActivityName=".admin.event.AdminEventFragment"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="true" />
+        <activity
+            android:name=".admin.event.AdminEventUpdateFragment"
+            android:parentActivityName=".admin.event.AdminEventFragment"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true" />
         <activity
             android:name=".user.UserHome"
@@ -162,10 +180,28 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true" />
         <activity
+            android:name=".user.profile.ProfileFragment"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="true" />
+        <activity
             android:name=".user.donate.DonateDetails"
             android:parentActivityName=".user.donate.DonateFragment"
             android:theme="@style/Theme.AppCompat.DayNight"
             android:label="Donate Detail"
+            android:exported="true" />
+        <activity
+            android:name=".user.profile.DonateHistory"
+            android:parentActivityName=".user.profile.ProfileFragment"
+            android:theme="@style/Theme.AppCompat.DayNight"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="Donate History"
+            android:exported="true" />
+        <activity
+            android:name=".user.profile.EventHistory"
+            android:parentActivityName=".user.profile.ProfileFragment"
+            android:theme="@style/Theme.AppCompat.DayNight"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="Event History"
             android:exported="true" />
         <meta-data
             android:name="preloaded_fonts"

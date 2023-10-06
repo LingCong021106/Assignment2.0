@@ -1,4 +1,4 @@
-package com.example.assignment
+package com.example.assignment.user.donate
 
 import android.content.Context
 import android.content.Intent
@@ -10,15 +10,18 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.Toast
+import com.example.assignment.R
+import kotlin.properties.Delegates
 
 class Payment: AppCompatActivity() {
     lateinit var editTextAmount : EditText
     lateinit var radioGroupAmount: RadioGroup
     lateinit var radioGroupMethod : RadioGroup
     lateinit var buttonDonate : Button
-    private var method: String = ""
-    private var amount: String = ""
-    private var donateID : String =""
+    private lateinit var method: String
+    private lateinit var amount: String
+    private var donateId by Delegates.notNull<Int>()
+    private var userId by Delegates.notNull<Int>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fundraising_details_donate_payment)
@@ -29,7 +32,8 @@ class Payment: AppCompatActivity() {
         buttonDonate = findViewById(R.id.donate_payment_btn)
         radioGroupMethod = findViewById(R.id.donate_payment_method)
 
-        donateID = intent.getStringExtra("donateID").toString()
+        donateId = intent.getIntExtra("donateId", -1)
+        userId = intent.getIntExtra("userId", -1)
 
         radioGroupAmount.setOnCheckedChangeListener { group, checkedId ->
             val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -62,10 +66,10 @@ class Payment: AppCompatActivity() {
                     method = "paypal"
             }
         }
-        buttonDonate.setOnClickListener { storeDonate(it) }
+        buttonDonate.setOnClickListener { validationDonate(it) }
     }
 
-    private fun storeDonate(view: View) {
+    private fun validationDonate(view: View) {
         val inputAmount = editTextAmount.text.toString().trim()
 
         if (inputAmount.isEmpty() && amount.isEmpty()) {
@@ -90,18 +94,16 @@ class Payment: AppCompatActivity() {
             when (method) {
                 "card" -> {
                     val intent = Intent(this@Payment, CreditCard::class.java)
-                    intent.putExtra("donateID", donateID)
-                    intent.putExtra("userID","123")
-                    intent.putExtra("username", "test name")
+                    intent.putExtra("donateId", donateId)
+                    intent.putExtra("userId",userId)
                     intent.putExtra("amount", amount)
                     startActivity(intent)
                 }
 
                 "paypal" -> {
                     val intent = Intent(this@Payment, Paypal::class.java)
-                    intent.putExtra("donateID", donateID)
-                    intent.putExtra("userID","123")
-                    intent.putExtra("username", "test name")
+                    intent.putExtra("donateId", donateId)
+                    intent.putExtra("userId",userId)
                     intent.putExtra("amount", amount)
                     startActivity(intent)
                 }
@@ -119,5 +121,9 @@ class Payment: AppCompatActivity() {
         }
 
 
+    override fun onSupportNavigateUp(): Boolean {
+        super.onBackPressed()
+        return true
+    }
 
 }

@@ -113,10 +113,6 @@ class EventFragment : Fragment(){
         return super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -130,7 +126,7 @@ class EventFragment : Fragment(){
         val userRole = sharedPreferences.getString("userRole", "users")
         val userName= sharedPreferences.getString("userName", "")
         val userEmail = sharedPreferences.getString("userEmail", "")
-        val userId = sharedPreferences.getString("userId","")
+        val userId = sharedPreferences.getInt("userId",-1)
 
         //check connection
         if(CheckConnection.checkForInternet(requireContext())){
@@ -138,7 +134,7 @@ class EventFragment : Fragment(){
         }
 
         //refresh button
-        binding.refreshbtn.setOnClickListener{
+        binding.refreshBtn.setOnClickListener{
             parentFragmentManager.beginTransaction()
                 .addToBackStack(null)
                 .replace(R.id.fragment_container, EventFragment()).commit()
@@ -164,10 +160,10 @@ class EventFragment : Fragment(){
         //check connection, if yes initial donate room database
         if(connection) {
             CoroutineScope(Dispatchers.IO).launch {
-                if (eventDB.eventDatabaseDao().getAllEvent() != null) {
+                if (eventDB.eventDatabaseDao().getAllEvent().size > 0) {
                     eventDB.eventDatabaseDao().deleteAllEvent()
                 }
-                if (eventDB.eventDatabaseDao().getAllEventJoined() != null) {
+                if (eventDB.eventDatabaseDao().getAllEventJoined().size > 0) {
                     eventDB.eventDatabaseDao().deleteEventJoined()
                 }
             }
@@ -190,7 +186,7 @@ class EventFragment : Fragment(){
                 else{
                     binding.progressBar.visibility = View.GONE
                     binding.loading.visibility = View.GONE
-                    binding.refreshbtn.visibility = View.VISIBLE
+                    binding.refreshBtn.visibility = View.VISIBLE
                 }
                 Snackbar.make(rootView, "No connection now!", Snackbar.LENGTH_SHORT).show()
             }
@@ -198,21 +194,21 @@ class EventFragment : Fragment(){
 
 
         binding.imageButton6.setOnClickListener{
-            adapter = EventAdapter(eventList)
-            binding.eventRecycleView.adapter  = adapter
+            eventList.clear()
+            eventGetAll()
         }
         binding.imageButton7.setOnClickListener{
-            val event = searchByCategory("category1")
+            val event = searchByCategory("Beach Cleanup")
             adapter = EventAdapter(event)
             binding.eventRecycleView.adapter  = adapter
         }
         binding.imageButton8.setOnClickListener{
-            val event = searchByCategory("category2")
+            val event = searchByCategory("Ocean Awareness Campaigns")
             adapter = EventAdapter(event)
             binding.eventRecycleView.adapter  = adapter
         }
         binding.imageButton9.setOnClickListener{
-            val event = searchByCategory("category3")
+            val event = searchByCategory("Boat Tours and Marine Ecotourism")
             adapter = EventAdapter(event)
             binding.eventRecycleView.adapter  = adapter
         }
@@ -256,6 +252,7 @@ class EventFragment : Fragment(){
                             val event = array.getJSONObject(i)
                             val data = Event(
                                 event.getInt("eventId"),
+                                event.getInt("adminId"),
                                 event.getString("eventName"),
                                 event.getString("eventCategory"),
                                 event.getString("eventImage"),
@@ -267,6 +264,7 @@ class EventFragment : Fragment(){
                                 event.getInt("eventMaxPerson"),
                                 event.getString("eventDate"),
                                 event.getString("eventLocation"),
+                                event.getInt("isDeleted"),
                             )
                             eventList.add(data)
 
@@ -298,7 +296,7 @@ class EventFragment : Fragment(){
     }
 
     private fun getEventJoined(){
-        val url = "http://10.0.2.2/Assignment(Mobile)/eventJoined.php"
+        val url = "http://10.0.2.2/Assignment(Mobile)/eventJoinedGetAll.php"
         val stringRequest: StringRequest =
             object : StringRequest(
                 Request.Method.POST, url,
@@ -313,9 +311,11 @@ class EventFragment : Fragment(){
                                 val data = EventJoined(
                                         eventJoined.getInt("eventJoinedId"),
                                         eventJoined.getInt("eventId"),
+                                        eventJoined.getInt("userId"),
                                         eventJoined.getString("userEmail"),
                                         eventJoined.getString("userImage"),
                                         eventJoined.getString("userName"),
+                                        eventJoined.getString("createDate"),
                                     )
                                 eventJoinedList.add(data)
                                 CoroutineScope(Dispatchers.IO).launch{
@@ -350,24 +350,6 @@ class EventFragment : Fragment(){
             }
         }
         return events
-    }
-    private fun checkForInternet(context: Context): Boolean {
-
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val network = connectivityManager.activeNetwork ?: return false
-            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
-            return when {
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                else -> false
-            }
-        } else {
-            @Suppress("DEPRECATION") val networkInfo =
-                connectivityManager.activeNetworkInfo ?: return false
-            @Suppress("DEPRECATION")
-            return networkInfo.isConnected
-        }
     }
 
 }

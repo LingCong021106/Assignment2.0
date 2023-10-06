@@ -1,15 +1,22 @@
 package com.example.assignment.admin.donate
 
+import android.opengl.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assignment.BitmapConverter
 import com.example.assignment.database.donate.Donate
 import com.example.assignment.R
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class DonateAdapter(
@@ -29,6 +36,8 @@ class DonateAdapter(
         val title : TextView = itemView.findViewById(R.id.donatetitle)
         val organization : TextView = itemView.findViewById(R.id.organization)
         val donateImage : ImageView = itemView.findViewById(R.id.donateImage)
+        val donatePrograss : ProgressBar = itemView.findViewById(R.id.donateListProgressBar)
+        val donatePercentages : TextView = itemView.findViewById(R.id.donateListPercentages)
         val deletebtn : ImageView = itemView.findViewById(R.id.donateDeleteBtn)
         val donateCardView : ConstraintLayout =itemView.findViewById(R.id.donateCardView)
 
@@ -58,8 +67,9 @@ class DonateAdapter(
         //holder.profile.setImageResource(userList[position].profile)
         val donate = donateList[position]
 
-        holder.title.text = donateList[position].title
-        holder.organization.text = donateList[position].organization
+        holder.title.text = donateList[position].donateName
+        holder.organization.text = donateList[position].donateOrgname
+        holder.donatePercentages.text = "" + donateList[position].percentages.toString() + "%"
         imageString = donateList[position].donateImage
         val bitmap = BitmapConverter.convertStringToBitmap(imageString)
         holder.donateImage.setImageBitmap(bitmap)
@@ -71,6 +81,8 @@ class DonateAdapter(
         holder.donateCardView.setOnClickListener{
             onActionClick("view", donate)
         }
+
+        holder.donatePrograss.progress = donateList[position].percentages?.toInt()!!
 
 
 

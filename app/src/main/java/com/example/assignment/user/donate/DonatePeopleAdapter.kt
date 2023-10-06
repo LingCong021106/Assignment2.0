@@ -9,6 +9,9 @@ import android.widget.TextView
 import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.example.assignment.BitmapConverter
 import com.example.assignment.R
 import com.google.android.material.imageview.ShapeableImageView
@@ -43,7 +46,13 @@ class DonatePeopleAdapter (
         val middle = "RM" + decimalFormat.format(currentItem.userTotalDonate)
         val changeColor = "<font color = '#F30F0F'>$middle</font>"
         val last = " for this project!"
-        holder.peopleImg.setImageResource(R.drawable.baseline_person_24)
+        imageString = currentItem.userImage
+        var bitmap = BitmapConverter.convertStringToBitmap(imageString)
+        holder.peopleImg.setImageBitmap(bitmap)
+        Glide.with(holder.itemView.context)
+            .load(bitmap)
+            .apply(RequestOptions.bitmapTransform(CircleCrop()))
+            .into(holder.peopleImg)
         holder.comment.setText(Html.fromHtml(first + changeColor + last))
     }
 }

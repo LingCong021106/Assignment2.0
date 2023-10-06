@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".user.donate.DonateFragment">
+    tools:context=".user.event.EventFragment">
 
     <ImageButton
         android:id="@+id/imageButton7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="77dp"
+        android:layout_height="77dp"
         android:layout_marginTop="16dp"
         android:layout_weight="1"
-        android:src="@android:drawable/btn_star_big_on"
+        android:src="@drawable/icons8_ocean_wave_64"
         app:layout_constraintEnd_toStartOf="@+id/imageButton8"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageButton6"
@@ -20,37 +20,24 @@
 
     <ImageButton
         android:id="@+id/imageButton6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="77dp"
+        android:layout_height="77dp"
         android:layout_marginTop="16dp"
         android:layout_weight="1"
-        android:src="@android:drawable/btn_star_big_on"
+        android:src="@drawable/icons8_all_64"
         app:layout_constraintEnd_toStartOf="@+id/imageButton7"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/imageButton9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_weight="1"
-        android:src="@android:drawable/btn_star"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageButton8"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
         android:id="@+id/imageButton8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="77dp"
+        android:layout_height="77dp"
         android:layout_marginTop="16dp"
         android:layout_weight="1"
-        android:src="@android:drawable/btn_star"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton9"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:src="@drawable/icons8_sea_turtle_64"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageButton7"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -66,7 +53,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageButton7"
-        tools:listitem="@layout/event_card" />
+        tools:listitem="@layout/user_card" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -91,12 +78,11 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/refreshbtn"
+        android:id="@+id/refreshBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="refresh"
-        android:text="Refresh"
-        android:visibility="gone"
+        android:text="REfresh"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

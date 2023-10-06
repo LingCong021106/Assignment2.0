@@ -1,31 +1,24 @@
 package com.example.assignment.user.donate
 
-import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
-import android.graphics.Paint
 import android.icu.text.DecimalFormat
-import android.net.Uri
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assignment.BitmapConverter
 import com.example.assignment.CheckConnection
-import com.example.assignment.Payment
 import com.example.assignment.R
+import com.example.assignment.database.AppDatabase
+import com.example.assignment.database.User
 import com.example.assignment.databinding.DonateDetailsBinding
-import com.example.assignment.databinding.EventDetailsBinding
-import com.example.assignment.user.event.Event
-import com.example.assignment.user.event.EventJoined
-import com.example.assignment.user.event.EventJoinedAdapter
-import com.example.assignment.user.event.eventJoinedList
-import com.example.assignment.user.event.eventList
 import com.google.android.material.snackbar.Snackbar
-import java.security.AccessController.getContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 
 class DonateDetails : AppCompatActivity(){
@@ -33,10 +26,15 @@ class DonateDetails : AppCompatActivity(){
     private lateinit var binding: DonateDetailsBinding
     private lateinit var recycleView : RecyclerView
     private lateinit var adapter: DonatePeopleAdapter
-    var donateId : Int = 0
     private var imageString: String? = null
     lateinit var builder : AlertDialog.Builder
     private var connection : Boolean = false
+    private var userId : Int = 0
+    private var userName : String = ""
+    private var userImage : String = ""
+    private var userEmail : String = ""
+    private var eventId : Int = 0
+    private lateinit var appDB : AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,12 +42,25 @@ class DonateDetails : AppCompatActivity(){
         binding = DonateDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //share preference
+        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getInt("userId",-1)
+        CoroutineScope(Dispatchers.IO).launch {
+            appDB = AppDatabase.getInstance(this@DonateDetails)
+            val user: User? = appDB.userDao().getUserById(userId)
+            if (user != null) {
+                userName = user.userName.toString()
+                userImage = user.photo.toString()
+                userEmail = user.userEmail.toString()
+            }
+        }
+
         //check connection
         if(CheckConnection.checkForInternet(this)){
             connection = true
         }
 
-        donateId = intent.getIntExtra("donateId", -1)
+        val donateId = intent.getIntExtra("donateId", -1)
         val currentDonate = intent.getDoubleExtra("currentDonate", 0.0)
 
         val dateFormated = DateTimeFormatter.ofPattern("dd-MM-yyyy")
@@ -101,8 +112,9 @@ class DonateDetails : AppCompatActivity(){
         }
         else{
             binding.donateBtn.setOnClickListener{
-                intent = Intent(this,Payment::class.java)
-                intent.putExtra("donateID",donateId)
+                intent = Intent(this, Payment::class.java)
+                intent.putExtra("userId",userId)
+                intent.putExtra("donateId",donateId)
                 startActivity(intent)
             }
         }
@@ -125,19 +137,5 @@ class DonateDetails : AppCompatActivity(){
             }
         }
         return donatePeopleList
-    }
-
-    private fun checkAvailability(): Boolean{
-        val userEmail = "tester@gmail.com"
-        for (donatePerson in donatePersonList){
-            if(donatePerson.userEmail == userEmail && donateId == donatePerson.donateId){
-                return false
-            }
-        }
-        return true
-    }
-
-    fun refresh(){
-
     }
 }

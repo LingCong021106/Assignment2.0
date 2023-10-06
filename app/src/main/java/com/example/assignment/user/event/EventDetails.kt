@@ -27,10 +27,17 @@ import com.android.volley.toolbox.Volley
 import com.example.assignment.BitmapConverter
 import com.example.assignment.CheckConnection
 import com.example.assignment.ListDonate
+import com.example.assignment.MainActivity
 import com.example.assignment.R
+import com.example.assignment.database.AppDatabase
+import com.example.assignment.database.User
 import com.example.assignment.databinding.EventDetailsBinding
 import com.example.assignment.user.UserHome
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
@@ -52,15 +59,31 @@ class EventDetails : AppCompatActivity(){
     private val imageIdList: ArrayList<Int> = ArrayList()
     private var imageString: String? = null
     private var connection : Boolean = false
-    lateinit var userName : String
-    var eventId : Int = 0
-    //user Id
+    private var userId : Int = 0
+    private var userName : String = ""
+    private var userImage : String = ""
+    private var userEmail : String = ""
+    private var eventId : Int = 0
+    private lateinit var appDB : AppDatabase
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.event_details)
         binding = EventDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        //share preference
+        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        userId = sharedPreferences.getInt("userId",-1)
+        CoroutineScope(Dispatchers.IO).launch {
+            appDB = AppDatabase.getInstance(this@EventDetails)
+            val user: User? = appDB.userDao().getUserById(userId)
+            if (user != null) {
+                userName = user.userName.toString()
+                userImage = user.photo.toString()
+                userEmail = user.userEmail.toString()
+            }
+        }
 
         //check connection
         if(CheckConnection.checkForInternet(this)){
@@ -137,9 +160,8 @@ class EventDetails : AppCompatActivity(){
     }
 
     private fun checkAvailability(): Boolean{
-        val userEmail = "tester@gmail.com"
         for (eventJoined in eventJoinedList){
-            if(eventJoined.userEmail == userEmail && eventId == eventJoined.eventId){
+            if(eventJoined.userId == userId && eventId == eventJoined.eventId){
                 return false
             }
         }
@@ -181,11 +203,6 @@ class EventDetails : AppCompatActivity(){
     private fun storeJoinEventPeople() {
         val url : String = "http://10.0.2.2/Assignment(Mobile)/insertEventPeople.php"
 
-        userName = "Test name"
-        var userEmail = "tester@gmail.com"
-        var userImage = "image123"
-        val userId = 1
-
         val stringRequest: StringRequest = object : StringRequest(
             Request.Method.POST, url,
             Response.Listener { response ->
@@ -224,10 +241,16 @@ class EventDetails : AppCompatActivity(){
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String>? {
                 val data: MutableMap<String, String> = HashMap()
+                val currentDateTime = LocalDateTime.now()
+                val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+                val formattedDateTime = currentDateTime.format(formatter)
+
                 data["eventId"] = eventId.toString()
+                data["userId"] = userId.toString()
                 data["userEmail"] = userEmail
                 data["userImage"] = userImage
                 data["userName"] = userName
+                data["createDate"] = formattedDateTime
                 return data
             }
         }

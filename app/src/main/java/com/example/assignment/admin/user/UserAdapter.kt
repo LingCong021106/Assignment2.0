@@ -14,6 +14,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
+import com.example.assignment.BitmapConverter
 import com.example.assignment.R
 import com.example.assignment.database.User
 import com.google.android.material.imageview.ShapeableImageView
@@ -33,12 +34,17 @@ class UserAdapter(
         holder.nameTextView?.text = currentItem.name
         holder.emailTextView?.text = currentItem.email
 
+        var imageString = currentItem.photo
+        var bitmap = BitmapConverter.convertStringToBitmap(imageString)
+        val encodedImage = "/9j/4AAQSkZJRgABAQAAAQABAAD/4gIoSUNDX1BST0ZJTEUAAQEAAAIYAAAAAAQwAABtbnRyUkdC"
+        val bitmap2 = BitmapConverter.convertStringToBitmap(encodedImage)
+
         holder.imageView?.let {
-            Glide.with(holder.imageView.context)
-                .load(currentItem.photo)
-                .placeholder(R.drawable.baseline_person_2_24)
-//                .error(R.drawable.baseline_error_24)
-                .into(it)
+            Glide.with(it.context)
+                .load(bitmap ?: bitmap2)
+                .placeholder(R.drawable.baseline_person_24)
+                .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                .into(holder.imageView)
         }
 
         if (role == "admin") {

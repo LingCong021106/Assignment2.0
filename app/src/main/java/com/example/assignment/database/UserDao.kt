@@ -13,6 +13,9 @@ interface UserDao {
     @Query("SELECT * FROM users_table WHERE userEmail = :email")
     fun getUserByEmail(email: String): User?
 
+    @Query("SELECT * FROM users_table WHERE userId = :userId")
+    fun getUserById(userId: Int): User?
+
     @Query("SELECT * FROM users_table")
     fun getAll(): List<User>
 

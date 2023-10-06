@@ -7,6 +7,7 @@ import com.example.assignment.user.event.Event
 
 var donateList = mutableListOf<Donate>()
 var donatePersonList = mutableListOf<DonatePerson>()
+var donatePersonListById = mutableListOf<DonatePerson>()
 var searchList = mutableListOf<Donate>()
 
 @Entity(tableName = "donate_table")
@@ -14,11 +15,14 @@ data class Donate(
     @PrimaryKey()
     var donateId: Int,
 
+    @ColumnInfo(name = "adminId")
+    var adminId:Int,
+
     @ColumnInfo(name = "donateName")
     var donateName:String,
 
     @ColumnInfo(name = "donateImage")
-    var donateImage:String,
+    var donateImage:String?,
 
     @ColumnInfo(name = "donateCategory")
     var donateCategory:String,
@@ -37,6 +41,9 @@ data class Donate(
 
     @ColumnInfo(name = "donateDescription")
     var donateDescription:String,
+
+    @ColumnInfo(name = "isDeleted")
+    var deleted:Int,
 )
 
 @Entity(tableName = "donate_person_table")
@@ -47,6 +54,9 @@ data class DonatePerson(
     @ColumnInfo(name = "donateId")
     var donateId:Int,
 
+    @ColumnInfo(name = "userId")
+    var userId: Int,
+
     @ColumnInfo(name = "userEmail")
     var userEmail:String,
 
@@ -54,8 +64,14 @@ data class DonatePerson(
     var userName:String,
 
     @ColumnInfo(name = "userImage")
-    var userImage:String,
+    var userImage:String?,
 
     @ColumnInfo(name = "userTotalDonate")
-    var userTotalDonate:Double
+    var userTotalDonate:Double,
+
+    @ColumnInfo(name = "paymentMethod")
+    var paymentMethod:String,
+
+    @ColumnInfo(name = "createDate")
+    var createDate: String
 )

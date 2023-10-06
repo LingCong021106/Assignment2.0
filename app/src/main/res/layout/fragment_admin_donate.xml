@@ -6,6 +6,63 @@
     android:layout_height="match_parent"
     tools:context=".admin.donate.AdminDonateFragment">
 
+    <RadioGroup
+        android:id="@+id/donateGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center|top"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RadioButton
+            android:id="@+id/radioButtonAllDonate"
+            android:layout_width="85dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/admin_radio_selector"
+            android:button="@android:color/transparent"
+            android:checked="true"
+            android:elevation="4dp"
+            android:padding="16dp"
+            android:text="All"
+            android:textAlignment="center"
+            android:textColor="@drawable/admin_radio_text_colour"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/radioButtonAnimal"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/admin_radio_selector"
+            android:button="@android:color/transparent"
+            android:elevation="4dp"
+            android:padding="16dp"
+            android:text="Marine Animal"
+            android:textAlignment="center"
+            android:textColor="@drawable/admin_radio_text_colour"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/radioButtonOcean"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/admin_radio_selector"
+            android:button="@android:color/transparent"
+            android:elevation="4dp"
+            android:padding="16dp"
+            android:text="Ocean Conservation"
+            android:textAlignment="center"
+            android:textColor="@drawable/admin_radio_text_colour"
+            android:textSize="12sp" />
+
+
+
+    </RadioGroup>
+
+
     <android.widget.SearchView
         android:id="@+id/adminDonateSearch"
         android:layout_width="288dp"
@@ -16,7 +73,7 @@
         android:iconifiedByDefault="false"
         app:defaultQueryHint="Search"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/donateGroup" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/moveAddDonateFragment"
@@ -29,8 +86,9 @@
         app:backgroundTint="#FFFFFF"
         app:fabCustomSize="60sp"
         app:layout_constraintStart_toEndOf="@+id/adminDonateSearch"
-        app:layout_constraintTop_toTopOf="parent"
-        app:maxImageSize="40sp" />
+        app:layout_constraintTop_toBottomOf="@+id/donateGroup"
+        app:maxImageSize="40sp"
+        android:visibility="visible"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/donateRecycleView"
@@ -72,5 +130,3 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-

@@ -32,11 +32,20 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.assignment.database.User
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
+import com.example.assignment.admin.event.AdminEventFragment
+import com.example.assignment.databinding.DonateDetailsBinding
+import com.example.assignment.databinding.FragmentAdminEventBinding
+import com.example.assignment.databinding.UserEditProfileBinding
+import com.example.assignment.databinding.UserProfileBinding
+import com.example.assignment.user.UserHome
+import java.io.InputStream
 
 class UserEditProfileActivity : AppCompatActivity() {
     lateinit var nameText: TextView
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: UserEditProfileBinding
     private lateinit var appDb: AppDatabase
     private lateinit var etName : EditText
     private lateinit var emailEditText: EditText
@@ -57,13 +66,14 @@ class UserEditProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.user_edit_profile)
-
+        binding = UserEditProfileBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 //testing
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
         val userRole = sharedPreferences.getString("userRole", "users")
         val userEmail = sharedPreferences.getString("userEmail", "")
-        val userId = sharedPreferences.getString("userId", "")
+        val userId = sharedPreferences.getInt("userId", 0)
 
         Log.d("MyApp", "isLoggedIn: $isLoggedIn")
         Log.d("MyApp", "userId: $userId")
@@ -74,7 +84,7 @@ class UserEditProfileActivity : AppCompatActivity() {
 
         if (isLoggedIn) {
             CoroutineScope(Dispatchers.IO).launch {
-                val user = userEmail?.let { appDb.userDao().getUserByEmail(it) }
+                val user = userId?.let { appDb.userDao().getUserById(it) }
 
                 withContext(Dispatchers.Main) {
                     if (user != null) {
@@ -94,10 +104,13 @@ class UserEditProfileActivity : AppCompatActivity() {
                         setUserData(user)
                         originalProfileImageUrl = user.photo
 
+                        var bitmap = BitmapConverter.convertStringToBitmap(originalProfileImageUrl)
+
                         Glide.with(this@UserEditProfileActivity)
-                            .load(user.photo)
+                            .load(bitmap)
                             .apply(RequestOptions.bitmapTransform(CircleCrop()))
                             .into(userImageView)
+
                     }else{
                         Toast.makeText(
                             this@UserEditProfileActivity,
@@ -142,9 +155,17 @@ class UserEditProfileActivity : AppCompatActivity() {
             // open image choose
             startActivityForResult(intent, PICK_IMAGE_REQUEST)
         }
+
+        binding.upBtn.setOnClickListener{
+            onBackPressed()
+        }
     }
 
+    override fun onBackPressed() {
 
+            super.onBackPressed()
+        finish()
+    }
     fun checkValidation() {
         val newName = etName.text.toString().trim()
         val newEmail = emailEditText.text.toString().trim()
@@ -262,15 +283,28 @@ class UserEditProfileActivity : AppCompatActivity() {
                 )
             } else {
                 Toast.makeText(this, "No Change", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, UserHome::class.java)
+                intent.putExtra("fragment", "profile")
+                startActivity(intent)
             }
         } else {
             Toast.makeText(this, "No Change", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, UserHome::class.java)
+            intent.putExtra("fragment", "profile")
+            startActivity(intent)
         }
     }
 
 
 
     private fun updateProfile(originalName:String,newName: String, originalEmail: String, newEmail: String,originalPhone:String, newPhone: String, originalProfileImageUrl:String, profileImageUrl: String) {
+        var imageStore = ""
+        if(profileImageUrl == null|| profileImageUrl == ""){
+            imageStore = originalProfileImageUrl
+        }
+        else{
+            imageStore = profileImageUrl
+        }
 
         if (!isNetworkConnected()) {
 
@@ -309,13 +343,13 @@ class UserEditProfileActivity : AppCompatActivity() {
                             CoroutineScope(Dispatchers.IO).launch {
                                 val user = appDb.userDao().getUserByEmail(originalEmail)
 
-                                val userId = user?.userId.toString()
+                                val userId = user!!.userId
                                 val sharedPreferences =
                                     getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
                                 val editor = sharedPreferences.edit()
                                 editor.putString("userRole", "users")
                                 editor.putString("userEmail", newEmail)
-                                editor.putString("userId", userId)
+                                editor.putInt("userId", userId)
                                 editor.apply()
 
                                 appDb.userDao().updateUserInfo(
@@ -323,7 +357,7 @@ class UserEditProfileActivity : AppCompatActivity() {
                                     newName,
                                     newEmail,
                                     newPhone,
-                                    profileImageUrl
+                                    imageStore
                                 )
                             }
 
@@ -338,6 +372,9 @@ class UserEditProfileActivity : AppCompatActivity() {
                                 "Profile updated successfully",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            val intent = Intent(this, UserHome::class.java)
+                            intent.putExtra("fragment", "profile")
+                            startActivity(intent)
                         } else {
                             emailEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(
                                 null,
@@ -393,7 +430,7 @@ class UserEditProfileActivity : AppCompatActivity() {
                     data["newName"] = newName
                     data["newEmail"] = newEmail
                     data["newPhone"] = newPhone
-                    data["profileImageUrl"] = profileImageUrl
+                    data["profileImageUrl"] = imageStore
                     return data
                 }
             }
@@ -494,14 +531,27 @@ class UserEditProfileActivity : AppCompatActivity() {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             val selectedImageUri = data.data
 
-            // glide set circle shape immage
-            Glide.with(this)
-                .load(selectedImageUri)
-                .apply(RequestOptions.bitmapTransform(CircleCrop()))
-                .into(userImageView)
 
-            imageUrl = selectedImageUri.toString()
-            isImageChanged = true
+            val inputStream: InputStream? = selectedImageUri?.let { contentResolver.openInputStream(it) }
+
+            if (inputStream != null) {
+
+                val bitmap: Bitmap = BitmapFactory.decodeStream(inputStream)
+
+
+                imageUrl = BitmapConverter.convertBitmapToString(bitmap)
+
+
+                Glide.with(this)
+                    .load(selectedImageUri)
+                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                    .into(userImageView)
+
+
+                isImageChanged = true
+            } else {
+                isImageChanged = false
+            }
         }
     }
 
@@ -530,23 +580,7 @@ class UserEditProfileActivity : AppCompatActivity() {
         emailEditText.hint = user.userEmail
         phoneeditText.hint = user.phone
     }
-     fun logout(view: View?){
-        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
 
-
-        editor.remove("isLoggedIn")
-        editor.remove("userRole")
-        editor.remove("userEmail")
-        editor.remove("userId")
-
-        editor.apply()
-
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        finish()
-    }
 
     private fun isNetworkConnected(): Boolean {
         val connectivityManager =
@@ -560,6 +594,7 @@ class UserEditProfileActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val userEmail = sharedPreferences.getString("userEmail", "")
         intent.putExtra("userEmail", userEmail)
+        intent.putExtra("callingActivityName", "UserEditProfileActivity")
         startActivity(intent)
         finish()
     }

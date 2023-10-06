@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.provider.MediaStore
@@ -20,15 +22,19 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
+import com.example.assignment.admin.AdminHome
 import com.example.assignment.database.Admin
 import com.example.assignment.database.AppDatabase
 import com.example.assignment.databinding.ActivityMainBinding
+import com.example.assignment.user.UserHome
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.InputStream
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -63,7 +69,7 @@ class AddOrganization : AppCompatActivity() {
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
         val userRole = sharedPreferences.getString("userRole", "users")
         val userEmail = sharedPreferences.getString("userEmail", "")
-        val userId = sharedPreferences.getString("userId", "")
+        val userId = sharedPreferences.getInt("userId", -1)
         appDb = AppDatabase.getInstance(this)
         saveButton = findViewById(R.id.saveButton)
         userImageView = findViewById(R.id.userImageView)
@@ -253,6 +259,7 @@ class AddOrganization : AppCompatActivity() {
                         val success = jsonResponse.getInt("success")
                         val emailExists = jsonResponse.getInt("emailExists")
                         val phoneExists = jsonResponse.getInt("phoneExists")
+                        val aId = jsonResponse.getInt("id")
 
 
                         if (success == 1) {
@@ -262,6 +269,7 @@ class AddOrganization : AppCompatActivity() {
                             val formattedDateTime = dateFormat.format(currentDateTime)
 
                             val admin = Admin(
+                                aId = aId,
                                 aName = name,
                                 aPassword = md5(password),
                                 aEmail = email,
@@ -279,9 +287,12 @@ class AddOrganization : AppCompatActivity() {
                             clearFields()
                             Toast.makeText(
                                 this@AddOrganization,
-                                "Profile updated successfully",
+                                "Organization added successful",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            val intent = Intent(this, AdminHome::class.java)
+                            intent.putExtra("fragment", "user")
+                            startActivity(intent)
                         } else {
                             emailEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(
                                 null,
@@ -368,29 +379,38 @@ class AddOrganization : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == Companion.PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == AddOrganization.PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             val selectedImageUri = data.data
 
-            runOnUiThread {
-                // Use Glide to load the image and apply the circular crop transformation
-                Glide.with(this@AddOrganization)
+
+            val inputStream: InputStream? = selectedImageUri?.let { contentResolver.openInputStream(it) }
+
+            if (inputStream != null) {
+
+                val bitmap: Bitmap = BitmapFactory.decodeStream(inputStream)
+
+
+                imageUrl = BitmapConverter.convertBitmapToString(bitmap)
+
+
+                Glide.with(this)
                     .load(selectedImageUri)
-                    .apply(com.bumptech.glide.request.RequestOptions.bitmapTransform(CircleCrop()))
+                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
                     .into(userImageView)
-            }
 
-            imageUrl = selectedImageUri.toString()
-            isImageChanged = true
-        } else {
-            runOnUiThread {
-                // Load a default image if no image is selected
-                Glide.with(this@AddOrganization)
-                    .load(R.drawable.user)
-                    .apply(com.bumptech.glide.request.RequestOptions.bitmapTransform(CircleCrop()))
+
+                isImageChanged = true
+            } else {
+
+                val encodedImage = "/9j/4AAQSkZJRgABAQAAAQABAAD/4gIoSUNDX1BST0ZJTEUAAQEAAAIYAAAAAAQwAABtbnRyUkdC"
+                val bitmap2 = BitmapConverter.convertStringToBitmap(encodedImage)
+
+                Glide.with(this)
+                    .load(bitmap2)
+                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
                     .into(userImageView)
+                isImageChanged = false
             }
-
-            imageUrl = R.drawable.user.toString()
         }
     }
 

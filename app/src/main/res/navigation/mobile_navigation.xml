@@ -42,9 +42,9 @@
 
     <fragment
         android:id="@+id/admin_nav_volunteer"
-        android:name="com.example.assignment.admin.volunteer.AdminVolunteerFragment"
+        android:name="com.example.assignment.admin.event.AdminEventFragment"
         android:label="Volunteer"
-        tools:layout="@layout/fragment_admin_volunteer" />
+        tools:layout="@layout/fragment_admin_event" />
 
     <fragment
         android:id="@+id/admin_nav_news"
