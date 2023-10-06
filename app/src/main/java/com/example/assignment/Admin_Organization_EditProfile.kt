@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,7 +15,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.android.volley.AuthFailureError
@@ -31,8 +32,9 @@ import org.json.JSONObject
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
-import com.example.assignment.admin.user.UsersList
+import com.example.assignment.admin.AdminHome
 import com.example.assignment.database.Admin
+import java.io.InputStream
 
 class Admin_Organization_EditProfile : AppCompatActivity() {
 
@@ -60,7 +62,7 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
 
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
-        val userId = sharedPreferences.getString("userId", "")
+        val userId = sharedPreferences.getInt("userId", -1)
         val userEmail = sharedPreferences.getString("userEmail", "")
 
 
@@ -72,7 +74,7 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
 
         if (isLoggedIn) {
             CoroutineScope(Dispatchers.IO).launch {
-                val admin = userEmail?.let { appDb.adminDao().getAdminByEmail(it) }
+                val admin = userId?.let { appDb.adminDao().getAdminById(it) }
 
                 withContext(Dispatchers.Main) {
                     if (admin != null) {
@@ -93,10 +95,13 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
                         setUserData(admin)
                         originalProfileImageUrl = admin.photo
 
+                        var bitmap = BitmapConverter.convertStringToBitmap(originalProfileImageUrl)
+
                         Glide.with(this@Admin_Organization_EditProfile)
-                            .load(admin.photo) // 用户照片的 URL
+                            .load(bitmap)
                             .apply(RequestOptions.bitmapTransform(CircleCrop()))
                             .into(userImageView)
+
                     } else {
                         Toast.makeText(
                             this@Admin_Organization_EditProfile,
@@ -108,19 +113,7 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
                 }
             }
         }
-        val orgbtn = findViewById<Button>(R.id.orgbtn)
-        orgbtn.setOnClickListener{
-            val intent = Intent(this, AddOrganization::class.java)
-            startActivity(intent)
-            finish()
-        }
 
-        val listBtn = findViewById<Button>(R.id.listBtn)
-        listBtn.setOnClickListener{
-            val intent = Intent(this, UsersList::class.java)
-            startActivity(intent)
-            finish()
-        }
 
         saveButton = findViewById(R.id.saveButton)
         saveButton.setOnClickListener {
@@ -146,6 +139,11 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
         }
 
 
+        val upButton : ImageView = findViewById(R.id.imageView5)
+        upButton.setOnClickListener{
+            val intent = Intent(this, AdminHome::class.java)
+            startActivity(intent)
+        }
         userImageView.setOnClickListener {
 
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -363,14 +361,14 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
 
                             CoroutineScope(Dispatchers.IO).launch {
                                 val admin = appDb.adminDao().getAdminByEmail(originalEmail)
-                                val userId = admin?.aId.toString()
+                                val userId = admin?.aId!!
                                 val userRole = admin?.role.toString()
                                 val sharedPreferences =
                                     getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
                                 val editor = sharedPreferences.edit()
                                 editor.putString("userRole", userRole)
                                 editor.putString("userEmail", newEmail)
-                                editor.putString("userId", userId)
+                                editor.putInt("userId", userId)
                                 editor.apply()
 
                                 appDb.adminDao().updateAdminInfo(
@@ -547,17 +545,30 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == Companion.PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == Admin_Organization_EditProfile.PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             val selectedImageUri = data.data
 
 
-            Glide.with(this)
-                .load(selectedImageUri)
-                .apply(RequestOptions.bitmapTransform(CircleCrop()))
-                .into(userImageView)
+            val inputStream: InputStream? = selectedImageUri?.let { contentResolver.openInputStream(it) }
 
-            imageUrl = selectedImageUri.toString()
-            isImageChanged = true
+            if (inputStream != null) {
+
+                val bitmap: Bitmap = BitmapFactory.decodeStream(inputStream)
+
+
+                imageUrl = BitmapConverter.convertBitmapToString(bitmap)
+
+
+                Glide.with(this)
+                    .load(selectedImageUri)
+                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                    .into(userImageView)
+
+
+                isImageChanged = true
+            } else {
+                isImageChanged = false
+            }
         }
     }
 
@@ -587,23 +598,6 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
         phoneeditText.hint = admin.aPhone
     }
 
-    fun logout(view: View?){
-        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-
-
-        editor.remove("isLoggedIn")
-        editor.remove("userRole")
-        editor.remove("userEmail")
-        editor.remove("userId")
-
-        editor.apply()
-
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        finish()
-    }
 
     private fun isNetworkConnected(): Boolean {
         val connectivityManager =
@@ -617,6 +611,7 @@ class Admin_Organization_EditProfile : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val userEmail = sharedPreferences.getString("userEmail", "")
         intent.putExtra("userEmail", userEmail)
+        intent.putExtra("callingActivityName", "Admin_Organization_EditProfile")
         startActivity(intent)
         finish()
     }

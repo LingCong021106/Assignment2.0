@@ -46,7 +46,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:background="@drawable/oval_shape"
-        android:text="Volunteer"
+        android:text="Event"
         android:textSize="28dp"
         app:backgroundTint="#E53935"
         app:cornerRadius="20dp"
@@ -61,7 +61,7 @@
         android:layout_width="173dp"
         android:layout_height="173dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/oval_shape"
         android:text="Donate"
@@ -72,15 +72,15 @@
         app:iconGravity="textTop"
         app:iconSize="50dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/dashboardUserBtn"
-        app:layout_constraintTop_toBottomOf="@+id/text1" />
+        app:layout_constraintStart_toEndOf="@+id/dashboardVolunteerBtn"
+        app:layout_constraintTop_toBottomOf="@+id/dashboardNewsBtn" />
 
     <Button
         android:id="@+id/dashboardNewsBtn"
         android:layout_width="173dp"
         android:layout_height="173dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/oval_shape"
         android:text="News"
@@ -91,8 +91,8 @@
         app:iconGravity="textTop"
         app:iconSize="50dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/dashboardVolunteerBtn"
-        app:layout_constraintTop_toBottomOf="@+id/dashboardDonateBtn" />
+        app:layout_constraintStart_toEndOf="@+id/dashboardUserBtn"
+        app:layout_constraintTop_toBottomOf="@+id/text1" />
 
     <Button
         android:id="@+id/dashboardReportBtn"

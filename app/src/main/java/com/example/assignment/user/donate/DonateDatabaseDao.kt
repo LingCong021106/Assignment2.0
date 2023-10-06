@@ -24,7 +24,7 @@ interface DonateDatabaseDao {
     @Query("delete from donate_person_table")
     fun deleteAllFromDonatePerson()
 
-    @Query("select * from donate_table")
+    @Query("select * from donate_table where isDeleted = 0")
     fun getAllDonate() : MutableList<Donate>
 
     @Query("select * from donate_person_table")

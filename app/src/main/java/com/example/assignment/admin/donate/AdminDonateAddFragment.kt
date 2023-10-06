@@ -15,10 +15,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.DatePicker
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.android.volley.AuthFailureError
@@ -27,9 +30,12 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.assignment.BitmapConverter
+import com.example.assignment.CheckConnection
+import com.example.assignment.GlobalVariables.anyChange
 import com.example.assignment.R
 import com.example.assignment.database.donate.Donate
 import com.example.assignment.database.donate.DonateDatabase
+import com.example.assignment.database.donate.donateList
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -39,7 +45,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class AdminDonateAddFragment : Fragment() {
+class AdminDonateAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
 //    val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 //    val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
@@ -48,14 +54,16 @@ class AdminDonateAddFragment : Fragment() {
 //    val userEmail = sharedPreferences.getString("userEmail", "")
 //    val userId = sharedPreferences.getString("userId","")
 
-    private lateinit var donateImage : ImageButton
+    private lateinit var donateImage : ImageView
     private lateinit var startBtn : Button
     private lateinit var endBtn : Button
     private lateinit var addBtn : Button
+    private lateinit var organization : TextInputEditText
     private lateinit var title : TextInputEditText
     private lateinit var target : TextInputEditText
     private lateinit var description : TextInputEditText
     private lateinit var back : ImageView
+    private lateinit var spinner: Spinner
 
 
     private var startChange = 0
@@ -66,14 +74,17 @@ class AdminDonateAddFragment : Fragment() {
     private val endDateCal: Calendar = Calendar.getInstance()
 
     lateinit var builder : AlertDialog.Builder
-    private val URL :String = "http://192.168.0.192/Assignment(Mobile)/insertDonations.php"
+    private val URL :String = "http://10.0.2.2/Assignment(Mobile)/insertDonations.php"
 
-    private lateinit var insertImage : String
+    private var insertImage : String = ""
+    private lateinit var insertOrganization : String
     private lateinit var insertTitle : String
     private lateinit var insertTarget : String
+    private var category : String = ""
     private lateinit var insertStartDate : String
     private lateinit var insertEndDate : String
     private lateinit var insertDescription : String
+    var adminID = 0
     private lateinit var appDb : DonateDatabase
 
 
@@ -84,9 +95,17 @@ class AdminDonateAddFragment : Fragment() {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_admin_donate_add, container, false)
 
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+        val userRole = sharedPreferences.getString("userRole", "users")
+        val adminId = sharedPreferences.getInt("userId",-1)
+
+        adminID = adminId
+
         appDb = DonateDatabase.getDatabase(requireContext())
 
         donateImage = view.findViewById(R.id.addDonateImage)
+        organization = view.findViewById(R.id.addDonateOriganization)
         title = view.findViewById(R.id.addDonateTitle)
         target = view.findViewById(R.id.donateTargetValue)
         startBtn = view.findViewById(R.id.addDonateStartBtn)
@@ -94,6 +113,7 @@ class AdminDonateAddFragment : Fragment() {
         description = view.findViewById(R.id.addDonateDescription)
         addBtn = view.findViewById(R.id.addDonateButton)
         back = view.findViewById(R.id.donateBack)
+        spinner = view.findViewById(R.id.spinnerDonateCategory)
 
         builder = AlertDialog.Builder(requireContext())
 
@@ -125,7 +145,7 @@ class AdminDonateAddFragment : Fragment() {
                     cal.get(Calendar.YEAR),
                     cal.get(Calendar.MONTH),
                     cal.get(Calendar.DAY_OF_MONTH)).show()
-                    startChange = 1
+                startChange = 1
             }
 
         })
@@ -138,27 +158,57 @@ class AdminDonateAddFragment : Fragment() {
                     cal.get(Calendar.YEAR),
                     cal.get(Calendar.MONTH),
                     cal.get(Calendar.DAY_OF_MONTH)).show()
-                    endChange = 1
+                endChange = 1
             }
 
         })
 
         addBtn.setOnClickListener {
+            insertOrganization = organization.text.toString()
             insertTitle = title.text.toString()
-            insertTarget = target.text.toString().trim()
+            insertTarget = target.text.toString()
             insertDescription = description.text.toString()
 
+            if(CheckConnection.checkForInternet(requireContext())){
+                if (insertOrganization.isEmpty() ||insertImage.isEmpty() ||insertTitle.isEmpty() || insertTarget.isEmpty() ||
+                    insertDescription.isEmpty() || insertStartDate.isEmpty() || insertEndDate.isEmpty() || category == "Select the Category") {
+                    Toast.makeText(requireContext(),"Field cannot be empty", Toast.LENGTH_LONG).show()
 
-            if (insertImage.isEmpty() ||insertTitle.isEmpty() || insertTarget.isEmpty() || insertDescription.isEmpty() || insertStartDate.isEmpty() || insertEndDate.isEmpty()) {
-                Toast.makeText(requireContext(),"Field cannot be empty", Toast.LENGTH_LONG).show()
-            } else if (!insertTarget.matches("-?\\d+".toRegex())) {
-                Toast.makeText(requireContext(),"Please enter a valid integer", Toast.LENGTH_LONG).show()
-            } else {
-               addNewRemoteDonation()
+                } else if (!insertTarget.matches("-?\\d+".toRegex())) {
+                    Toast.makeText(requireContext(),"Please enter a valid integer", Toast.LENGTH_LONG).show()
+                } else {
+                    addNewRemoteDonation()
+                }
+            }else{
+                builder.setMessage("Please change to an available network connection before adding new donation")
+                    .setCancelable(true)
+                    .setPositiveButton("OK", DialogInterface.OnClickListener { dialogInterface, i ->
+                        dialogInterface.dismiss() // Dismiss the second dialog
+                    })
+                    .setNegativeButton("", DialogInterface.OnClickListener { dialogInterface, i ->
+                        dialogInterface.cancel()
+                    })
+                    .show()
             }
 
 
+
+
+
         }
+
+
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.donateCategory,
+            android.R.layout.simple_spinner_item
+
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
+        }
+        spinner.onItemSelectedListener = this
+
 
 
 
@@ -193,7 +243,7 @@ class AdminDonateAddFragment : Fragment() {
     }
 
     private fun updateDateInView() {
-        val myFormat = "MM/dd/yyyy" // mention the format you need
+        val myFormat = "dd/MM/yyyy" // mention the format you need
         val sdf = SimpleDateFormat(myFormat, Locale.US)
         if(startChange == 1){
             if(validateDates() == true){
@@ -222,8 +272,11 @@ class AdminDonateAddFragment : Fragment() {
     }
 
     private fun validateDates() : Boolean {
-        if (startDateCal.after(endDateCal)) {
-            Toast.makeText(requireContext(),"Invalid Date, End Date Can't Before Start Date", Toast.LENGTH_LONG).show()
+
+        if(startChange == 1 && endBtn.text == "End Date"){
+            return true
+        }else if (startDateCal.after(endDateCal)) {
+            Toast.makeText(requireContext(),"Invalid Date, End Date Can't Before Start Date. Please Select Again", Toast.LENGTH_LONG).show()
             return false
         }else{
             return true
@@ -231,8 +284,6 @@ class AdminDonateAddFragment : Fragment() {
     }
 
     private fun addNewRemoteDonation() {
-
-        //userName = "Test name"
 
         val stringRequest: StringRequest = object : StringRequest(
             Request.Method.POST, URL,
@@ -243,12 +294,13 @@ class AdminDonateAddFragment : Fragment() {
                         .setCancelable(true)
                         .setPositiveButton("OK", DialogInterface.OnClickListener { dialogInterface, i ->
                             dialogInterface.dismiss() // Dismiss the second dialog
+                            anyChange = 1
                             loadFragment(AdminDonateFragment())
+
                         })
                         .setNegativeButton("", DialogInterface.OnClickListener { dialogInterface, i ->
                             dialogInterface.cancel()
-                        })
-                        .show()
+                        }).show()
                 } else if (response == "failure") {
                     builder.setMessage("Fail Add New Donation")
                         .setCancelable(true)
@@ -272,12 +324,15 @@ class AdminDonateAddFragment : Fragment() {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String>? {
                 val data: MutableMap<String, String> = HashMap()
-                data["image"] = insertImage
-                data["title"] = insertTitle
-                data["target"] = insertTarget
-                data["startDate"] = insertStartDate
-                data["endDate"] = insertEndDate
-                data["description"] = insertDescription
+                data["adminId"] = adminID.toString()
+                data["donateName"] = insertTitle
+                data["donateImage"] = insertImage
+                data["donateCategory"] = category
+                data["donateOrgname"] = insertOrganization
+                data["donateStartTime"] = insertStartDate
+                data["donateEndTime"] = insertEndDate
+                data["totalDonation"] = insertTarget
+                data["donateDescription"] = insertDescription
                 return data
             }
         }
@@ -287,18 +342,14 @@ class AdminDonateAddFragment : Fragment() {
 
     }
 
-    private fun addNewLocalDonation(){
 
-        val donate = Donate(
-            null, insertImage, "ABC Company", insertTitle, insertTarget.toInt(),
-            insertStartDate, insertEndDate, insertDescription, 1
-        )
-        GlobalScope.launch(Dispatchers.IO) {
-            appDb.donateDao().insert(donate)
-        }
+    override fun onItemSelected(p0: AdapterView<*>, p1: View?, p2: Int, p3: Long) {
 
-        Toast.makeText(requireContext(),"Successfully written", Toast.LENGTH_SHORT).show()
+        category = p0.getItemAtPosition(p2).toString()
+    }
 
+    override fun onNothingSelected(p0: AdapterView<*>) {
+        category == ""
     }
 
 

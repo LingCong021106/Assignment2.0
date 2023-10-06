@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    tools:context=".UserEditProfileActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -25,18 +26,31 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/topEditText"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"
-                android:text="Edit My User Profile"
-                android:textAlignment="center"
-                android:textColor="#033247"
-                android:textSize="34sp"
-                android:textStyle="bold|italic" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/upBtn"
+                    android:layout_width="55dp"
+                    android:layout_height="40dp"
+                    android:layout_marginVertical="10dp"
+                    android:src="@drawable/baseline_arrow_back_24" />
+
+                <TextView
+                    android:id="@+id/topEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="15dp"
+                    android:text="Edit My User Profile"
+                    android:textAlignment="center"
+                    android:textColor="#033247"
+                    android:textSize="34sp"
+                    android:textStyle="bold|italic" />
+            </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -78,6 +92,7 @@
                 android:textColor="#809CA8"
                 android:textSize="14sp"
                 android:textStyle="bold|italic" />
+
             <TextView
                 android:id="@+id/rightTopTextView"
                 android:layout_width="wrap_content"
@@ -85,11 +100,11 @@
                 android:layout_gravity="end"
                 android:layout_marginTop="4dp"
                 android:layout_marginRight="10dp"
+                android:onClick="ChangePassword"
                 android:text="Change Password"
                 android:textColor="#1476A3"
                 android:textSize="14sp"
-                android:textStyle="bold|italic"
-                android:onClick="ChangePassword"/>
+                android:textStyle="bold|italic" />
 
             <TextView
                 android:id="@+id/nameText"
@@ -242,13 +257,6 @@
 
     </androidx.cardview.widget.CardView>
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        tools:layout_editor_absoluteX="3dp"
-        tools:ignore="MissingConstraints"
-        android:onClick="logout"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

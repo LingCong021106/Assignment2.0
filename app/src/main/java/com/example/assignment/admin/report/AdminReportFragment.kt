@@ -7,8 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.example.assignment.R
-import com.example.assignment.admin.news.AdminNewsViewModel
+import androidx.appcompat.app.AppCompatActivity
 import com.example.assignment.databinding.FragmentAdminReportBinding
 
 class AdminReportFragment : Fragment() {
@@ -32,6 +31,9 @@ class AdminReportFragment : Fragment() {
         AdminReportViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
+
+        //change toolbar title
+        (activity as AppCompatActivity).supportActionBar?.title = "Report"
         return root
     }
 

@@ -1,25 +1,23 @@
 package com.example.assignment.admin.dashboard
 
 import android.R.*
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
-import androidx.drawerlayout.widget.DrawerLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import com.example.assignment.R
 import com.example.assignment.admin.donate.AdminDonateFragment
 import com.example.assignment.admin.news.AdminNewsFragment
 import com.example.assignment.admin.report.AdminReportFragment
 //import com.example.assignment.admin.user.AdminUserFragment
-import com.example.assignment.admin.volunteer.AdminVolunteerFragment
+import com.example.assignment.admin.event.AdminEventFragment
+import com.example.assignment.admin.user.AdminUserFragment
 import com.example.assignment.databinding.FragmentDashboardBinding
-import com.google.android.material.navigation.NavigationView
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -67,15 +65,29 @@ class DashboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var fragment = parentFragmentManager.findFragmentById(R.id.fragment_container)
 
+        //share preference
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+        val userRole = sharedPreferences.getString("userRole", "users")
+        val adminId = sharedPreferences.getInt("userId",-1)
+
+        if(isLoggedIn && userRole == "organization"){
+            binding.dashboardUserBtn.visibility = View.GONE
+            binding.dashboardNewsBtn.visibility = View.GONE
+        }
+        binding.dashboardReportBtn.visibility = View.GONE
+
+        //change toolbar title
+        (activity as AppCompatActivity).supportActionBar?.title = "Dashboard"
 
         binding.dashboardUserBtn.setOnClickListener {
             if (savedInstanceState == null) {
                 parentFragmentManager.beginTransaction()
                     .addToBackStack(null)
-//                    .replace(R.id.fragment_container, AdminUserFragment()).commit()
-
+                    .replace(R.id.fragment_container, AdminUserFragment()).commit()
+            }
+        }
 
                 binding.dashboardDonateBtn.setOnClickListener {
                     if (savedInstanceState == null) {
@@ -89,7 +101,8 @@ class DashboardFragment : Fragment() {
                     if (savedInstanceState == null) {
                         parentFragmentManager.beginTransaction()
                             .addToBackStack(null)
-                            .replace(R.id.fragment_container, AdminVolunteerFragment()).commit()
+                            .replace(R.id.fragment_container, AdminEventFragment()).commit()
+
                     }
                 }
 
@@ -109,6 +122,5 @@ class DashboardFragment : Fragment() {
                     }
                 }
             }
-        }
-    }
+
 }

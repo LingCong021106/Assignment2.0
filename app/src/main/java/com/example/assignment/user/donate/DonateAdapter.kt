@@ -10,12 +10,9 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assignment.BitmapConverter
 import com.example.assignment.R
-import com.example.assignment.user.event.EventDetails
-import com.example.assignment.user.event.eventJoinedList
 
 class DonateAdapter(var donaeList : List<Donate>): RecyclerView.Adapter<DonateAdapter.DonateViewHolder>() {
     private var context: Context? = null
@@ -27,7 +24,7 @@ class DonateAdapter(var donaeList : List<Donate>): RecyclerView.Adapter<DonateAd
         val donateRegTime: TextView = itemView.findViewById(R.id.donate_registration_end_time) as TextView
         val donateTotalNeed: TextView = itemView.findViewById(R.id.donate_total) as TextView
         val donateSelectedBtn: Button = itemView.findViewById(R.id.donate_selected_btn) as Button
-        val donateCardView : CardView = itemView.findViewById(R.id.donate_card_view) as CardView
+        val donateCardView : CardView = itemView.findViewById(R.id.card_view) as CardView
 
     }
 

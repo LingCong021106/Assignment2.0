@@ -16,6 +16,8 @@ interface AdminDao {
 //    @Query("SELECT * FROM users_table WHERE userId= :key")
 //    suspend fun findById(key: Int): LiveData<User>
 
+    @Query("SELECT * FROM admin_table WHERE aId = :userId")
+    fun getAdminById(userId: Int): Admin?
     @Insert
     fun insert(admin: Admin)
 

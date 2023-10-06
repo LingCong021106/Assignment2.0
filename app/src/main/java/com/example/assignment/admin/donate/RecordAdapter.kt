@@ -1,13 +1,21 @@
 package com.example.assignment.admin.donate
 
+import android.opengl.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.example.assignment.BitmapConverter
+import com.example.assignment.database.donate.Donate
 import com.example.assignment.R
 import com.example.assignment.database.donate.DonatePeople
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class RecordAdapter(
@@ -56,10 +64,13 @@ class RecordAdapter(
         val donate = donatePeople[position]
 
         holder.name.text = donatePeople[position].userName
-        holder.amount.text = donatePeople[position].amount.toString()
-        holder.date.text = donatePeople[position].date
-        val drawableResId = R.drawable.baseline_person_24
-        holder.peopleImage.setImageResource(drawableResId)
+        holder.amount.text = donatePeople[position].userTotalDonate.toString()
+        holder.date.text = donatePeople[position].createDate
+//        val drawableResId = R.drawable.baseline_person_24
+//        holder.peopleImage.setImageResource(drawableResId)
+        imageString = donatePeople[position].userImage
+        val bitmap = BitmapConverter.convertStringToBitmap(imageString)
+        holder.peopleImage.setImageBitmap(bitmap)
 
 
 

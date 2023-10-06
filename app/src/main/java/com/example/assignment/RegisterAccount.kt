@@ -4,7 +4,10 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
@@ -16,6 +19,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.room.Room
 import com.android.volley.AuthFailureError
 import com.android.volley.Request
@@ -382,15 +386,20 @@ class RegisterAccount : AppCompatActivity() {
                 Request.Method.POST, URL,
                 Response.Listener { response ->
                     Log.d("Register", response)
-                    if (response == "success") {
+                    val jsonResponse = JSONObject(response)
+                    if (jsonResponse.getString("status") == "success") {
                         Toast.makeText(
                             applicationContext,
                             "Register Succesfully",
                             Toast.LENGTH_SHORT
                         ).show()
 
+
+                        val id = jsonResponse.getInt("id")
+
                         if (userRole == "users") {
                             val user = User(
+                                userId = id,
                                 userName = userName,
                                 password = md5(password),
                                 userEmail = aEmail,
@@ -404,6 +413,7 @@ class RegisterAccount : AppCompatActivity() {
                             }
                         } else {
                             val admin = Admin(
+                                aId = id,
                                 aName = userName,
                                 aPassword = md5(password),
                                 aEmail = aEmail,
@@ -443,10 +453,14 @@ class RegisterAccount : AppCompatActivity() {
                 @Throws(AuthFailureError::class)
                 override fun getParams(): Map<String, String>? {
                     val data: MutableMap<String, String> = HashMap()
+                    val drawable : Drawable = ContextCompat.getDrawable(applicationContext, R.drawable.baseline_person_24)!!
+                    val bitmap = drawable.toBitmap()
+                    val image = BitmapConverter.convertBitmapToString(bitmap)
                     data["name"] = userName
                     data["email"] = aEmail
                     data["password"] = password
                     data["phone"] = phone
+                    data["photo"] = image
                     data["role"] = lastRole
                     return data
                 }

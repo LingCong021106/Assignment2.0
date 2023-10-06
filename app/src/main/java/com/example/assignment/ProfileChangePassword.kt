@@ -7,9 +7,11 @@ import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import com.android.volley.AuthFailureError
 import com.android.volley.Request
@@ -29,24 +31,35 @@ class ProfileChangePassword : AppCompatActivity() {
     lateinit var etPassword : EditText
     lateinit var etconPassword: EditText
     lateinit var submitButton: Button
+    lateinit var upBtn : ImageView
     lateinit var etPasswordLayout : TextInputLayout
     lateinit var etconPasswordLayout: TextInputLayout
     private var email: String? = null
     private val resetPasswordURL:String="http://10.0.2.2/Assignment(Mobile)/reset_password.php"
     private lateinit var appDb: AppDatabase
+    private var userRole = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.profile_change_password)
+
+        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+        val userId = sharedPreferences.getInt("userId", -1)
+        val userEmail = sharedPreferences.getString("userEmail", "")
+        userRole = sharedPreferences.getString("userRole", "")!!
+
 
         submitButton  = findViewById(R.id.submitButton)
         Log.d("ResetPasswordActivity", "ResetPasswordActivity started")
         etPasswordLayout = findViewById(R.id.etPasswordLayout)
         etconPasswordLayout = findViewById(R.id.etconPasswordLayout)
         appDb = AppDatabase.getInstance(this)
-
+        upBtn = findViewById(R.id.changePasswordUpBtn)
         email = intent.getStringExtra("userEmail")
         Log.d("EmailDebug", "Email sending initiated for userEmail: $email")
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (email != null) {
             etPassword = findViewById(R.id.etPassword)
@@ -79,6 +92,49 @@ class ProfileChangePassword : AppCompatActivity() {
 
             val dialog = builder.create()
             dialog.show()
+        }
+
+
+        upBtn.setOnClickListener { onBackPressed() }
+    }
+
+    override fun onBackPressed() {
+        if(userRole== "user"){
+            val intent = Intent(this, UserEditProfileActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+        else{
+            val intent = Intent(this, Admin_Organization_EditProfile::class.java)
+            startActivity(intent)
+            finish()
+        }
+        super.onBackPressed()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                val callingActivityName = intent.getStringExtra("callingActivityName")
+
+                when (callingActivityName) {
+                    "UserEditProfileActivity" -> {
+                        val userIntent = Intent(this, UserEditProfileActivity::class.java)
+                        startActivity(userIntent)
+                    }
+                    "Admin_Organization_EditProfile" -> {
+                        val adminIntent = Intent(this, Admin_Organization_EditProfile::class.java)
+                        startActivity(adminIntent)
+                    }
+
+                    else -> {
+
+                    }
+                }
+
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
         }
     }
 
@@ -192,13 +248,24 @@ class ProfileChangePassword : AppCompatActivity() {
 //                            appDb.userDao().updateUserInfo(originalEmail, newName, newEmail, newPhone, profileImageUrl)
                             }
 
-                            val intent = Intent(this, MainActivity::class.java) // 返回到登录活动
-                            startActivity(intent)
-                            finish()
+                            val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+                            val userRole = sharedPreferences.getString("userRole", "users")
+                            if(userRole == "users"){
+                                val intent = Intent(this, UserEditProfileActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }else{
+                                val intent = Intent(this, Admin_Organization_EditProfile::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+
+
+
                             runOnUiThread {
                                 Toast.makeText(
                                     applicationContext,
-                                    "Password reset successful. Please log in again.",
+                                    "Password reset successful....",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }

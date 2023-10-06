@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.assignment.user.donate.DonateDatabase
 import com.example.assignment.user.donate.DonateDatabaseDao
 
-@Database(entities = [Event::class, EventJoined::class], version = 6)
+@Database(entities = [Event::class, EventJoined::class], version = 15)
 abstract class EventDatabase : RoomDatabase() {
 
     abstract fun eventDatabaseDao() : EventDatabaseDao

@@ -9,11 +9,12 @@
 
     <ImageButton
         android:id="@+id/imageButton7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="77dp"
+        android:layout_height="77dp"
         android:layout_marginTop="16dp"
         android:layout_weight="1"
-        android:src="@android:drawable/btn_star_big_on"
+        android:src="@drawable/icons8_beach_80"
+        android:tooltipText="Beach Cleanup"
         app:layout_constraintEnd_toStartOf="@+id/imageButton8"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageButton6"
@@ -21,11 +22,12 @@
 
     <ImageButton
         android:id="@+id/imageButton6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="77dp"
+        android:layout_height="77dp"
         android:layout_marginTop="16dp"
         android:layout_weight="1"
-        android:src="@android:drawable/btn_star_big_on"
+        android:src="@drawable/icons8_all_64"
+        android:tooltipText="All Events"
         app:layout_constraintEnd_toStartOf="@+id/imageButton7"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,11 +35,12 @@
 
     <ImageButton
         android:id="@+id/imageButton9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="77dp"
+        android:layout_height="77dp"
         android:layout_marginTop="16dp"
         android:layout_weight="1"
-        android:src="@android:drawable/btn_star"
+        android:src="@drawable/icons8_boat_64"
+        android:tooltipText="Boat Tours and Marine Ecotourism"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageButton8"
@@ -45,11 +48,12 @@
 
     <ImageButton
         android:id="@+id/imageButton8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="77dp"
+        android:layout_height="77dp"
         android:layout_marginTop="16dp"
         android:layout_weight="1"
-        android:src="@android:drawable/btn_star"
+        android:src="@drawable/icons8_campaigns_64"
+        android:tooltipText="Ocean Awareness Campaigns"
         app:layout_constraintEnd_toStartOf="@+id/imageButton9"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageButton7"
@@ -67,7 +71,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageButton7"
-        tools:listitem="@layout/event_card" />
+        tools:listitem="@layout/user_card" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -92,7 +96,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/refreshbtn"
+        android:id="@+id/refreshBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Refresh"

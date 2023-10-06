@@ -5,6 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.example.assignment.BitmapConverter
 import com.example.assignment.ListDonate
 import com.example.assignment.R
@@ -35,8 +38,13 @@ class EventJoinedAdapter(var eventJoined : List<EventJoined>) :
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = eventJoined[position]
         val userName = currentItem.userName
-
-        holder.peopleImg.setImageResource(R.drawable.baseline_person_24)
+        imageString = currentItem.userImage
+        var bitmap = BitmapConverter.convertStringToBitmap(imageString)
+        Glide.with(holder.itemView.context)
+            .load(bitmap)
+            .apply(RequestOptions.bitmapTransform(CircleCrop()))
+            .into(holder.peopleImg)
+        holder.peopleImg.setImageBitmap(bitmap)
         holder.peopleName.text = "$userName joined this event !"
     }
 }

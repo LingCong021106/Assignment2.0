@@ -22,7 +22,7 @@
             android:theme="@style/AppCompatTheme"
             app:popupTheme="@style/AppCompatTheme"
             app:subtitleTextColor="#FFFFFF"
-            >
+            app:title="Azure Ocean">
 
             <ImageView
                 android:id="@+id/nav_logo"
@@ -38,11 +38,13 @@
 
 
 
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_container"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></fragment>
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/admin_nav" ></androidx.fragment.app.FragmentContainerView>
 
 
     </LinearLayout>
@@ -54,7 +56,8 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/admin_nav_menu" />
+        app:menu="@menu/admin_nav_menu"
+        />
 
 
 

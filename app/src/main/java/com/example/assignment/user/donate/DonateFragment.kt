@@ -47,12 +47,13 @@ class DonateFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var _binding: FragmentUserDonateBinding? = null
+    private val binding get() = _binding!!
     private lateinit var recyclerView : RecyclerView
     private lateinit var adapter: DonateAdapter
     private lateinit var mToolbar : Toolbar
     private lateinit var donateDB : DonateDatabase
     private var connection : Boolean = false
-    private val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -115,13 +116,12 @@ class DonateFragment : Fragment() {
         }
 
         //refresh buton
-        binding.refreshbtn.setOnClickListener{
+        binding.refreshBtn.setOnClickListener{
             parentFragmentManager.beginTransaction()
                 .addToBackStack(null)
                 .replace(R.id.fragment_container, DonateFragment()).commit()
         }
 
-        //toolbar
         setHasOptionsMenu(true)
         mToolbar = requireActivity().findViewById(R.id.toolbar)
         if (mToolbar != null) {
@@ -141,10 +141,10 @@ class DonateFragment : Fragment() {
         //check connection, if yes initial donate room database
         if(connection) {
             CoroutineScope(Dispatchers.IO).launch {
-                if (donateDB.donateDatabaseDao().getAllDonate() != null) {
+                if (donateDB.donateDatabaseDao().getAllDonate().size > 0) {
                     donateDB.donateDatabaseDao().deleteAllFromDonate()
                 }
-                if (donateDB.donateDatabaseDao().getAllDonatePerson() != null) {
+                if (donateDB.donateDatabaseDao().getAllDonatePerson().size > 0) {
                     donateDB.donateDatabaseDao().deleteAllFromDonatePerson()
                 }
             }
@@ -167,7 +167,7 @@ class DonateFragment : Fragment() {
                 else{
                     binding.progressBar.visibility = View.GONE
                     binding.loading.visibility = View.GONE
-                    binding.refreshbtn.visibility = View.VISIBLE
+                    binding.refreshBtn.visibility = View.VISIBLE
                 }
 
                 Snackbar.make(rootView, "No connection now!", Snackbar.LENGTH_SHORT).show()
@@ -177,24 +177,20 @@ class DonateFragment : Fragment() {
 
 
         binding.imageButton6.setOnClickListener{
-            adapter = DonateAdapter(donateList)
-            binding.donateRecycleView.adapter  = adapter
+            donateList.clear()
+            donateGetAll()
         }
         binding.imageButton7.setOnClickListener{
-            val donate = searchByCategory("category1")
+            val donate = searchByCategory("Ocean Conservation")
             adapter = DonateAdapter(donate)
             binding.donateRecycleView.adapter  = adapter
         }
         binding.imageButton8.setOnClickListener{
-            val donate = searchByCategory("category2")
+            val donate = searchByCategory("Marine Animal")
             adapter = DonateAdapter(donate)
             binding.donateRecycleView.adapter  = adapter
         }
-        binding.imageButton9.setOnClickListener{
-            val donate = searchByCategory("category3")
-            adapter = DonateAdapter(donate)
-            binding.donateRecycleView.adapter  = adapter
-        }
+
         return rootView
     }
 
@@ -219,7 +215,7 @@ class DonateFragment : Fragment() {
     }
 
     private fun getDonatePerson(){
-        val url = "http://10.0.2.2/Assignment(Mobile)/donatePerson.php"
+        val url = "http://10.0.2.2/Assignment(Mobile)/donatePersonGetAll.php"
         val stringRequest: StringRequest = object : StringRequest(
             Request.Method.POST, url,
             Response.Listener { response ->
@@ -231,12 +227,15 @@ class DonateFragment : Fragment() {
                         for (i in 0 until array.length()) {
                             val donatePerson = array.getJSONObject(i)
                             val data = DonatePerson(
-                                donatePerson.getInt("donateJoinedId"),
+                                donatePerson.getInt("donatePersonId"),
                                 donatePerson.getInt("donateId"),
+                                donatePerson.getInt("userId"),
                                 donatePerson.getString("userEmail"),
                                 donatePerson.getString("userName"),
                                 donatePerson.getString("userImage"),
                                 donatePerson.getDouble("userTotalDonate"),
+                                donatePerson.getString("paymentMethod"),
+                                donatePerson.getString("createDate"),
                             )
                             donatePersonList.add(data)
 
@@ -271,6 +270,7 @@ class DonateFragment : Fragment() {
                             val donate = array.getJSONObject(i)
                             val data = Donate(
                                 donate.getInt("donateId"),
+                                donate.getInt("adminId"),
                                 donate.getString("donateName"),
                                 donate.getString("donateImage"),
                                 donate.getString("donateCategory"),
@@ -279,6 +279,7 @@ class DonateFragment : Fragment() {
                                 donate.getString("donateEndTime"),
                                 donate.getDouble("totalDonation"),
                                 donate.getString("donateDescription"),
+                                donate.getInt("isDeleted"),
                             )
                             donateList.add(data)
 
@@ -314,15 +315,5 @@ class DonateFragment : Fragment() {
         }
         return donates
     }
-
-    override fun onResume() {
-        super.onResume()
-        val activity: Activity? = activity
-        if (activity != null) {
-            activity.title = "R.string.my_title"
-        }
-    }
-
-
 
 }
